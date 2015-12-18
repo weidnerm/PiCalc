@@ -26,3 +26,10 @@ ${TARGET}: $(SOURCES:.cpp=.o)
 clean:
 	rm -rf $(SOURCES:.cpp=.o)  ${TARGET}
 	
+.PHONY: dox_all dox_clean
+dox_all:
+	doxygen ../doxygen.cfg
+	
+dox_clean:
+	rm -rf ../doxygen/
+	
