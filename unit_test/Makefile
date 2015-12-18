@@ -1,0 +1,28 @@
+
+SOURCES = TestRunner.cpp \
+          BigIntTest.cpp \
+          ../BigIntBase.cpp \
+          
+TARGET:=runTests
+
+CPPUTEST_HOME = /usr
+CPPFLAGS += -I(CPPUTEST_HOME)/include
+CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
+CFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
+    
+LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
+
+all: ${TARGET}
+
+$(SOURCES:.cpp=.o): $@
+	@echo CXX $@
+	@g++ -c -g ${CXXFLAGS} $(@:.o=.cpp) -o $@
+	
+
+${TARGET}: $(SOURCES:.cpp=.o)
+	@g++ $(SOURCES:.cpp=.o) -o ${TARGET}   ${LD_LIBRARIES}
+	@./${TARGET}
+
+clean:
+	rm -rf $(SOURCES:.cpp=.o)  ${TARGET}
+	
