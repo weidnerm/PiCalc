@@ -40,14 +40,14 @@ class BigIntBase
 {
     public:
         BigIntBase();
-        virtual void pow(int);   // base ^ int
-        virtual void valueOf(int); // assign an int
+//        virtual void pow(int);   // base ^ int
+        virtual void valueOf(int) = 0; // assign an int
         // add
         // subtract
         // multiply
         // divide
         // assign from a string
-        // output to a string
+        virtual char* getString() = 0; // output to a string
         virtual ~BigIntBase();
 };
 

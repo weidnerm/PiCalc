@@ -6,7 +6,7 @@
  *
  ********************************************************************************
  *
- *  FILE NAME : BigIntTest.cpp
+ *  FILE NAME : BigIntsBase10.h
  *
  *-------------------------------- PURPOSE --------------------------------------
  *
@@ -25,38 +25,29 @@
  *
  *******************************************************************************/
 
-/*--------------------------- HEADER FILE INCLUDES ----------------------------*/
-#include "BigIntsBase10.h"
+#ifndef BIGINTSBASE10_H_
+#define BIGINTSBASE10_H_
+
+/*-------------------------- HEADER FILE INCLUDES -----------------------------*/
 #include "BigIntBase.h"
-#include "CppUTest/TestHarness.h"
-#include <string>
-#include <iostream>
+#include "stdint.h"
 
-using namespace std;
+/*------------------------------ CONSTANTS ------------------------------------*/
 
-TEST_GROUP(FirstTestGroup)
+/*---------------------------- ENUMERATED TYPES -------------------------------*/
+
+/*---------------------------------- MACROS -----------------------------------*/
+
+class BigIntsBase10: public BigIntBase
 {
+    public:
+        BigIntsBase10();
+        virtual void valueOf(int); // assign an int
+        virtual char* getString(); // output to a string
+
+    public:
+        int8_t m_value[10];
+        uint32_t m_length;
 };
 
-TEST(FirstTestGroup, setPostiveMediumInt123)
-{
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.valueOf(123);
-
-    char* result = myBigIntsBase10.getString();
-
-    STRCMP_EQUAL("123",result);
-    delete [] result;
-}
-
-TEST(FirstTestGroup, setPostiveMediumInt100)
-{
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.valueOf(100);
-
-    char* result = myBigIntsBase10.getString();
-
-    STRCMP_EQUAL("100",result);
-    delete [] result;
-}
-
+#endif /* BIGINTSBASE10_H_ */

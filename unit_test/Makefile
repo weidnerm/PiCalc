@@ -2,10 +2,13 @@
 SOURCES = TestRunner.cpp \
           BigIntTest.cpp \
           ../BigIntBase.cpp \
+          ../BigIntsBase10.cpp \
           
 TARGET:=runTests
 
 CPPUTEST_HOME = /usr
+CXXFLAGS += -Wno-write-strings
+CXXFLAGS += -I/home/vagrant/workspace/BigInts
 CPPFLAGS += -I(CPPUTEST_HOME)/include
 CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
 CFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
