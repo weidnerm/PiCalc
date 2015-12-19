@@ -32,116 +32,110 @@
 
 TEST_GROUP(FirstTestGroup)
 {
+    BigIntBase * myBigIntBase;
+    char* result;
+
+    void setup()
+    {
+        myBigIntBase = new BigIntsBase10;
+        result = 0;  // null it out in case its not used, we can safely delete 0
+    }
+
+    void teardown()
+    {
+        delete myBigIntBase;
+        delete [] result;
+    }
 };
 
 TEST(FirstTestGroup, setPostiveMediumInt123)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.valueOf(123);
+    myBigIntBase->valueOf(123);
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("123",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setPostiveMediumInt100)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.valueOf(100);
+    myBigIntBase->valueOf(100);
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("100",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setMaxPosInt)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.valueOf(2147483647);
+    myBigIntBase->valueOf(2147483647);
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("2147483647",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setNegMaxInt)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.valueOf(-2147483647);
+    myBigIntBase->valueOf(-2147483647);
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("-2147483647",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setZero)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.valueOf(0);
+    myBigIntBase->valueOf(0);
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("0",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setLargePositive)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.setString("12345678901234567890");
+    myBigIntBase->setString("12345678901234567890");
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("12345678901234567890",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setLargeNegative)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.setString("-21345678901234567890");
+    myBigIntBase->setString("-21345678901234567890");
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("-21345678901234567890",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setStringZero)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.setString("0");
+    myBigIntBase->setString("0");
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("0",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setString123)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.setString("123");
+    myBigIntBase->setString("123");
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("123",result);
-    delete [] result;
 }
 
 TEST(FirstTestGroup, setStringNeg123)
 {
-    BigIntsBase10 myBigIntsBase10;
-    myBigIntsBase10.setString("-123");
+    myBigIntBase->setString("-123");
 
-    char* result = myBigIntsBase10.getString();
+    result = myBigIntBase->getString();
 
     STRCMP_EQUAL("-123",result);
-    delete [] result;
 }
 
 
