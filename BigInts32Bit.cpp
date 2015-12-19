@@ -111,4 +111,16 @@ char* BigInts32Bit::getString()
 
 void BigInts32Bit::setString(char* valueString)
 {
+    /*
+    output = 0
+    foreach digit in digits:
+        output = output * base + digit
+    In the reverse order, it's the following:
+
+    output = 0
+    multiplier = 1
+    foreach digit in digits:
+        output = output + multiplier * digit
+        multiplier = multiplier * base
+    */
 }
