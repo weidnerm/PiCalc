@@ -46,7 +46,7 @@ class BigIntBase
         // subtract
         // multiply
         // divide
-        // assign from a string
+        virtual void setString(char * valueString) = 0;  // assign from a string
         virtual char* getString() = 0; // output to a string
         virtual ~BigIntBase();
 };

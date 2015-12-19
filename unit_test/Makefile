@@ -7,7 +7,7 @@ SOURCES = TestRunner.cpp \
 TARGET:=runTests
 
 CPPUTEST_HOME = /usr
-CXXFLAGS += -Wno-write-strings
+CXXFLAGS += -Wno-write-strings -fpermissive
 CXXFLAGS += -I/home/vagrant/workspace/BigInts
 CPPFLAGS += -I(CPPUTEST_HOME)/include
 CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h

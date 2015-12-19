@@ -42,12 +42,15 @@ class BigIntsBase10: public BigIntBase
 {
     public:
         BigIntsBase10();
+        ~BigIntsBase10();
         virtual void valueOf(int); // assign an int
         virtual char* getString(); // output to a string
+        virtual void setString(char * valueString);  // assign from a string
 
     public:
-        int8_t m_value[10];
+        int8_t* m_value;
         uint32_t m_length;
+        bool m_negative;
 };
 
 #endif /* BIGINTSBASE10_H_ */
