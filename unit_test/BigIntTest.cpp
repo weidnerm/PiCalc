@@ -27,6 +27,7 @@
 
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "BigIntsBase10.h"
+#include "BigInts32Bit.h"
 #include "BigIntBase.h"
 #include "CppUTest/TestHarness.h"
 #include "stdio.h"
@@ -39,7 +40,7 @@ TEST_GROUP(FirstTestGroup)
 
     void setup()
     {
-        myBigIntBase = new BigIntsBase10;
+        myBigIntBase = new BigInts32Bit;
         result = 0;  // null it out in case its not used, we can safely delete 0
     }
 
@@ -95,6 +96,7 @@ TEST(FirstTestGroup, setZero)
     STRCMP_EQUAL("0",result);
 }
 
+/*
 TEST(FirstTestGroup, setLargePositive)
 {
     myBigIntBase->setString("12345678901234567890");
@@ -139,7 +141,7 @@ TEST(FirstTestGroup, setStringNeg123)
 
     STRCMP_EQUAL("-123",result);
 }
-
+*/
 
 
 TEST_GROUP(TwoValueTestGroup)
