@@ -125,6 +125,14 @@ void BigIntsBase10::setString(char* valueString)
 {
     int length = strlen(valueString);
 
+    int inIndex = 0;
+    if ( valueString[0] == '-' )
+    {
+        m_negative = true;
+        inIndex++;
+        length--;
+    }
+
     // if there isnt currently enough space, allocate more.
     if ( length > m_length)
     {
@@ -133,24 +141,83 @@ void BigIntsBase10::setString(char* valueString)
         m_value = new int8_t[m_length];
     }
 
-    int inIndex = 0;
-    if ( valueString[0] == '-' )
-    {
-        m_negative = true;
-        inIndex++;
-    }
-
     int outIndex;
-
-    for (; inIndex < length; inIndex++)
+    int index;
+    for (index=0; index < length; index++)
     {
-        outIndex = length - inIndex - 1;
+        outIndex = length - index - 1;
         m_value[outIndex] = valueString[inIndex] - '0';
+        inIndex++;
     }
 
 }
 
 
+
+// 0    0   0   0   0   0   0   9   9   9
+// [9] [8] [7] [6] [5] [4] [3] [2] [1] [0]
+
+//          0   0   0   0   0   1   2   3
+//         [7] [6] [5] [4] [3] [2] [1] [0]
+
+
+void BigIntsBase10::add(BigIntBase* bigIntPtr)
+{
+    BigIntsBase10* longPtr = this;
+    BigIntsBase10* shortPtr = (BigIntsBase10*)bigIntPtr;
+
+    if ((longPtr->m_length) < (shortPtr->m_length))
+    {
+        BigIntsBase10* tempPtr;
+        tempPtr = longPtr;
+        longPtr = shortPtr;
+        shortPtr = tempPtr;
+    }
+    int shortestLength = shortPtr->m_length;
+
+    int8_t * resultArray = new int8_t[longPtr->m_length+1];
+
+    if ( shortPtr->m_negative == longPtr->m_negative)
+    {
+        // the signs match.  we can just add. (even if both negative)
+        int index;
+        int carry = 0;
+        for (index = 0; ((index < shortestLength) || (carry == 1)); index++)
+        {
+            int temp = 0;
+            if (index < shortestLength)
+            {
+                temp = shortPtr->m_value[index];
+            }
+            if (index < longPtr->m_length)
+            {
+                temp = temp + longPtr->m_value[index];
+            }
+            temp = temp + carry;
+            carry = 0;
+            if (temp >= 10)
+            {
+                temp = temp - 10;
+                carry = 1;
+            }
+            resultArray[index] = temp;
+        }
+        delete [] m_value;
+        m_value = resultArray;
+        m_length = longPtr->m_length + ((longPtr->m_length < index) ? 1 : 0);
+
+
+
+
+
+    }
+    else
+    {
+        // they are different signs need to subtract
+    }
+
+
+}
 /*
  *    +10      +10      +10
  *  + +21    + +21    + +21

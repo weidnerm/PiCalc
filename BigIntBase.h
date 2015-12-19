@@ -42,7 +42,7 @@ class BigIntBase
         BigIntBase();
 //        virtual void pow(int);   // base ^ int
         virtual void valueOf(int) = 0; // assign an int
-        // add
+        virtual void add(BigIntBase* bigInt) = 0;
         // subtract
         // multiply
         // divide

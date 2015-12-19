@@ -29,6 +29,8 @@
 #include "BigIntsBase10.h"
 #include "BigIntBase.h"
 #include "CppUTest/TestHarness.h"
+#include "stdio.h"
+#include "memory.h"
 
 TEST_GROUP(FirstTestGroup)
 {
@@ -139,3 +141,121 @@ TEST(FirstTestGroup, setStringNeg123)
 }
 
 
+
+TEST_GROUP(TwoValueTestGroup)
+{
+    BigIntBase * myBigIntBaseA;
+    BigIntBase * myBigIntBaseB;
+    char* result;
+
+    void setup()
+    {
+        myBigIntBaseA = new BigIntsBase10;
+        myBigIntBaseB = new BigIntsBase10;
+        result = 0;  // null it out in case its not used, we can safely delete 0
+    }
+
+    void teardown()
+    {
+        delete myBigIntBaseA;
+        delete myBigIntBaseB;
+        delete [] result;
+    }
+};
+
+
+
+
+TEST(TwoValueTestGroup, setStringAddOneDigitNoCarry)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("2");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("3",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddOneDigitCarry)
+{
+    myBigIntBaseA->setString("9");
+    myBigIntBaseB->setString("8");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("17",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddOneDigitNoCarryNeg)
+{
+    myBigIntBaseA->setString("-1");
+    myBigIntBaseB->setString("-2");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("-3",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddOneDigitCarryNeg)
+{
+    myBigIntBaseA->setString("-9");
+    myBigIntBaseB->setString("-8");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("-17",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddMoreDigitCarry)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("999999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("1000000000",result);
+}
+TEST(TwoValueTestGroup, setStringAddLongDigitCarry)
+{
+    myBigIntBaseA->setString("89999999999999999999");
+    myBigIntBaseB->setString("1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("90000000000000000000",result);
+}
+TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortA)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("89999999999999999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("90000000000000000000",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortASpillover)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("99999999999999999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("100000000000000000000",result);
+}
