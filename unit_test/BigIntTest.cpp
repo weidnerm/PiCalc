@@ -29,10 +29,6 @@
 #include "BigIntsBase10.h"
 #include "BigIntBase.h"
 #include "CppUTest/TestHarness.h"
-#include <string>
-#include <iostream>
-
-using namespace std;
 
 TEST_GROUP(FirstTestGroup)
 {

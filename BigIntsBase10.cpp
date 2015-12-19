@@ -27,7 +27,6 @@
 
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "BigIntsBase10.h"
-#include <iostream>
 #include "stdio.h"
 #include "memory.h"
 
@@ -173,3 +172,21 @@ void BigIntsBase10::setString(char* valueString)
  *
  *
  */
+
+
+
+//power function
+//
+//int ipow(int base, int exp)
+//{
+//    int result = 1;
+//    while (exp)
+//    {
+//        if (exp & 1)
+//            result *= base;
+//        exp >>= 1;
+//        base *= base;
+//    }
+//
+//    return result;
+//}
