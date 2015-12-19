@@ -43,7 +43,7 @@ class BigIntBase
 //        virtual void pow(int);   // base ^ int
         virtual void valueOf(int) = 0; // assign an int
         virtual void add(BigIntBase* bigInt) = 0;
-        // subtract
+        virtual void subtract(BigIntBase* bigInt) = 0;
         // multiply
         // divide
         virtual void setString(char * valueString) = 0;  // assign from a string

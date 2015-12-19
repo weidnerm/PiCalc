@@ -296,6 +296,30 @@ TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortMaxAddNeg)
     STRCMP_EQUAL("-199999999999999999998",result);
 }
 
+TEST(TwoValueTestGroup, setStringAddLongDigitCarryMaxSubNeg)
+{
+    myBigIntBaseA->setString("99999999999999999999");
+    myBigIntBaseB->setString("-99999999999999999999");
+
+    // A = A+B
+    myBigIntBaseA->subtract(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("199999999999999999998",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddLongDigitCarryMaxSubPos)
+{
+    myBigIntBaseA->setString("-99999999999999999999");
+    myBigIntBaseB->setString("99999999999999999999");
+
+    // A = A+B
+    myBigIntBaseA->subtract(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("-199999999999999999998",result);
+}
+
 
 
 

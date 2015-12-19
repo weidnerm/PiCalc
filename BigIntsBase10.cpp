@@ -172,6 +172,16 @@ void BigIntsBase10::add(BigIntBase* bigIntPtr)
         // they are different signs need to subtract
     }
 }
+
+void BigIntsBase10::subtract(BigIntBase* bigInt)
+{
+    // subtract by changing the sign of the second parameter then do add.  change sign back when done.
+    BigIntsBase10 * secondParm = (BigIntsBase10*)bigInt;
+    secondParm->m_negative = (secondParm->m_negative ? false : true);  // toggle the negative flag
+    add(bigInt);
+    secondParm->m_negative = (secondParm->m_negative ? false : true);  // toggle the negative flag
+}
+
 void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
 {
     BigIntsBase10* longPtr = this;
