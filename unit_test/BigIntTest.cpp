@@ -259,3 +259,43 @@ TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortASpillover)
 
     STRCMP_EQUAL("100000000000000000000",result);
 }
+
+TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortBSpillover)
+{
+    myBigIntBaseA->setString("99999999999999999999");
+    myBigIntBaseB->setString("1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("100000000000000000000",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortASpilloverNeg)
+{
+    myBigIntBaseA->setString("-1");
+    myBigIntBaseB->setString("-99999999999999999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("-100000000000000000000",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortMaxAddNeg)
+{
+    myBigIntBaseA->setString("-99999999999999999999");
+    myBigIntBaseB->setString("-99999999999999999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("-199999999999999999998",result);
+}
+
+
+
+

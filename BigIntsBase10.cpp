@@ -163,6 +163,17 @@ void BigIntsBase10::setString(char* valueString)
 
 void BigIntsBase10::add(BigIntBase* bigIntPtr)
 {
+    if (m_negative == ((BigIntsBase10*)bigIntPtr)->m_negative)
+    {
+        sameSignAdd(bigIntPtr);
+    }
+    else
+    {
+        // they are different signs need to subtract
+    }
+}
+void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
+{
     BigIntsBase10* longPtr = this;
     BigIntsBase10* shortPtr = (BigIntsBase10*)bigIntPtr;
 
@@ -177,53 +188,46 @@ void BigIntsBase10::add(BigIntBase* bigIntPtr)
 
     int8_t * resultArray = new int8_t[longPtr->m_length+1];
 
-    if ( shortPtr->m_negative == longPtr->m_negative)
+    // the signs match.  we can just add. (even if both negative)
+    int index;
+    int carry = 0;
+    for (index = 0; ((index < shortestLength) || (carry == 1)); index++)
     {
-        // the signs match.  we can just add. (even if both negative)
-        int index;
-        int carry = 0;
-        for (index = 0; ((index < shortestLength) || (carry == 1)); index++)
+        int temp = 0;
+        if (index < shortestLength)
         {
-            int temp = 0;
-            if (index < shortestLength)
-            {
-                temp = shortPtr->m_value[index];
-            }
-            if (index < longPtr->m_length)
-            {
-                temp = temp + longPtr->m_value[index];
-            }
-            temp = temp + carry;
-            carry = 0;
-            if (temp >= 10)
-            {
-                temp = temp - 10;
-                carry = 1;
-            }
-            resultArray[index] = temp;
+            temp = shortPtr->m_value[index];
         }
-        delete [] m_value;
-        m_value = resultArray;
-        m_length = longPtr->m_length + ((longPtr->m_length < index) ? 1 : 0);
-
-
-
-
-
+        if (index < longPtr->m_length)
+        {
+            temp = temp + longPtr->m_value[index];
+        }
+        temp = temp + carry;
+        carry = 0;
+        if (temp >= 10)
+        {
+            temp = temp - 10;
+            carry = 1;
+        }
+        resultArray[index] = temp;
     }
-    else
-    {
-        // they are different signs need to subtract
-    }
-
-
+    delete [] m_value;
+    m_value = resultArray;
+    m_length = longPtr->m_length + ((longPtr->m_length < index) ? 1 : 0);
 }
 /*
+ * Same Sign Cases
  *    +10      +10      +10
  *  + +21    + +21    + +21
  *  ======   ======   ======
  *               1       31
  *
+ *    -10      -10      -10
+ *  + -21    + -21    + -21
+ *  ======   ======   ======
+ *               1      -31
+ *
+ *Mixed sign cases
  *    -10
  *  +  21
  *  ======
@@ -232,10 +236,6 @@ void BigIntsBase10::add(BigIntBase* bigIntPtr)
  *  + -21
  *  ======
  *
- *    -10      -10      -10
- *  + -21    + -21    + -21
- *  ======   ======   ======
- *               1      -31
  *
  *
  */

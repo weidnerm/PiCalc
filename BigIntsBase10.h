@@ -47,6 +47,8 @@ class BigIntsBase10: public BigIntBase
         virtual char* getString(); // output to a string
         virtual void setString(char * valueString);  // assign from a string
         virtual void add(BigIntBase* bigInt);
+    protected:
+        virtual void sameSignAdd(BigIntBase* bigInt);
 
     public:
         int8_t* m_value;
