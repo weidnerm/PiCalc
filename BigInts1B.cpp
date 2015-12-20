@@ -83,7 +83,7 @@ char* BigInts1B::getString()
 {
     char* returnVal = new char[m_length*9 + 2];   //add space terminator and negative sign
     int outIndex = 0;
-    int index;
+    int storageIndex;
     bool foundFirstDigit = false;
 
     if (m_negative == true)
@@ -92,23 +92,24 @@ char* BigInts1B::getString()
         outIndex++;
     }
 
-    for (index = m_length - 1; index >= 0; index--)
+    for (storageIndex = m_length - 1; storageIndex >= 0; storageIndex--)
     {
-        if ((m_value[index] != 0) || (foundFirstDigit == true))
+        int32_t digitDivisor = 100000000;  // 1e8
+        int32_t tempWord = m_value[storageIndex];
+        int32_t tempNibble;
+
+        while (digitDivisor != 0)
         {
-            int32_t tempVal = m_value[index];
+            tempNibble = tempWord / digitDivisor;
 
-            returnVal[outIndex++] = tempVal/100000000 + '0' ; tempVal %= 100000000 ;
-            returnVal[outIndex++] = tempVal/10000000  + '0' ; tempVal %= 10000000  ;
-            returnVal[outIndex++] = tempVal/1000000   + '0' ; tempVal %= 1000000   ;
-            returnVal[outIndex++] = tempVal/100000    + '0' ; tempVal %= 100000    ;
-            returnVal[outIndex++] = tempVal/10000     + '0' ; tempVal %= 10000     ;
-            returnVal[outIndex++] = tempVal/1000      + '0' ; tempVal %= 1000      ;
-            returnVal[outIndex++] = tempVal/100       + '0' ; tempVal %= 100       ;
-            returnVal[outIndex++] = tempVal/10        + '0' ; tempVal %= 10        ;
-            returnVal[outIndex++] = tempVal           + '0' ;
+            if ((tempNibble != 0) || (foundFirstDigit == true))
+            {
+                returnVal[outIndex++] = tempNibble + '0';
+                foundFirstDigit = true;
+            }
+            tempWord = tempWord % digitDivisor;
+            digitDivisor = digitDivisor / 10;
 
-            foundFirstDigit = true;
         }
     }
     if (foundFirstDigit ==false)
