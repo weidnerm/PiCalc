@@ -28,6 +28,7 @@
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "BigIntsBase10.h"
 #include "BigInts32Bit.h"
+#include "BigInts1B.h"
 #include "BigIntBase.h"
 #include "CppUTest/TestHarness.h"
 #include "stdio.h"
@@ -40,7 +41,7 @@ TEST_GROUP(FirstTestGroup)
 
     void setup()
     {
-        myBigIntBase = new BigInts32Bit;
+        myBigIntBase = new BigInts1B;
         result = 0;  // null it out in case its not used, we can safely delete 0
     }
 
@@ -60,41 +61,42 @@ TEST(FirstTestGroup, setPostiveMediumInt123)
     STRCMP_EQUAL("123",result);
 }
 
-TEST(FirstTestGroup, setPostiveMediumInt100)
-{
-    myBigIntBase->valueOf(100);
 
-    result = myBigIntBase->getString();
-
-    STRCMP_EQUAL("100",result);
-}
-
-TEST(FirstTestGroup, setMaxPosInt)
-{
-    myBigIntBase->valueOf(2147483647);
-
-    result = myBigIntBase->getString();
-
-    STRCMP_EQUAL("2147483647",result);
-}
-
-TEST(FirstTestGroup, setNegMaxInt)
-{
-    myBigIntBase->valueOf(-2147483647);
-
-    result = myBigIntBase->getString();
-
-    STRCMP_EQUAL("-2147483647",result);
-}
-
-TEST(FirstTestGroup, setZero)
-{
-    myBigIntBase->valueOf(0);
-
-    result = myBigIntBase->getString();
-
-    STRCMP_EQUAL("0",result);
-}
+//TEST(FirstTestGroup, setPostiveMediumInt100)
+//{
+//    myBigIntBase->valueOf(100);
+//
+//    result = myBigIntBase->getString();
+//
+//    STRCMP_EQUAL("100",result);
+//}
+//
+//TEST(FirstTestGroup, setMaxPosInt)
+//{
+//    myBigIntBase->valueOf(2147483647);
+//
+//    result = myBigIntBase->getString();
+//
+//    STRCMP_EQUAL("2147483647",result);
+//}
+//
+//TEST(FirstTestGroup, setNegMaxInt)
+//{
+//    myBigIntBase->valueOf(-2147483647);
+//
+//    result = myBigIntBase->getString();
+//
+//    STRCMP_EQUAL("-2147483647",result);
+//}
+//
+//TEST(FirstTestGroup, setZero)
+//{
+//    myBigIntBase->valueOf(0);
+//
+//    result = myBigIntBase->getString();
+//
+//    STRCMP_EQUAL("0",result);
+//}
 
 /*
 TEST(FirstTestGroup, setLargePositive)
@@ -153,8 +155,8 @@ TEST_GROUP(TwoValueTestGroup)
 
     void setup()
     {
-        myBigIntBaseA = new BigInts32Bit;
-        myBigIntBaseB = new BigInts32Bit;
+        myBigIntBaseA = new BigInts100M;
+        myBigIntBaseB = new BigInts100M;
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
     }

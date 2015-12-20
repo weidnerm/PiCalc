@@ -4,6 +4,7 @@ SOURCES = TestRunner.cpp \
           ../BigIntBase.cpp \
           ../BigIntsBase10.cpp \
           ../BigInts32Bit.cpp \
+          ../BigInts1B.cpp \
           
 TARGET:=runTests
 
