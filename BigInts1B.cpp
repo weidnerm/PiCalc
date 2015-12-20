@@ -28,6 +28,7 @@
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "BigInts1B.h"
 #include "memory.h"
+#include "stdio.h"
 
 BigInts1B::BigInts1B()
 {
@@ -55,6 +56,8 @@ void BigInts1B::valueOf(int inputValue)
     {
         delete[] m_value;
         m_value = new int32_t[2];
+        m_value[0] = 0;
+        m_value[1] = 0;
     }
 
     int index = 0;
@@ -115,12 +118,9 @@ void BigInts1B::setString(char* valueString)
     }
 
     // if there isnt currently enough space, allocate more.
-    if ( (length+8)/9 > m_length)
-    {
-        m_length = (length+8)/9;
-        delete [] m_value;
-        m_value = new int32_t[m_length];
-    }
+    m_length = (length+8)/9;
+    delete [] m_value;
+    m_value = new int32_t[m_length];
 
     int index;
     for(index=0;index<m_length;index++)
@@ -225,9 +225,44 @@ void BigInts1B::sameSignAdd(BigIntBase* bigIntPtr)
     m_length = longPtr->m_length + ((longPtr->m_length < index) ? 1 : 0);
 }
 
-void BigInts1B::diffSignAdd(BigIntBase* bigInt)
+void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
 {
+    // the signs are different, so its a subtract.
+    // take  the Big one minus Small and then use the final sign of the bigger
+    BigInts1B* bigPtr = this;
+    BigInts1B* smallPtr = (BigInts1B*)bigIntPtr;
+
+    // 55 - 5
+    if ((bigPtr->m_length) < (smallPtr->m_length))
+    {
+        swap(&bigPtr, &smallPtr);
+    }
+    else if ((bigPtr->m_length) == (smallPtr->m_length))  // 5 - 8
+    {
+//printf("Length matches %d==%d. big=%d small=%d\n",
+//        bigPtr->m_length,smallPtr->m_length
+//        ,bigPtr->m_value[bigPtr->m_length - 1],smallPtr->m_value[smallPtr->m_length - 1]);
+        if (bigPtr->m_value[bigPtr->m_length - 1] < smallPtr->m_value[smallPtr->m_length - 1])
+        {
+            swap(&bigPtr, &smallPtr);
+        }
+    }
+//    printf("bigPtr->m_value[0]=%d  smallPtr->m_value[0]=%d\n",bigPtr->m_value[0],smallPtr->m_value[0]);
+//    printf("bigPtr->m_negative=%d  smallPtr->m_negative=%d\n",bigPtr->m_negative,smallPtr->m_negative);
+//    printf("this->m_negative=%d  bigIntPtr->m_negative=%d\n",this->m_negative,((BigInts1B*)bigIntPtr)->m_negative);
+
+    m_value[0] = bigPtr->m_value[0] - smallPtr->m_value[0];
+
+    // Set the final sign to the sign of the bigger of the values.
+    m_negative = bigPtr->m_negative;
 }
+
+/*
+ *  100
+ *   -1
+ *
+ */
+
 
 void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
 {
@@ -235,4 +270,5 @@ void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
     tempPtr = *first;
     *first = *second;
     *second = tempPtr;
+//printf("Swapping\n");
 }

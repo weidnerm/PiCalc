@@ -45,14 +45,14 @@ class BigInts1B: public BigIntBase
         virtual ~BigInts1B();
         virtual void valueOf(int); // assign an int
         virtual void add(BigIntBase* bigInt);
-        virtual void subtract(BigIntBase* bigInt);
+        virtual void subtract(BigIntBase* bigIntPtr);
         // multiply
         // divide
         virtual void setString(char * valueString);  // assign from a string
         virtual char* getString(); // output to a string
     protected:
-        virtual void sameSignAdd(BigIntBase* bigInt);
-        virtual void diffSignAdd(BigIntBase* bigInt);
+        virtual void sameSignAdd(BigIntBase* bigIntPtr);
+        virtual void diffSignAdd(BigIntBase* bigIntPtr);
         void swap(BigInts1B ** first, BigInts1B ** second);
     public:
         int32_t* m_value;

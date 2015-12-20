@@ -445,61 +445,121 @@ TEST(TwoValueTestGroup, setStringSubLongDigitCarryMaxPos)
     STRCMP_EQUAL("99999999999999999999",result2); // make sure that B didnt change
 }
 
-//TEST(TwoValueTestGroup, addNegSmallSingleDigPBpNS)
+TEST(TwoValueTestGroup, addNegSmallSingleDigPBpNS)
+{
+    myBigIntBaseA->setString("5");
+    myBigIntBaseB->setString("-1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("4",result);
+    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addNegSmallSingleDigNSpPB)
+{
+    myBigIntBaseA->setString("-1");
+    myBigIntBaseB->setString("5");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("4",result);
+    STRCMP_EQUAL("5",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addNegSmallSingleDigNBpPS)
+{
+    myBigIntBaseA->setString("-5");
+    myBigIntBaseB->setString("1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-4",result);
+    STRCMP_EQUAL("1",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addNegSmallSingleDigPSpNB)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("-5");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-4",result);
+    STRCMP_EQUAL("-5",result2); // make sure that B didnt change
+}
+
+
+
+
+//TEST(TwoValueTestGroup, addNegMedDigPBpNS)
 //{
-//    myBigIntBaseA->setString("5");
-//    myBigIntBaseB->setString("-1");
+//    myBigIntBaseA->setString("5000000000");
+//    myBigIntBaseB->setString("-1000000000");
 //
 //    // A = A+B
 //    myBigIntBaseA->add(myBigIntBaseB);
 //    result = myBigIntBaseA->getString();
 //    result2 = myBigIntBaseB->getString();
 //
-//    STRCMP_EQUAL("4",result);
-//    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+//    STRCMP_EQUAL("4000000000",result);
+//    STRCMP_EQUAL("-1000000000",result2); // make sure that B didnt change
 //}
 
-//TEST(TwoValueTestGroup, addNegSmallSingleDigNSpPB)
+//TEST(TwoValueTestGroup, addNegMedDigNSpPB)
 //{
-//    myBigIntBaseA->setString("-1");
-//    myBigIntBaseB->setString("5");
+//    myBigIntBaseA->setString("-1000000000");
+//    myBigIntBaseB->setString("5000000000");
 //
 //    // A = A+B
 //    myBigIntBaseA->add(myBigIntBaseB);
 //    result = myBigIntBaseA->getString();
 //    result2 = myBigIntBaseB->getString();
 //
-//    STRCMP_EQUAL("4",result);
-//    STRCMP_EQUAL("5",result2); // make sure that B didnt change
+//    STRCMP_EQUAL("4000000000",result);
+//    STRCMP_EQUAL("5000000000",result2); // make sure that B didnt change
 //}
 //
-//TEST(TwoValueTestGroup, addNegSmallSingleDigNBpPS)
+//TEST(TwoValueTestGroup, addNegMedDigNBpPS)
 //{
-//    myBigIntBaseA->setString("-5");
-//    myBigIntBaseB->setString("1");
+//    myBigIntBaseA->setString("-5000000000");
+//    myBigIntBaseB->setString("1000000000");
 //
 //    // A = A+B
 //    myBigIntBaseA->add(myBigIntBaseB);
 //    result = myBigIntBaseA->getString();
 //    result2 = myBigIntBaseB->getString();
 //
-//    STRCMP_EQUAL("-4",result);
-//    STRCMP_EQUAL("1",result2); // make sure that B didnt change
+//    STRCMP_EQUAL("-4000000000",result);
+//    STRCMP_EQUAL("1000000000",result2); // make sure that B didnt change
 //}
 //
-//TEST(TwoValueTestGroup, addNegSmallSingleDigPSpNB)
+//TEST(TwoValueTestGroup, addNegMedDigPSpNB)
 //{
-//    myBigIntBaseA->setString("1");
-//    myBigIntBaseB->setString("-5");
+//    myBigIntBaseA->setString("1000000000");
+//    myBigIntBaseB->setString("-5000000000");
 //
 //    // A = A+B
 //    myBigIntBaseA->add(myBigIntBaseB);
 //    result = myBigIntBaseA->getString();
 //    result2 = myBigIntBaseB->getString();
 //
-//    STRCMP_EQUAL("-4",result);
-//    STRCMP_EQUAL("-5",result2); // make sure that B didnt change
+//    STRCMP_EQUAL("-4000000000",result);
+//    STRCMP_EQUAL("-5000000000",result2); // make sure that B didnt change
 //}
-//
+
+
 
 
