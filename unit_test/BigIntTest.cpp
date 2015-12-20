@@ -445,7 +445,7 @@ TEST(TwoValueTestGroup, setStringSubLongDigitCarryMaxPos)
     STRCMP_EQUAL("99999999999999999999",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, addNegSmallSingleDigPBpNS)
+TEST(TwoValueTestGroup, addMixedSmallSingleDigPBpNS)
 {
     myBigIntBaseA->setString("5");
     myBigIntBaseB->setString("-1");
@@ -459,7 +459,7 @@ TEST(TwoValueTestGroup, addNegSmallSingleDigPBpNS)
     STRCMP_EQUAL("-1",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, addNegSmallSingleDigNSpPB)
+TEST(TwoValueTestGroup, addMixedSmallSingleDigNSpPB)
 {
     myBigIntBaseA->setString("-1");
     myBigIntBaseB->setString("5");
@@ -473,7 +473,7 @@ TEST(TwoValueTestGroup, addNegSmallSingleDigNSpPB)
     STRCMP_EQUAL("5",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, addNegSmallSingleDigNBpPS)
+TEST(TwoValueTestGroup, addMixedSmallSingleDigNBpPS)
 {
     myBigIntBaseA->setString("-5");
     myBigIntBaseB->setString("1");
@@ -487,7 +487,7 @@ TEST(TwoValueTestGroup, addNegSmallSingleDigNBpPS)
     STRCMP_EQUAL("1",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, addNegSmallSingleDigPSpNB)
+TEST(TwoValueTestGroup, addMixedSmallSingleDigPSpNB)
 {
     myBigIntBaseA->setString("1");
     myBigIntBaseB->setString("-5");
@@ -504,61 +504,150 @@ TEST(TwoValueTestGroup, addNegSmallSingleDigPSpNB)
 
 
 
-//TEST(TwoValueTestGroup, addNegMedDigPBpNS)
-//{
-//    myBigIntBaseA->setString("5000000000");
-//    myBigIntBaseB->setString("-1000000000");
-//
-//    // A = A+B
-//    myBigIntBaseA->add(myBigIntBaseB);
-//    result = myBigIntBaseA->getString();
-//    result2 = myBigIntBaseB->getString();
-//
-//    STRCMP_EQUAL("4000000000",result);
-//    STRCMP_EQUAL("-1000000000",result2); // make sure that B didnt change
-//}
+TEST(TwoValueTestGroup, addMixedMedDigPBpNS)
+{
+    myBigIntBaseA->setString("5000000000");
+    myBigIntBaseB->setString("-1000000000");
 
-//TEST(TwoValueTestGroup, addNegMedDigNSpPB)
-//{
-//    myBigIntBaseA->setString("-1000000000");
-//    myBigIntBaseB->setString("5000000000");
-//
-//    // A = A+B
-//    myBigIntBaseA->add(myBigIntBaseB);
-//    result = myBigIntBaseA->getString();
-//    result2 = myBigIntBaseB->getString();
-//
-//    STRCMP_EQUAL("4000000000",result);
-//    STRCMP_EQUAL("5000000000",result2); // make sure that B didnt change
-//}
-//
-//TEST(TwoValueTestGroup, addNegMedDigNBpPS)
-//{
-//    myBigIntBaseA->setString("-5000000000");
-//    myBigIntBaseB->setString("1000000000");
-//
-//    // A = A+B
-//    myBigIntBaseA->add(myBigIntBaseB);
-//    result = myBigIntBaseA->getString();
-//    result2 = myBigIntBaseB->getString();
-//
-//    STRCMP_EQUAL("-4000000000",result);
-//    STRCMP_EQUAL("1000000000",result2); // make sure that B didnt change
-//}
-//
-//TEST(TwoValueTestGroup, addNegMedDigPSpNB)
-//{
-//    myBigIntBaseA->setString("1000000000");
-//    myBigIntBaseB->setString("-5000000000");
-//
-//    // A = A+B
-//    myBigIntBaseA->add(myBigIntBaseB);
-//    result = myBigIntBaseA->getString();
-//    result2 = myBigIntBaseB->getString();
-//
-//    STRCMP_EQUAL("-4000000000",result);
-//    STRCMP_EQUAL("-5000000000",result2); // make sure that B didnt change
-//}
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("4000000000",result);
+    STRCMP_EQUAL("-1000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedMedDigNSpPB)
+{
+    myBigIntBaseA->setString("-1000000000");
+    myBigIntBaseB->setString("5000000000");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("4000000000",result);
+    STRCMP_EQUAL("5000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedMedDigNBpPS)
+{
+    myBigIntBaseA->setString("-5000000000");
+    myBigIntBaseB->setString("1000000000");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-4000000000",result);
+    STRCMP_EQUAL("1000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedMedDigPSpNB)
+{
+    myBigIntBaseA->setString("1000000000");
+    myBigIntBaseB->setString("-5000000000");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-4000000000",result);
+    STRCMP_EQUAL("-5000000000",result2); // make sure that B didnt change
+}
+
+
+TEST(TwoValueTestGroup, addMixedDiffLenDigPBpNS)
+{
+    myBigIntBaseA->setString("11111111111");
+    myBigIntBaseB->setString("-1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("11111111110",result);
+    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedDiffLenDigNSpPB)
+{
+    myBigIntBaseA->setString("-1");
+    myBigIntBaseB->setString("11111111111");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("11111111110",result);
+    STRCMP_EQUAL("11111111111",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedDiffLenDigNBpPS)
+{
+    myBigIntBaseA->setString("-11111111111");
+    myBigIntBaseB->setString("1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-11111111110",result);
+    STRCMP_EQUAL("1",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedDiffLenDigPSpNB)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("-11111111111");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-11111111110",result);
+    STRCMP_EQUAL("-11111111111",result2); // make sure that B didnt change
+}
+
+
+
+
+TEST(TwoValueTestGroup, addMixedMostlyCancel)
+{
+    myBigIntBaseA->setString("12345678901234567891");
+    myBigIntBaseB->setString("-12345678901234567890");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("1",result);
+    STRCMP_EQUAL("-12345678901234567890",result2); // make sure that B didnt change
+}
+
+
+TEST(TwoValueTestGroup, addMixedBorrow)
+{
+    myBigIntBaseA->setString("100000000");
+    myBigIntBaseB->setString("-1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("99999999",result);
+    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+}
 
 
 

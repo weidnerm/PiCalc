@@ -227,7 +227,7 @@ void BigInts1B::sameSignAdd(BigIntBase* bigIntPtr)
 void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
 {
     // the signs are different, so its a subtract.
-    // take  the Big one minus Small and then use the final sign of the bigger
+    // take the Big one minus Small and then use the final sign of the bigger
     BigInts1B* bigPtr = this;
     BigInts1B* smallPtr = (BigInts1B*)bigIntPtr;
 
@@ -249,11 +249,34 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
 //    printf("bigPtr->m_value[0]=%d  smallPtr->m_value[0]=%d\n",bigPtr->m_value[0],smallPtr->m_value[0]);
 //    printf("bigPtr->m_negative=%d  smallPtr->m_negative=%d\n",bigPtr->m_negative,smallPtr->m_negative);
 //    printf("this->m_negative=%d  bigIntPtr->m_negative=%d\n",this->m_negative,((BigInts1B*)bigIntPtr)->m_negative);
+    int shortestLength = smallPtr->m_length;
+    int biggestLength  = bigPtr->m_length;
 
-    m_value[0] = bigPtr->m_value[0] - smallPtr->m_value[0];
+    //
+    // the signs are opposite.  we can just subtract bigger from smaller
+    //
+    int32_t * resultArray = new int32_t[bigPtr->m_length];
+
+    int index;
+    for (index = 0; index < biggestLength; index++)
+    {
+        int temp = 0;
+        if (index < shortestLength)
+        {
+            temp = smallPtr->m_value[index];
+        }
+        if (bigPtr->m_value[index] < smallPtr->m_value[index])
+        {
+            // borrow
+        }
+        resultArray[index] = bigPtr->m_value[index] - temp;
+    }
+    delete [] m_value;
+    m_value = resultArray;
 
     // Set the final sign to the sign of the bigger of the values.
     m_negative = bigPtr->m_negative;
+    m_length = bigPtr->m_length;
 }
 
 /*
