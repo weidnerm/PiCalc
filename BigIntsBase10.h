@@ -50,6 +50,8 @@ class BigIntsBase10: public BigIntBase
         virtual void subtract(BigIntBase* bigInt);
     protected:
         virtual void sameSignAdd(BigIntBase* bigInt);
+        virtual void diffSignAdd(BigIntBase* bigInt);
+        void swap(BigIntsBase10 ** first, BigIntsBase10 ** second);
 
     public:
         int8_t* m_value;

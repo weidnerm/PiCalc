@@ -52,6 +52,7 @@ void BigIntsBase10::valueOf(int inputValue)
         inputValue = inputValue / 10;
         index++;
     }
+    m_length = index;
 }
 
 BigIntsBase10::BigIntsBase10()
@@ -66,6 +67,7 @@ BigIntsBase10::BigIntsBase10()
     {
         m_value[index] = 0;
     }
+    m_length = 0;  // fixme
 
 }
 
@@ -170,6 +172,7 @@ void BigIntsBase10::add(BigIntBase* bigIntPtr)
     else
     {
         // they are different signs need to subtract
+        diffSignAdd(bigIntPtr);
     }
 }
 
@@ -189,10 +192,7 @@ void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
 
     if ((longPtr->m_length) < (shortPtr->m_length))
     {
-        BigIntsBase10* tempPtr;
-        tempPtr = longPtr;
-        longPtr = shortPtr;
-        shortPtr = tempPtr;
+        swap(&longPtr,&shortPtr);
     }
     int shortestLength = shortPtr->m_length;
 
@@ -225,6 +225,44 @@ void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
     m_value = resultArray;
     m_length = longPtr->m_length + ((longPtr->m_length < index) ? 1 : 0);
 }
+
+void BigIntsBase10::diffSignAdd(BigIntBase* bigIntPtr)
+{
+    // the signs are different, so its a subtract.
+    // take  the Big one minus Small and then use the final sign of the bigger
+    BigIntsBase10* bigPtr = this;
+    BigIntsBase10* smallPtr = (BigIntsBase10*)bigIntPtr;
+
+    // 55 - 5
+    if ((bigPtr->m_length) < (smallPtr->m_length))
+    {
+        swap(&bigPtr, &smallPtr );
+    }
+    else if ((bigPtr->m_length) == (smallPtr->m_length))  // 5 - 8
+    {
+        if (bigPtr->m_value[bigPtr->m_length-1] < smallPtr->m_value[smallPtr->m_length-1]   )
+        {
+            swap(&bigPtr, &smallPtr );
+        }
+    }
+//    printf("bigPtr->m_value[0]=%d  smallPtr->m_value[0]=%d\n",bigPtr->m_value[0],smallPtr->m_value[0]);
+//    printf("bigPtr->m_negative=%d  smallPtr->m_negative=%d\n",bigPtr->m_negative,smallPtr->m_negative);
+//    printf("this->m_negative=%d  bigIntPtr->m_negative=%d\n",this->m_negative,((BigIntsBase10*)bigIntPtr)->m_negative);
+
+    m_value[0] = bigPtr->m_value[0] - smallPtr->m_value[0];
+
+    // Set the final sign to the sign of the bigger of the values.
+    m_negative = bigPtr->m_negative;
+
+}
+
+void BigIntsBase10::swap(BigIntsBase10** first, BigIntsBase10** second)
+{
+    BigIntsBase10 * tempPtr;
+    tempPtr = *first;
+    *first = *second;
+    *second = tempPtr;
+}
 /*
  * Same Sign Cases
  *    +10      +10      +10
@@ -238,7 +276,7 @@ void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
  *               1      -31
  *
  *Mixed sign cases
- *    -10
+ *    -10  same as big-small with sign of big
  *  +  21
  *  ======
  *
