@@ -27,6 +27,7 @@
 
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "BigInts1B.h"
+#include "memory.h"
 
 BigInts1B::BigInts1B()
 {
@@ -67,16 +68,76 @@ void BigInts1B::valueOf(int inputValue)
     m_length = index;
 }
 
-void BigInts1B::add(BigIntBase* bigInt)
+void BigInts1B::add(BigIntBase* bigIntPtr)
 {
+    if (m_negative == ((BigInts1B*)bigIntPtr)->m_negative)
+    {
+        sameSignAdd(bigIntPtr);
+    }
+    else
+    {
+        // they are different signs need to subtract
+        diffSignAdd(bigIntPtr);
+    }
 }
 
 void BigInts1B::subtract(BigIntBase* bigInt)
 {
+    // subtract by changing the sign of the second parameter then do add.  change sign back when done.
+    BigInts1B * secondParm = (BigInts1B*)bigInt;
+    secondParm->m_negative = (secondParm->m_negative ? false : true);  // toggle the negative flag
+    add(bigInt);
+    secondParm->m_negative = (secondParm->m_negative ? false : true);  // toggle the negative flag
 }
 
+int multiplier[] =
+{
+        1,
+        10,
+        100,
+        1000,
+        10000,
+        100000,
+        1000000,
+        10000000,
+        100000000,
+};
 void BigInts1B::setString(char* valueString)
 {
+    int length = strlen(valueString);
+
+    int inIndex = 0;
+    if ( valueString[0] == '-' )
+    {
+        m_negative = true;
+        inIndex++;
+        length--;
+    }
+
+    // if there isnt currently enough space, allocate more.
+    if ( (length+8)/9 > m_length)
+    {
+        m_length = (length+8)/9;
+        delete [] m_value;
+        m_value = new int32_t[m_length];
+    }
+
+    int index;
+    for(index=0;index<m_length;index++)
+    {
+        m_value[index] = 0;
+    }
+
+    int outIndex;
+    for (index = 0; index < length; index++)
+    {
+        int rawOutIndex = length - index - 1;
+        outIndex = (rawOutIndex) / 9;
+        int outDigit = rawOutIndex % 9;
+        m_value[outIndex] += (valueString[inIndex] - '0') * multiplier[outDigit];
+        inIndex++;
+    }
+
 }
 
 char* BigInts1B::getString()
@@ -109,15 +170,69 @@ char* BigInts1B::getString()
             }
             tempWord = tempWord % digitDivisor;
             digitDivisor = digitDivisor / 10;
-
         }
     }
+
     if (foundFirstDigit ==false)
     {
         returnVal[outIndex] = '0';
         outIndex++;
     }
+
     returnVal[outIndex] = 0;
 
     return returnVal;
+}
+
+void BigInts1B::sameSignAdd(BigIntBase* bigIntPtr)
+{
+    BigInts1B* longPtr = this;
+    BigInts1B* shortPtr = (BigInts1B*)bigIntPtr;
+
+    if ((longPtr->m_length) < (shortPtr->m_length))
+    {
+        swap(&longPtr,&shortPtr);
+    }
+    int shortestLength = shortPtr->m_length;
+
+    int32_t * resultArray = new int32_t[longPtr->m_length+1];
+
+    // the signs match.  we can just add. (even if both negative)
+    int index;
+    int carry = 0;
+    for (index = 0; ((index < shortestLength) || (carry == 1)); index++)
+    {
+        int temp = 0;
+        if (index < shortestLength)
+        {
+            temp = shortPtr->m_value[index];
+        }
+        if (index < longPtr->m_length)
+        {
+            temp = temp + longPtr->m_value[index];
+        }
+        temp = temp + carry;
+        carry = 0;
+        if (temp >= 1000000000)
+        {
+            temp = temp - 1000000000;
+            carry = 1;
+        }
+        resultArray[index] = temp;
+    }
+    delete [] m_value;
+    m_value = resultArray;
+    m_length = longPtr->m_length + ((longPtr->m_length < index) ? 1 : 0);
+}
+
+void BigInts1B::diffSignAdd(BigIntBase* bigInt)
+{
+}
+
+void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
+{
+    BigInts1B * tempPtr;
+    tempPtr = *first;
+    *first = *second;
+    *second = tempPtr;
 }

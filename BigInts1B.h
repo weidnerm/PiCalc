@@ -50,6 +50,10 @@ class BigInts1B: public BigIntBase
         // divide
         virtual void setString(char * valueString);  // assign from a string
         virtual char* getString(); // output to a string
+    protected:
+        virtual void sameSignAdd(BigIntBase* bigInt);
+        virtual void diffSignAdd(BigIntBase* bigInt);
+        void swap(BigInts1B ** first, BigInts1B ** second);
     public:
         int32_t* m_value;
         uint32_t m_length;

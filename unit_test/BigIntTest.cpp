@@ -62,43 +62,42 @@ TEST(FirstTestGroup, setPostiveMediumInt123)
 }
 
 
-//TEST(FirstTestGroup, setPostiveMediumInt100)
-//{
-//    myBigIntBase->valueOf(100);
-//
-//    result = myBigIntBase->getString();
-//
-//    STRCMP_EQUAL("100",result);
-//}
-//
-//TEST(FirstTestGroup, setMaxPosInt)
-//{
-//    myBigIntBase->valueOf(2147483647);
-//
-//    result = myBigIntBase->getString();
-//
-//    STRCMP_EQUAL("2147483647",result);
-//}
-//
-//TEST(FirstTestGroup, setNegMaxInt)
-//{
-//    myBigIntBase->valueOf(-2147483647);
-//
-//    result = myBigIntBase->getString();
-//
-//    STRCMP_EQUAL("-2147483647",result);
-//}
-//
-//TEST(FirstTestGroup, setZero)
-//{
-//    myBigIntBase->valueOf(0);
-//
-//    result = myBigIntBase->getString();
-//
-//    STRCMP_EQUAL("0",result);
-//}
+TEST(FirstTestGroup, setPostiveMediumInt100)
+{
+    myBigIntBase->valueOf(100);
 
-/*
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("100",result);
+}
+
+TEST(FirstTestGroup, setMaxPosInt)
+{
+    myBigIntBase->valueOf(2147483647);
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("2147483647",result);
+}
+
+TEST(FirstTestGroup, setNegMaxInt)
+{
+    myBigIntBase->valueOf(-2147483647);
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("-2147483647",result);
+}
+
+TEST(FirstTestGroup, setZero)
+{
+    myBigIntBase->valueOf(0);
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("0",result);
+}
+
 TEST(FirstTestGroup, setLargePositive)
 {
     myBigIntBase->setString("12345678901234567890");
@@ -106,6 +105,87 @@ TEST(FirstTestGroup, setLargePositive)
     result = myBigIntBase->getString();
 
     STRCMP_EQUAL("12345678901234567890",result);
+}
+TEST(FirstTestGroup, setLargePositive21Dig)
+{
+    myBigIntBase->setString("123456789012345678901");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("123456789012345678901",result);
+}
+TEST(FirstTestGroup, setLargePositive22Dig)
+{
+    myBigIntBase->setString("1234567890123456789012");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("1234567890123456789012",result);
+}
+TEST(FirstTestGroup, setLargePositive23Dig)
+{
+    myBigIntBase->setString("12345678901234567890123");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("12345678901234567890123",result);
+}
+TEST(FirstTestGroup, setLargePositive24Dig)
+{
+    myBigIntBase->setString("123456789012345678901234");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("123456789012345678901234",result);
+}
+TEST(FirstTestGroup, setLargePositive25Dig)
+{
+    myBigIntBase->setString("1234567890123456789012345");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("1234567890123456789012345",result);
+}
+TEST(FirstTestGroup, setLargePositive26Dig)
+{
+    myBigIntBase->setString("12345678901234567890123456");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("12345678901234567890123456",result);
+}
+TEST(FirstTestGroup, setLargePositive27Dig)
+{
+    myBigIntBase->setString("123456789012345678901234567");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("123456789012345678901234567",result);
+}
+TEST(FirstTestGroup, setLargePositive28Dig)
+{
+    myBigIntBase->setString("1234567890123456789012345678");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("1234567890123456789012345678",result);
+}
+TEST(FirstTestGroup, setLargePositive29Dig)
+{
+    myBigIntBase->setString("12345678901234567890123456789");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("12345678901234567890123456789",result);
+}
+
+TEST(FirstTestGroup, setLargePositive30Dig0)
+{
+    myBigIntBase->setString("100000000000000000000000000000");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("100000000000000000000000000000",result);
 }
 
 TEST(FirstTestGroup, setLargeNegative)
@@ -155,8 +235,8 @@ TEST_GROUP(TwoValueTestGroup)
 
     void setup()
     {
-        myBigIntBaseA = new BigInts100M;
-        myBigIntBaseB = new BigInts100M;
+        myBigIntBaseA = new BigInts1B;
+        myBigIntBaseB = new BigInts1B;
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
     }
@@ -231,6 +311,40 @@ TEST(TwoValueTestGroup, setStringAddMoreDigitCarry)
     result = myBigIntBaseA->getString();
 
     STRCMP_EQUAL("1000000000",result);
+}
+
+TEST(TwoValueTestGroup, setStringAddMoreDigitCarry8)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("99999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("100000000",result);
+}
+TEST(TwoValueTestGroup, setStringAddMoreDigitCarry9)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("999999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("1000000000",result);
+}
+TEST(TwoValueTestGroup, setStringAddMoreDigitCarry10)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("9999999999");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("10000000000",result);
 }
 TEST(TwoValueTestGroup, setStringAddLongDigitCarry)
 {
@@ -331,61 +445,61 @@ TEST(TwoValueTestGroup, setStringSubLongDigitCarryMaxPos)
     STRCMP_EQUAL("99999999999999999999",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, addNegSmallSingleDigPBpNS)
-{
-    myBigIntBaseA->setString("5");
-    myBigIntBaseB->setString("-1");
+//TEST(TwoValueTestGroup, addNegSmallSingleDigPBpNS)
+//{
+//    myBigIntBaseA->setString("5");
+//    myBigIntBaseB->setString("-1");
+//
+//    // A = A+B
+//    myBigIntBaseA->add(myBigIntBaseB);
+//    result = myBigIntBaseA->getString();
+//    result2 = myBigIntBaseB->getString();
+//
+//    STRCMP_EQUAL("4",result);
+//    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+//}
 
-    // A = A+B
-    myBigIntBaseA->add(myBigIntBaseB);
-    result = myBigIntBaseA->getString();
-    result2 = myBigIntBaseB->getString();
+//TEST(TwoValueTestGroup, addNegSmallSingleDigNSpPB)
+//{
+//    myBigIntBaseA->setString("-1");
+//    myBigIntBaseB->setString("5");
+//
+//    // A = A+B
+//    myBigIntBaseA->add(myBigIntBaseB);
+//    result = myBigIntBaseA->getString();
+//    result2 = myBigIntBaseB->getString();
+//
+//    STRCMP_EQUAL("4",result);
+//    STRCMP_EQUAL("5",result2); // make sure that B didnt change
+//}
+//
+//TEST(TwoValueTestGroup, addNegSmallSingleDigNBpPS)
+//{
+//    myBigIntBaseA->setString("-5");
+//    myBigIntBaseB->setString("1");
+//
+//    // A = A+B
+//    myBigIntBaseA->add(myBigIntBaseB);
+//    result = myBigIntBaseA->getString();
+//    result2 = myBigIntBaseB->getString();
+//
+//    STRCMP_EQUAL("-4",result);
+//    STRCMP_EQUAL("1",result2); // make sure that B didnt change
+//}
+//
+//TEST(TwoValueTestGroup, addNegSmallSingleDigPSpNB)
+//{
+//    myBigIntBaseA->setString("1");
+//    myBigIntBaseB->setString("-5");
+//
+//    // A = A+B
+//    myBigIntBaseA->add(myBigIntBaseB);
+//    result = myBigIntBaseA->getString();
+//    result2 = myBigIntBaseB->getString();
+//
+//    STRCMP_EQUAL("-4",result);
+//    STRCMP_EQUAL("-5",result2); // make sure that B didnt change
+//}
+//
 
-    STRCMP_EQUAL("4",result);
-    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
-}
-
-TEST(TwoValueTestGroup, addNegSmallSingleDigNSpPB)
-{
-    myBigIntBaseA->setString("-1");
-    myBigIntBaseB->setString("5");
-
-    // A = A+B
-    myBigIntBaseA->add(myBigIntBaseB);
-    result = myBigIntBaseA->getString();
-    result2 = myBigIntBaseB->getString();
-
-    STRCMP_EQUAL("4",result);
-    STRCMP_EQUAL("5",result2); // make sure that B didnt change
-}
-
-TEST(TwoValueTestGroup, addNegSmallSingleDigNBpPS)
-{
-    myBigIntBaseA->setString("-5");
-    myBigIntBaseB->setString("1");
-
-    // A = A+B
-    myBigIntBaseA->add(myBigIntBaseB);
-    result = myBigIntBaseA->getString();
-    result2 = myBigIntBaseB->getString();
-
-    STRCMP_EQUAL("-4",result);
-    STRCMP_EQUAL("1",result2); // make sure that B didnt change
-}
-
-TEST(TwoValueTestGroup, addNegSmallSingleDigPSpNB)
-{
-    myBigIntBaseA->setString("1");
-    myBigIntBaseB->setString("-5");
-
-    // A = A+B
-    myBigIntBaseA->add(myBigIntBaseB);
-    result = myBigIntBaseA->getString();
-    result2 = myBigIntBaseB->getString();
-
-    STRCMP_EQUAL("-4",result);
-    STRCMP_EQUAL("-5",result2); // make sure that B didnt change
-}
-
-*/
 
