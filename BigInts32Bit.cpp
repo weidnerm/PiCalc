@@ -124,3 +124,11 @@ void BigInts32Bit::setString(char* valueString)
         multiplier = multiplier * base
     */
 }
+
+void BigInts32Bit::add(BigIntBase* bigInt)
+{
+}
+
+void BigInts32Bit::subtract(BigIntBase* bigInt)
+{
+}

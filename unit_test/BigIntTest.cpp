@@ -141,7 +141,7 @@ TEST(FirstTestGroup, setStringNeg123)
 
     STRCMP_EQUAL("-123",result);
 }
-*/
+
 
 
 TEST_GROUP(TwoValueTestGroup)
@@ -153,8 +153,8 @@ TEST_GROUP(TwoValueTestGroup)
 
     void setup()
     {
-        myBigIntBaseA = new BigIntsBase10;
-        myBigIntBaseB = new BigIntsBase10;
+        myBigIntBaseA = new BigInts32Bit;
+        myBigIntBaseB = new BigInts32Bit;
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
     }
@@ -385,5 +385,5 @@ TEST(TwoValueTestGroup, addNegSmallSingleDigPSpNB)
     STRCMP_EQUAL("-5",result2); // make sure that B didnt change
 }
 
-
+*/
 

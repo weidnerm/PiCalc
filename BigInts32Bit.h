@@ -46,6 +46,8 @@ class BigInts32Bit: public BigIntBase
         virtual void valueOf(int); // assign an int
         virtual char* getString(); // output to a string
         virtual void setString(char * valueString);  // assign from a string
+        virtual void add(BigIntBase* bigInt);
+        virtual void subtract(BigIntBase* bigInt);
     public:
         uint32_t* m_value;
         uint32_t m_length;
