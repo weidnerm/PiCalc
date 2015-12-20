@@ -238,17 +238,11 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
     }
     else if ((bigPtr->m_length) == (smallPtr->m_length))  // 5 - 8
     {
-//printf("Length matches %d==%d. big=%d small=%d\n",
-//        bigPtr->m_length,smallPtr->m_length
-//        ,bigPtr->m_value[bigPtr->m_length - 1],smallPtr->m_value[smallPtr->m_length - 1]);
         if (bigPtr->m_value[bigPtr->m_length - 1] < smallPtr->m_value[smallPtr->m_length - 1])
         {
             swap(&bigPtr, &smallPtr);
         }
     }
-//    printf("bigPtr->m_value[0]=%d  smallPtr->m_value[0]=%d\n",bigPtr->m_value[0],smallPtr->m_value[0]);
-//    printf("bigPtr->m_negative=%d  smallPtr->m_negative=%d\n",bigPtr->m_negative,smallPtr->m_negative);
-//    printf("this->m_negative=%d  bigIntPtr->m_negative=%d\n",this->m_negative,((BigInts1B*)bigIntPtr)->m_negative);
     int shortestLength = smallPtr->m_length;
     int biggestLength  = bigPtr->m_length;
 
@@ -256,8 +250,12 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
     // the signs are opposite.  we can just subtract bigger from smaller
     //
     int32_t * resultArray = new int32_t[bigPtr->m_length];
-
     int index;
+    for (index = 0; index < biggestLength; index++)  // transfer big to working area. borrows require tampering with big
+    {
+        resultArray[index] = bigPtr->m_value[index];
+    }
+
     for (index = 0; index < biggestLength; index++)
     {
         int temp = 0;
@@ -265,11 +263,13 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
         {
             temp = smallPtr->m_value[index];
         }
-        if (bigPtr->m_value[index] < smallPtr->m_value[index])
+        if (resultArray[index] < temp)
         {
             // borrow
+            resultArray[index] += 1000000000;
+            resultArray[index + 1] -= 1;  // next loop will trigger a re-borrow on the next digit to eliminate the neg
         }
-        resultArray[index] = bigPtr->m_value[index] - temp;
+        resultArray[index] = resultArray[index] - temp;
     }
     delete [] m_value;
     m_value = resultArray;
@@ -279,18 +279,10 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
     m_length = bigPtr->m_length;
 }
 
-/*
- *  100
- *   -1
- *
- */
-
-
 void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
 {
     BigInts1B * tempPtr;
     tempPtr = *first;
     *first = *second;
     *second = tempPtr;
-//printf("Swapping\n");
 }

@@ -635,9 +635,51 @@ TEST(TwoValueTestGroup, addMixedMostlyCancel)
 }
 
 
-TEST(TwoValueTestGroup, addMixedBorrow)
+TEST(TwoValueTestGroup, addMixedBorrow1BigLast)
 {
-    myBigIntBaseA->setString("100000000");
+    myBigIntBaseA->setString("-1");
+    myBigIntBaseB->setString("1000000000");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("999999999",result);
+    STRCMP_EQUAL("1000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedBorrow2BigLast)
+{
+    myBigIntBaseA->setString("-1");
+    myBigIntBaseB->setString("1000000000000000000");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("999999999999999999",result);
+    STRCMP_EQUAL("1000000000000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedBorrow3BigLast)
+{
+    myBigIntBaseA->setString("-1");
+    myBigIntBaseB->setString("1000000000000000000000000000");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("999999999999999999999999999",result);
+    STRCMP_EQUAL("1000000000000000000000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, addMixedBorrow3BigFirst)
+{
+    myBigIntBaseA->setString("1000000000000000000000000000");
     myBigIntBaseB->setString("-1");
 
     // A = A+B
@@ -645,9 +687,26 @@ TEST(TwoValueTestGroup, addMixedBorrow)
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("99999999",result);
+    STRCMP_EQUAL("999999999999999999999999999",result);
     STRCMP_EQUAL("-1",result2); // make sure that B didnt change
 }
+
+TEST(TwoValueTestGroup, addMixedBorrow4BigFirst)
+{
+    myBigIntBaseA->setString("123451000000000000000000000000000000000000000000000000000000");
+    myBigIntBaseB->setString("-1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("123450999999999999999999999999999999999999999999999999999999",result);
+    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+}
+
+
+
 
 
 
