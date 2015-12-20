@@ -32,10 +32,9 @@
 
 BigInts1B::BigInts1B()
 {
-    m_value = new int32_t[2];
+    m_value = new int32_t[1];
     m_value[0] = 0;
-    m_value[1] = 0;
-    m_length = 2;
+    m_length = 1;
     m_negative = false;
 }
 

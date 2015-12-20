@@ -1,40 +1,39 @@
+#---------
+#
+# CppUTest Examples Makefile
+#
+#----------
 
-SOURCES = TestRunner.cpp \
-          BigIntTest.cpp \
-          ../BigIntBase.cpp \
-          ../BigIntsBase10.cpp \
-          ../BigInts32Bit.cpp \
-          ../BigInts1B.cpp \
-          
-TARGET:=runTests
+#Set this to @ to keep the makefile quiet
+ifndef SILENCE
+	SILENCE = @
+endif
 
-CPPUTEST_HOME = /usr
-CXXFLAGS += -Wno-write-strings -fpermissive
-CXXFLAGS += -I/home/vagrant/workspace/BigInts
-CPPFLAGS += -I(CPPUTEST_HOME)/include
-CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
-CFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
-    
-LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
+#--- Inputs ----#
+COMPONENT_NAME = BigInt
+CPPUTEST_HOME = /home/vagrant/cpputest-3.7.1
 
-all: ${TARGET}
+CPPUTEST_USE_EXTENSIONS = Y
+CPPUTEST_USE_GCOV = Y
+CPP_PLATFORM = Gcc
 
-$(SOURCES:.cpp=.o): $@
-	@echo CXX $@
-	@g++ -c -g ${CXXFLAGS} $(@:.o=.cpp) -o $@
-	
+CPPUTEST_WARNINGFLAGS = -Wno-error=sign-conversion -Wno-write-strings
 
-${TARGET}: $(SOURCES:.cpp=.o)
-	@g++ $(SOURCES:.cpp=.o) -o ${TARGET}   ${LD_LIBRARIES}
-	@./${TARGET}
+SRC_DIRS = /home/vagrant/workspace/BigInts \
 
-clean:
-	rm -rf $(SOURCES:.cpp=.o)  ${TARGET}
-	
+TEST_SRC_DIRS = /home/vagrant/workspace/BigInts/unit_test \
+
+INCLUDE_DIRS =\
+  /home/vagrant/workspace/BigInts \
+  /home/vagrant/workspace/BigInts/unit_test \
+  $(CPPUTEST_HOME)/include\
+
+include $(CPPUTEST_HOME)/build/MakefileWorker.mk
+
 .PHONY: dox_all dox_clean
 dox_all:
 	doxygen ../doxygen.cfg
 	
 dox_clean:
 	rm -rf ../doxygen/
-	
+

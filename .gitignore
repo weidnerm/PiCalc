@@ -2,3 +2,10 @@
 runTests
 /doxygen/
 /Debug/
+*.d
+lib/
+objs/
+gcov/
+BigInt_tests
+BigInt_tests.txt
+
