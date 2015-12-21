@@ -48,6 +48,7 @@ class BigIntsBase10: public BigIntBase
         virtual void setString(char * valueString);  // assign from a string
         virtual void add(BigIntBase* bigInt);
         virtual void subtract(BigIntBase* bigInt);
+        virtual void multiply(BigIntBase* bigInt);
     protected:
         virtual void sameSignAdd(BigIntBase* bigInt);
         virtual void diffSignAdd(BigIntBase* bigInt);

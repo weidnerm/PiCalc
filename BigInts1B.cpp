@@ -279,6 +279,10 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
     m_length = bigPtr->m_length;
 }
 
+void BigInts1B::multiply(BigIntBase* bigInt)
+{
+}
+
 void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
 {
     BigInts1B * tempPtr;

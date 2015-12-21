@@ -46,7 +46,7 @@ class BigInts1B: public BigIntBase
         virtual void valueOf(int); // assign an int
         virtual void add(BigIntBase* bigInt);
         virtual void subtract(BigIntBase* bigIntPtr);
-        // multiply
+        virtual void multiply(BigIntBase* bigInt);
         // divide
         virtual void setString(char * valueString);  // assign from a string
         virtual char* getString(); // output to a string

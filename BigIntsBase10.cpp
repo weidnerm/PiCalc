@@ -263,6 +263,10 @@ void BigIntsBase10::swap(BigIntsBase10** first, BigIntsBase10** second)
     *first = *second;
     *second = tempPtr;
 }
+
+void BigIntsBase10::multiply(BigIntBase* bigInt)
+{
+}
 /*
  * Same Sign Cases
  *    +10      +10      +10

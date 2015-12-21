@@ -44,6 +44,7 @@ class BigIntBase
         virtual void valueOf(int) = 0; // assign an int
         virtual void add(BigIntBase* bigInt) = 0;
         virtual void subtract(BigIntBase* bigInt) = 0;
+        virtual void multiply(BigIntBase* bigInt) = 0;
         // multiply
         // divide
         virtual void setString(char * valueString) = 0;  // assign from a string
