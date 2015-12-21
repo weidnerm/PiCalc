@@ -30,6 +30,8 @@
 #include "memory.h"
 #include "stdio.h"
 
+#define BASE 1000000000
+
 BigInts1B::BigInts1B()
 {
     m_value = new int32_t[1];
@@ -51,7 +53,7 @@ void BigInts1B::valueOf(int inputValue)
         inputValue = -inputValue;
     }
 
-    if ((inputValue >= 1000000000) && (m_length < 2))  // make sure there is room for an extra digit.
+    if ((inputValue >= BASE) && (m_length < 2))  // make sure there is room for an extra digit.
     {
         delete[] m_value;
         m_value = new int32_t[2];
@@ -63,8 +65,8 @@ void BigInts1B::valueOf(int inputValue)
 
     while (inputValue != 0)
     {
-        m_value[index] = inputValue % 1000000000;
-        inputValue = inputValue / 1000000000;
+        m_value[index] = inputValue % BASE;
+        inputValue = inputValue / BASE;
         index++;
     }
     m_length = index;
@@ -212,9 +214,9 @@ void BigInts1B::sameSignAdd(BigIntBase* bigIntPtr)
         }
         temp = temp + carry;
         carry = 0;
-        if (temp >= 1000000000)
+        if (temp >= BASE)
         {
-            temp = temp - 1000000000;
+            temp = temp - BASE;
             carry = 1;
         }
         resultArray[index] = temp;
@@ -266,7 +268,7 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
         if (resultArray[index] < temp)
         {
             // borrow
-            resultArray[index] += 1000000000;
+            resultArray[index] += BASE;
             resultArray[index + 1] -= 1;  // next loop will trigger a re-borrow on the next digit to eliminate the neg
         }
         resultArray[index] = resultArray[index] - temp;

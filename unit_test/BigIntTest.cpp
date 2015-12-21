@@ -34,6 +34,9 @@
 #include "stdio.h"
 #include "memory.h"
 
+//#define CLASS_UNDER_TEST BigInts1B
+#define CLASS_UNDER_TEST BigIntsBase10
+
 TEST_GROUP(FirstTestGroup)
 {
     BigIntBase * myBigIntBase;
@@ -41,8 +44,7 @@ TEST_GROUP(FirstTestGroup)
 
     void setup()
     {
-//        myBigIntBase = new BigInts1B;
-        myBigIntBase = new BigIntsBase10;
+        myBigIntBase = new CLASS_UNDER_TEST;
         result = 0;  // null it out in case its not used, we can safely delete 0
     }
 
@@ -52,6 +54,13 @@ TEST_GROUP(FirstTestGroup)
         delete [] result;
     }
 };
+
+TEST(FirstTestGroup, setEmptyForZero)
+{
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("0",result);
+}
 
 TEST(FirstTestGroup, setPostiveMediumInt123)
 {
@@ -236,10 +245,8 @@ TEST_GROUP(TwoValueTestGroup)
 
     void setup()
     {
-//        myBigIntBaseA = new BigInts1B;
-//        myBigIntBaseB = new BigInts1B;
-        myBigIntBaseA = new BigIntsBase10;
-        myBigIntBaseB = new BigIntsBase10;
+        myBigIntBaseA = new CLASS_UNDER_TEST;
+        myBigIntBaseB = new CLASS_UNDER_TEST;
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
     }

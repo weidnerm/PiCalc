@@ -30,6 +30,8 @@
 #include "stdio.h"
 #include "memory.h"
 
+#define BASE 10
+
 using namespace std;
 //
 //    value of 123
@@ -46,10 +48,13 @@ void BigIntsBase10::valueOf(int inputValue)
         inputValue = -inputValue;
     }
 
+    delete [] m_value;
+    m_value = new int8_t[10];  // big enough to hold the biggest int
+
     while (inputValue != 0)
     {
-        m_value[index] = inputValue % 10;
-        inputValue = inputValue / 10;
+        m_value[index] = inputValue % BASE;
+        inputValue = inputValue / BASE;
         index++;
     }
     m_length = index;
@@ -57,18 +62,10 @@ void BigIntsBase10::valueOf(int inputValue)
 
 BigIntsBase10::BigIntsBase10()
 {
-    int index;
-    m_length = 10;  // fixme
-    m_value = new int8_t[m_length];
-
+    m_value = new int8_t[1];
     m_negative = false;
-
-    for (index = 0; index < m_length; index++)
-    {
-        m_value[index] = 0;
-    }
-    m_length = 0;  // fixme
-
+    m_value[0] = 0;
+    m_length = 1;
 }
 
 // m_length
@@ -135,13 +132,9 @@ void BigIntsBase10::setString(char* valueString)
         length--;
     }
 
-    // if there isnt currently enough space, allocate more.
-    if ( length > m_length)
-    {
-        m_length = length;
-        delete [] m_value;
-        m_value = new int8_t[m_length];
-    }
+    delete [] m_value;
+    m_length = length;
+    m_value = new int8_t[m_length];
 
     int outIndex;
     int index;
@@ -214,9 +207,9 @@ void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
         }
         temp = temp + carry;
         carry = 0;
-        if (temp >= 10)
+        if (temp >= BASE)
         {
-            temp = temp - 10;
+            temp = temp - BASE;
             carry = 1;
         }
         resultArray[index] = temp;
@@ -268,7 +261,7 @@ void BigIntsBase10::diffSignAdd(BigIntBase* bigIntPtr)
         if (resultArray[index] < temp)
         {
             // borrow
-            resultArray[index] += 10;
+            resultArray[index] += BASE;
             resultArray[index + 1] -= 1;  // next loop will trigger a re-borrow on the next digit to eliminate the neg
         }
         resultArray[index] = resultArray[index] - temp;
