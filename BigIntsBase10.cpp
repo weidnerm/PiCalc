@@ -229,31 +229,56 @@ void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
 void BigIntsBase10::diffSignAdd(BigIntBase* bigIntPtr)
 {
     // the signs are different, so its a subtract.
-    // take  the Big one minus Small and then use the final sign of the bigger
+    // take the Big one minus Small and then use the final sign of the bigger
     BigIntsBase10* bigPtr = this;
     BigIntsBase10* smallPtr = (BigIntsBase10*)bigIntPtr;
 
     // 55 - 5
     if ((bigPtr->m_length) < (smallPtr->m_length))
     {
-        swap(&bigPtr, &smallPtr );
+        swap(&bigPtr, &smallPtr);
     }
     else if ((bigPtr->m_length) == (smallPtr->m_length))  // 5 - 8
     {
-        if (bigPtr->m_value[bigPtr->m_length-1] < smallPtr->m_value[smallPtr->m_length-1]   )
+        if (bigPtr->m_value[bigPtr->m_length - 1] < smallPtr->m_value[smallPtr->m_length - 1])
         {
-            swap(&bigPtr, &smallPtr );
+            swap(&bigPtr, &smallPtr);
         }
     }
-//    printf("bigPtr->m_value[0]=%d  smallPtr->m_value[0]=%d\n",bigPtr->m_value[0],smallPtr->m_value[0]);
-//    printf("bigPtr->m_negative=%d  smallPtr->m_negative=%d\n",bigPtr->m_negative,smallPtr->m_negative);
-//    printf("this->m_negative=%d  bigIntPtr->m_negative=%d\n",this->m_negative,((BigIntsBase10*)bigIntPtr)->m_negative);
+    int shortestLength = smallPtr->m_length;
+    int biggestLength  = bigPtr->m_length;
 
-    m_value[0] = bigPtr->m_value[0] - smallPtr->m_value[0];
+    //
+    // the signs are opposite.  we can just subtract bigger from smaller
+    //
+    int8_t * resultArray = new int8_t[bigPtr->m_length];
+    int index;
+    for (index = 0; index < biggestLength; index++)  // transfer big to working area. borrows require tampering with big
+    {
+        resultArray[index] = bigPtr->m_value[index];
+    }
+
+    for (index = 0; index < biggestLength; index++)
+    {
+        int temp = 0;
+        if (index < shortestLength)
+        {
+            temp = smallPtr->m_value[index];
+        }
+        if (resultArray[index] < temp)
+        {
+            // borrow
+            resultArray[index] += 10;
+            resultArray[index + 1] -= 1;  // next loop will trigger a re-borrow on the next digit to eliminate the neg
+        }
+        resultArray[index] = resultArray[index] - temp;
+    }
+    delete [] m_value;
+    m_value = resultArray;
 
     // Set the final sign to the sign of the bigger of the values.
     m_negative = bigPtr->m_negative;
-
+    m_length = bigPtr->m_length;
 }
 
 void BigIntsBase10::swap(BigIntsBase10** first, BigIntsBase10** second)

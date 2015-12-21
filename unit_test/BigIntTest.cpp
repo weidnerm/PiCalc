@@ -41,7 +41,8 @@ TEST_GROUP(FirstTestGroup)
 
     void setup()
     {
-        myBigIntBase = new BigInts1B;
+//        myBigIntBase = new BigInts1B;
+        myBigIntBase = new BigIntsBase10;
         result = 0;  // null it out in case its not used, we can safely delete 0
     }
 
@@ -235,8 +236,10 @@ TEST_GROUP(TwoValueTestGroup)
 
     void setup()
     {
-        myBigIntBaseA = new BigInts1B;
-        myBigIntBaseB = new BigInts1B;
+//        myBigIntBaseA = new BigInts1B;
+//        myBigIntBaseB = new BigInts1B;
+        myBigIntBaseA = new BigIntsBase10;
+        myBigIntBaseB = new BigIntsBase10;
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
     }
