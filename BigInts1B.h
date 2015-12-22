@@ -52,6 +52,7 @@ class BigInts1B: public BigIntBase
         virtual char* getString(); // output to a string
         virtual int compareMagnitude(BigIntBase* bigIntPtr);
         virtual void assign(BigIntBase* bigIntPtr);
+        virtual void pow(int power);   // base ^ int
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);
         virtual void diffSignAdd(BigIntBase* bigIntPtr);

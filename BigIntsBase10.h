@@ -52,6 +52,7 @@ class BigIntsBase10: public BigIntBase
         virtual void divide(BigIntBase* bigIntPtr);
         virtual int compareMagnitude(BigIntBase* bigIntPtr);
         virtual void assign(BigIntBase* bigIntPtr);
+        virtual void pow(int power);   // base ^ int
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);
         virtual void diffSignAdd(BigIntBase* bigIntPtr);

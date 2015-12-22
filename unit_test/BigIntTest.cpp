@@ -1196,3 +1196,37 @@ TEST(TwoValueTestGroup, multiply3162277660168379331998893544_sqrd)
 
 
 
+
+
+
+
+TEST(TwoValueTestGroup, pow_10_toThe_3)
+{
+    myBigIntBaseA->setString("10");
+
+    // A = A+B
+    myBigIntBaseA->pow(3);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("1000",result);
+}
+
+TEST(TwoValueTestGroup, pow_10_toThe_100)
+{
+    myBigIntBaseA->setString("10");
+
+    // A = A+B
+    myBigIntBaseA->pow(100);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",result);
+}
+
+
+
+
+
+
+
+
+

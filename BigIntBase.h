@@ -40,7 +40,6 @@ class BigIntBase
 {
     public:
         BigIntBase();
-//        virtual void pow(int);   // base ^ int
         virtual void valueOf(int) = 0; // assign an int
         virtual void add(BigIntBase* bigIntPtr) = 0;
         virtual void subtract(BigIntBase* bigIntPtr) = 0;
@@ -51,6 +50,7 @@ class BigIntBase
         virtual char* getString() = 0; // output to a string
         virtual void assign(BigIntBase* bigIntPtr) = 0;
         virtual ~BigIntBase();
+        virtual void pow(int power) = 0;   // base ^ int
 };
 
 #endif /* BIGINTBASE_H_ */

@@ -516,6 +516,54 @@ void BigIntsBase10::assign(BigIntBase* bigIntPtr)
     m_negative = src_Ptr->m_negative;
 }
 
+//power function
+//
+//BigInt ipow(BigInt base, int exp)
+//{
+//    BigInt result = 1;
+//    while (exp)
+//    {
+//        if (exp & 1)
+//            result *= base;
+//        exp >>= 1;
+//        base *= base;
+//    }
+//
+//    return result;
+//}
+/*
+ *
+ *
+ *                                                        3           2
+ *                                              6        2           2
+ *                                    12       2        2           2
+ *                   25      24      2        2        2           2
+ *             50   2       2       2        2        2           2
+ *      100   2    2       2       2        2        2           2
+ *     2     2    2     2x2     2x2      2x2      2x2       2x2x2
+ *
+ *
+ */
+void BigIntsBase10::pow(int exp)
+{
+    int numDigits = m_length * exp;
+    BigIntsBase10 base;
+    BigIntsBase10 result;
+
+    base.assign(this);
+    result.valueOf(1);  //    BigInt result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+        {
+            result.multiply(&base);
+        }
+        exp >>= 1;
+        base.multiply(&base);
+    }
+    assign(&result);
+}
+
 void BigIntsBase10::insertLeastSigDigit(int8_t digit)
 {
     int8_t * newArray = new int8_t[m_length + 1];
@@ -554,18 +602,4 @@ void BigIntsBase10::insertLeastSigDigit(int8_t digit)
 
 
 
-//power function
-//
-//int ipow(int base, int exp)
-//{
-//    int result = 1;
-//    while (exp)
-//    {
-//        if (exp & 1)
-//            result *= base;
-//        exp >>= 1;
-//        base *= base;
-//    }
-//
-//    return result;
-//}
+

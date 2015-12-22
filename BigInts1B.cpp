@@ -426,6 +426,54 @@ void BigInts1B::assign(BigIntBase* bigIntPtr)
     m_negative = src_Ptr->m_negative;
 }
 
+//power function
+//
+//BigInt ipow(BigInt base, int exp)
+//{
+//    BigInt result = 1;
+//    while (exp)
+//    {
+//        if (exp & 1)
+//            result *= base;
+//        exp >>= 1;
+//        base *= base;
+//    }
+//
+//    return result;
+//}
+/*
+ *
+ *
+ *                                                        3           2
+ *                                              6        2           2
+ *                                    12       2        2           2
+ *                   25      24      2        2        2           2
+ *             50   2       2       2        2        2           2
+ *      100   2    2       2       2        2        2           2
+ *     2     2    2     2x2     2x2      2x2      2x2       2x2x2
+ *
+ *
+ */
+void BigInts1B::pow(int exp)
+{
+    int numDigits = m_length * exp;
+    BigInts1B base;
+    BigInts1B result;
+
+    base.assign(this);
+    result.valueOf(1);  //    BigInt result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+        {
+            result.multiply(&base);
+        }
+        exp >>= 1;
+        base.multiply(&base);
+    }
+    assign(&result);
+}
+
 /*              4
  *            --------------
  * 8/2 ->   2 | 8
