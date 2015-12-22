@@ -375,8 +375,58 @@ void BigIntsBase10::swap(BigIntsBase10** first, BigIntsBase10** second)
     *second = tempPtr;
 }
 
-void BigIntsBase10::multiply(BigIntBase* bigInt)
+void BigIntsBase10::multiply(BigIntBase* bigIntPtr)
 {
+    BigIntsBase10* A_Ptr = this;
+    BigIntsBase10* B_Ptr = (BigIntsBase10*)bigIntPtr;
+
+    int newLength = A_Ptr->m_length + B_Ptr->m_length;
+    int8_t * result = new int8_t[newLength];
+
+    int index;
+    for (index = 0; index < newLength; index++)
+    {
+        result[index] = 0;
+    }
+
+    /*
+     *   2345
+     * x   11
+     * ------
+     *   2345
+     *  2345
+     * -------
+     *
+     */
+
+    int Aindex, Bindex;
+    int8_t carry = 0;
+    for (Bindex = 0; Bindex < B_Ptr->m_length; Bindex++)
+    {
+        for (Aindex = 0; ((Aindex < A_Ptr->m_length)|| (carry !=0)); Aindex++)
+        {
+            int8_t tempDigit;
+            int8_t tempA = 0;
+            if (Aindex < A_Ptr->m_length)
+            {
+                tempA = A_Ptr->m_value[Aindex];
+            }
+            result[Bindex+Aindex] = result[Bindex+Aindex] + tempA * B_Ptr->m_value[Bindex] + carry;
+            carry = 0;
+            if (result[Bindex+Aindex] >= BASE )
+            {
+                carry = result[Bindex+Aindex] / BASE;
+                result[Bindex+Aindex] = result[Bindex+Aindex] % BASE;
+            }
+
+        }
+    }
+
+    delete [] m_value;
+    m_value = result;
+    m_length = newLength;
+    m_negative = A_Ptr->m_negative ^ B_Ptr->m_negative;
+    trimLeadingZeros();
 }
 
 // reuturns -1 if A<B;  0 if A==B;  1 if A>B

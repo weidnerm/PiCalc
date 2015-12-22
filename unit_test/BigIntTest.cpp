@@ -37,6 +37,8 @@
 //#define CLASS_UNDER_TEST BigInts1B
 #define CLASS_UNDER_TEST BigIntsBase10
 
+#define DIVISION_TESTS
+
 TEST_GROUP(FirstTestGroup)
 {
     BigIntBase * myBigIntBase;
@@ -874,8 +876,7 @@ TEST(TwoValueTestGroup, assign_origLonger)
 
 
 
-
-
+#ifdef DIVISION_TESTS
 
 TEST(TwoValueTestGroup, divideLen1by1)
 {
@@ -1045,7 +1046,7 @@ TEST(TwoValueTestGroup, divide10_by_200)
     STRCMP_EQUAL("-200",result2); // make sure that B didnt change
 }
 
-IGNORE_TEST(TwoValueTestGroup, speedTest)
+IGNORE_TEST(TwoValueTestGroup, speedTestDivide)
 {
     myBigIntBaseB->setString("987654321");
     int index;
@@ -1062,11 +1063,136 @@ IGNORE_TEST(TwoValueTestGroup, speedTest)
     STRCMP_EQUAL("1234567890",result);
     STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
 }
-// handle 0
+
+#endif
+
+
+/*
+ *  987654321
+ * 1234567890
+ *
+ *
+ *
+ *
+ */
 
 
 
+TEST(TwoValueTestGroup, speedTestMultiply)
+{
+    myBigIntBaseB->setString("987654321");
+    int index;
+    for(index=0;index<1;index++)
+    {
+        myBigIntBaseA->setString("1234567890");
 
+        // A = A+B
+        myBigIntBaseA->multiply(myBigIntBaseB);
+    }
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("1219326311126352690",result);
+    STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, multiply1234x2_noCarry)
+{
+    myBigIntBaseA->setString("1234");
+    myBigIntBaseB->setString("2");
+
+    // A = A+B
+    myBigIntBaseA->multiply(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("2468",result);
+    STRCMP_EQUAL("2",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, multiply2345x2)
+{
+    myBigIntBaseA->setString("-12345");
+    myBigIntBaseB->setString("2");
+
+    // A = A+B
+    myBigIntBaseA->multiply(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-24690",result);
+    STRCMP_EQUAL("2",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, multiply9999x9)
+{
+    myBigIntBaseA->setString("9999");
+    myBigIntBaseB->setString("-9");
+
+    // A = A+B
+    myBigIntBaseA->multiply(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-89991",result);
+    STRCMP_EQUAL("-9",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, multiply6x9)
+{
+    myBigIntBaseA->setString("-6");
+    myBigIntBaseB->setString("-9");
+
+    // A = A+B
+    myBigIntBaseA->multiply(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("54",result);
+    STRCMP_EQUAL("-9",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, multiply9999x99)
+{
+    myBigIntBaseA->setString("9999");
+    myBigIntBaseB->setString("99");
+
+    // A = A+B
+    myBigIntBaseA->multiply(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("989901",result);
+    STRCMP_EQUAL("99",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, multiply9x888888)
+{
+    myBigIntBaseA->setString("9");
+    myBigIntBaseB->setString("888888");
+
+    // A = A+B
+    myBigIntBaseA->multiply(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("7999992",result);
+    STRCMP_EQUAL("888888",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, multiply3162277660168379331998893544_sqrd)
+{
+    myBigIntBaseA->setString("3162277660168379331998893544");
+    myBigIntBaseB->setString("3162277660168379331998893544");
+
+    // A = A+B
+    myBigIntBaseA->multiply(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("9999999999999999999999999997263247695355666440244879936",result);
+    STRCMP_EQUAL("3162277660168379331998893544",result2); // make sure that B didnt change
+}
 
 
 

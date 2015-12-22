@@ -284,8 +284,61 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
     trimLeadingZeros();
 }
 
-void BigInts1B::multiply(BigIntBase* bigInt)
+void BigInts1B::multiply(BigIntBase* bigIntPtr)
 {
+    BigInts1B* A_Ptr = this;
+    BigInts1B* B_Ptr = (BigInts1B*)bigIntPtr;
+
+    int newLength = A_Ptr->m_length + B_Ptr->m_length;
+    int32_t * result = new int32_t[newLength];
+
+    int index;
+    for (index = 0; index < newLength; index++)
+    {
+        result[index] = 0;
+    }
+
+    /*
+     *   2345
+     * x   11
+     * ------
+     *   2345
+     *  2345
+     * -------
+     *
+     */
+
+    int Aindex, Bindex;
+    int32_t carry = 0;
+    for (Bindex = 0; Bindex < B_Ptr->m_length; Bindex++)
+    {
+        for (Aindex = 0; ((Aindex < A_Ptr->m_length)|| (carry !=0)); Aindex++)
+        {
+            long long tempDigit;
+            long long tempA = 0;
+            if (Aindex < A_Ptr->m_length)
+            {
+                tempA = A_Ptr->m_value[Aindex];
+            }
+            tempDigit = result[Bindex+Aindex] + tempA * B_Ptr->m_value[Bindex] + carry;
+            carry = 0;
+            if (tempDigit >= BASE )
+            {
+                carry = tempDigit / BASE;
+                result[Bindex+Aindex] = tempDigit % BASE;
+            }
+            else
+            {
+                result[Bindex+Aindex] = tempDigit;
+            }
+        }
+    }
+
+    delete [] m_value;
+    m_value = result;
+    m_length = newLength;
+    m_negative = A_Ptr->m_negative ^ B_Ptr->m_negative;
+    trimLeadingZeros();
 }
 
 void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
@@ -368,7 +421,7 @@ void BigInts1B::assign(BigIntBase* bigIntPtr)
         m_value = new int32_t[src_Ptr->m_length];
     }
 
-    memcpy(m_value, src_Ptr->m_value, sourceLength);
+    memcpy(m_value, src_Ptr->m_value, sourceLength*sizeof(int32_t));
     m_length = sourceLength;
     m_negative = src_Ptr->m_negative;
 }
