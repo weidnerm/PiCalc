@@ -974,6 +974,23 @@ TEST(TwoValueTestGroup, divideLen1219326311126352690_by_987654321)
     STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
 }
 
+TEST(TwoValueTestGroup, speedTest)
+{
+    myBigIntBaseB->setString("987654321");
+    int index;
+    for(index=0;index<100000;index++)
+    {
+        myBigIntBaseA->setString("1219326311126352690");
+
+        // A = A+B
+        myBigIntBaseA->divide(myBigIntBaseB);
+    }
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("1234567890",result);
+    STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
+}
 // handle 0
 
 

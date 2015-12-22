@@ -283,15 +283,24 @@ void BigIntsBase10::diffSignAdd(BigIntBase* bigIntPtr)
 
 void BigIntsBase10::divide(BigIntBase* bigIntPtr)
 {
+    int index;
     BigIntsBase10* dividend = this;
     BigIntsBase10* divisor = (BigIntsBase10*)bigIntPtr;
     BigIntsBase10* posDivisor = new BigIntsBase10();
     posDivisor->assign(divisor);
     posDivisor->m_negative = false;  // force it to be positive.
 
+    // pre-compute various divisor products for 0-9 (and one for 10 since search loop goes one past)
+    BigIntsBase10 productFrag[11];
+    productFrag[0].valueOf(0);
+    for (index = 1; index < 11; index++)
+    {
+        productFrag[index].assign(&productFrag[index-1]);
+        productFrag[index].add(posDivisor);
+    }
+
     int8_t * resultArray = new int8_t[m_length];
 
-    int index;
     for (index = 0; index < m_length; index++)
     {
         resultArray[index] = 0;
@@ -316,18 +325,18 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
     while ( resultDigitIndex >= 0)
     {
         int dividendDigit = 0;
-        BigIntsBase10 productFrag;
-        productFrag.valueOf(0);
+//        BigIntsBase10 productFrag;
+//        productFrag.valueOf(0);
 //        printBigInt("productFrag0 = %s\n", &productFrag);
         do
         {
             dividendDigit++;
 //            printf("dividendDigit=%d;  ",dividendDigit);
-            productFrag.add(posDivisor);
+//            productFrag.add(posDivisor);
         }
-        while (( divdendFragment.compareMagnitude(&productFrag) > -1 ) && (dividendDigit <= 10 ));
+        while (( divdendFragment.compareMagnitude(&productFrag[dividendDigit]) > -1 ) && (dividendDigit <= 10 ));
 
-        productFrag.subtract(posDivisor);  // the previous loop went one too far.  back up.
+//        productFrag.subtract(posDivisor);  // the previous loop went one too far.  back up.
         dividendDigit--;
 
 //        printBigInt("productFrag = %s\n", &productFrag);
@@ -337,7 +346,7 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
         resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
         resultDigitIndex--;
 
-        divdendFragment.subtract(&productFrag);
+        divdendFragment.subtract(&(productFrag[dividendDigit]));
         if (resultDigitIndex >= 0)
         {
             divdendFragment.insertLeastSigDigit(dividend->m_value[resultDigitIndex]);
