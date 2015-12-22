@@ -51,12 +51,14 @@ void BigIntsBase10::valueOf(int inputValue)
     delete [] m_value;
     m_value = new int8_t[10];  // big enough to hold the biggest int
 
-    while (inputValue != 0)
+    do
     {
         m_value[index] = inputValue % BASE;
         inputValue = inputValue / BASE;
         index++;
     }
+    while (inputValue != 0);
+
     m_length = index;
 }
 
@@ -89,6 +91,13 @@ char* BigIntsBase10::getString()
     }
 
     if ( (m_length > 1) && (m_value[m_length - 1] == 0) )   // if first value is 0, its improper
+    {
+        returnVal[0] = 'E';
+        returnVal[1] = 0;
+        return returnVal;
+    }
+
+    if ( m_length == 0 )   // if length is 0 its improper.
     {
         returnVal[0] = 'E';
         returnVal[1] = 0;
@@ -165,6 +174,7 @@ void BigIntsBase10::setString(char* valueString)
 
 void BigIntsBase10::add(BigIntBase* bigIntPtr)
 {
+//    printf("[%d] [%d] ",this->m_length, ((BigIntsBase10*)bigIntPtr)->m_length);
 //    printBigInt("%s+", this);
 //    printBigInt("%s=", (BigIntsBase10*)bigIntPtr);
 
@@ -286,9 +296,7 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
     int index;
     BigIntsBase10* dividend = this;
     BigIntsBase10* divisor = (BigIntsBase10*)bigIntPtr;
-    BigIntsBase10* posDivisor = new BigIntsBase10();
-    posDivisor->assign(divisor);
-    posDivisor->m_negative = false;  // force it to be positive.
+    int8_t * resultArray = new int8_t[m_length];
 
     // pre-compute various divisor products for 0-9 (and one for 10 since search loop goes one past)
     BigIntsBase10 productFrag[11];
@@ -296,10 +304,13 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
     for (index = 1; index < 11; index++)
     {
         productFrag[index].assign(&productFrag[index-1]);
-        productFrag[index].add(posDivisor);
+        productFrag[index].add(divisor);
+    }
+    for (index = 1; index < 11; index++)
+    {
+        productFrag[index].m_negative = false; // make sure all of these are positive since we do math using them.
     }
 
-    int8_t * resultArray = new int8_t[m_length];
 
     for (index = 0; index < m_length; index++)
     {
@@ -311,10 +322,9 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
 
     BigIntsBase10 divdendFragment;
 
+    // get a starting point for our division.  assume same num of digits as divisor.  might need one more though.
     getSubArray(&divdendFragment, m_length-1, divisor->m_length);
-
-//    printBigInt("divdendFragment = %s\n", &divdendFragment);
-    if ( divdendFragment.compareMagnitude(divisor) == -1 )
+    if ( divdendFragment.compareMagnitude(divisor) == -1 )  // if divisor doesnt fit in fragment, tack on an extra digit.
     {
         resultDigitIndex--;
     }
@@ -325,23 +335,16 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
     while ( resultDigitIndex >= 0)
     {
         int dividendDigit = 0;
-//        BigIntsBase10 productFrag;
-//        productFrag.valueOf(0);
-//        printBigInt("productFrag0 = %s\n", &productFrag);
         do
         {
             dividendDigit++;
-//            printf("dividendDigit=%d;  ",dividendDigit);
-//            productFrag.add(posDivisor);
         }
         while (( divdendFragment.compareMagnitude(&productFrag[dividendDigit]) > -1 ) && (dividendDigit <= 10 ));
 
-//        productFrag.subtract(posDivisor);  // the previous loop went one too far.  back up.
         dividendDigit--;
 
-//        printBigInt("productFrag = %s\n", &productFrag);
+//        printBigInt("productFrag = %s\n", &productFrag[dividendDigit]);
 //        printf("resultArray[%d] = %d\n",resultDigitIndex,dividendDigit);
-
 
         resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
         resultDigitIndex--;
@@ -359,7 +362,6 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
 //    printBigInt("Remainder = %s\n",&divdendFragment);
 
     delete [] m_value;
-    delete posDivisor;
     m_value = resultArray;
     m_negative = divisor->m_negative ^ dividend->m_negative;   // XOR divisor sign  and  dividend sign
     trimLeadingZeros();
@@ -473,6 +475,7 @@ void BigIntsBase10::insertLeastSigDigit(int8_t digit)
 
     delete[] m_value;
     m_value = newArray;
+    trimLeadingZeros();
 }
 /*
  * Same Sign Cases

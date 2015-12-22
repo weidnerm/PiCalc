@@ -456,6 +456,21 @@ TEST(TwoValueTestGroup, add1and1111111111)
     STRCMP_EQUAL("1111111111",result2);// make sure that B didnt change
 }
 
+TEST(TwoValueTestGroup, add0and0)
+{
+    myBigIntBaseA->setString("0");
+    myBigIntBaseB->setString("0");
+
+    // A = A+B
+    myBigIntBaseA->subtract(myBigIntBaseB);
+
+    result  = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("0",result);
+    STRCMP_EQUAL("0",result2);// make sure that B didnt change
+}
+
 
 
 
@@ -878,44 +893,44 @@ TEST(TwoValueTestGroup, divideLen1by1)
 
 TEST(TwoValueTestGroup, divideLen1by1_posXneg)
 {
-    myBigIntBaseA->setString("8");
-    myBigIntBaseB->setString("-2");
+    myBigIntBaseA->setString("111228");
+    myBigIntBaseB->setString("-199");
 
     // A = A+B
     myBigIntBaseA->divide(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("-4",result);
-    STRCMP_EQUAL("-2",result2); // make sure that B didnt change
+    STRCMP_EQUAL("-558",result);
+    STRCMP_EQUAL("-199",result2); // make sure that B didnt change
 }
 
 TEST(TwoValueTestGroup, divideLen1by1_negXpos)
 {
-    myBigIntBaseA->setString("-8");
-    myBigIntBaseB->setString("2");
+    myBigIntBaseA->setString("-111228975896");
+    myBigIntBaseB->setString("129787");
 
     // A = A+B
     myBigIntBaseA->divide(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("-4",result);
-    STRCMP_EQUAL("2",result2); // make sure that B didnt change
+    STRCMP_EQUAL("-857011",result);
+    STRCMP_EQUAL("129787",result2); // make sure that B didnt change
 }
 
 TEST(TwoValueTestGroup, divideLen1by1_negXneg)
 {
-    myBigIntBaseA->setString("-8");
-    myBigIntBaseB->setString("-2");
+    myBigIntBaseA->setString("-975896293941");
+    myBigIntBaseB->setString("-2589");
 
     // A = A+B
     myBigIntBaseA->divide(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("4",result);
-    STRCMP_EQUAL("-2",result2); // make sure that B didnt change
+    STRCMP_EQUAL("376939472",result);
+    STRCMP_EQUAL("-2589",result2); // make sure that B didnt change
 }
 
 TEST(TwoValueTestGroup, divideLen1260257by37)
@@ -974,7 +989,63 @@ TEST(TwoValueTestGroup, divideLen1219326311126352690_by_987654321)
     STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, speedTest)
+TEST(TwoValueTestGroup, divide12340000_by_1234)
+{
+    myBigIntBaseA->setString("12340000");
+    myBigIntBaseB->setString("1234");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("10000",result);
+    STRCMP_EQUAL("1234",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divide12340000_by_1)
+{
+    myBigIntBaseA->setString("12340000");
+    myBigIntBaseB->setString("1");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("12340000",result);
+    STRCMP_EQUAL("1",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divide1_by_10)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("10");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("0",result);
+    STRCMP_EQUAL("10",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divide10_by_200)
+{
+    myBigIntBaseA->setString("-10");
+    myBigIntBaseB->setString("-200");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("0",result);
+    STRCMP_EQUAL("-200",result2); // make sure that B didnt change
+}
+
+IGNORE_TEST(TwoValueTestGroup, speedTest)
 {
     myBigIntBaseB->setString("987654321");
     int index;
