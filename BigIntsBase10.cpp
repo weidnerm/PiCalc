@@ -165,8 +165,8 @@ void BigIntsBase10::setString(char* valueString)
 
 void BigIntsBase10::add(BigIntBase* bigIntPtr)
 {
-    printBigInt("%s+", this);
-    printBigInt("%s=", (BigIntsBase10*)bigIntPtr);
+//    printBigInt("%s+", this);
+//    printBigInt("%s=", (BigIntsBase10*)bigIntPtr);
 
     if (m_negative == ((BigIntsBase10*)bigIntPtr)->m_negative)
     {
@@ -177,7 +177,7 @@ void BigIntsBase10::add(BigIntBase* bigIntPtr)
         // they are different signs need to subtract
         diffSignAdd(bigIntPtr);
     }
-    printBigInt("%s\n", this);
+//    printBigInt("%s\n", this);
 }
 
 void BigIntsBase10::subtract(BigIntBase* bigInt)
@@ -304,13 +304,13 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
 
     getSubArray(&divdendFragment, m_length-1, divisor->m_length);
 
-    printBigInt("divdendFragment = %s\n", &divdendFragment);
+//    printBigInt("divdendFragment = %s\n", &divdendFragment);
     if ( divdendFragment.compareMagnitude(divisor) == -1 )
     {
         resultDigitIndex--;
     }
     getSubArray(&divdendFragment, m_length-1, m_length-resultDigitIndex);
-    printBigInt("divdendFragment = %s\n", &divdendFragment);
+//    printBigInt("divdendFragment = %s\n", &divdendFragment);
 
     resultLength = resultDigitIndex+1;
     while ( resultDigitIndex >= 0)
@@ -318,11 +318,11 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
         int dividendDigit = 0;
         BigIntsBase10 productFrag;
         productFrag.valueOf(0);
-        printBigInt("productFrag0 = %s\n", &productFrag);
+//        printBigInt("productFrag0 = %s\n", &productFrag);
         do
         {
             dividendDigit++;
-            printf("dividendDigit=%d;  ",dividendDigit);
+//            printf("dividendDigit=%d;  ",dividendDigit);
             productFrag.add(posDivisor);
         }
         while (( divdendFragment.compareMagnitude(&productFrag) > -1 ) && (dividendDigit <= 10 ));
@@ -330,8 +330,8 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
         productFrag.subtract(posDivisor);  // the previous loop went one too far.  back up.
         dividendDigit--;
 
-        printBigInt("productFrag = %s\n", &productFrag);
-        printf("resultArray[%d] = %d\n",resultDigitIndex,dividendDigit);
+//        printBigInt("productFrag = %s\n", &productFrag);
+//        printf("resultArray[%d] = %d\n",resultDigitIndex,dividendDigit);
 
 
         resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
@@ -342,12 +342,12 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
         {
             divdendFragment.insertLeastSigDigit(dividend->m_value[resultDigitIndex]);
         }
-        printBigInt("concatResult = %s\n", &divdendFragment);
+//        printBigInt("concatResult = %s\n", &divdendFragment);
 
 
     }
 
-    printBigInt("Remainder = %s\n",&divdendFragment);
+//    printBigInt("Remainder = %s\n",&divdendFragment);
 
     delete [] m_value;
     delete posDivisor;
