@@ -49,6 +49,7 @@ class BigIntBase
         virtual void setString(char * valueString) = 0;  // assign from a string
         virtual int compareMagnitude(BigIntBase* bigIntPtr) = 0;
         virtual char* getString() = 0; // output to a string
+        virtual void assign(BigIntBase* bigIntPtr) = 0;
         virtual ~BigIntBase();
 };
 

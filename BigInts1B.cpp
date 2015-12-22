@@ -356,6 +356,23 @@ int BigInts1B::compareMagnitude(BigIntBase* bigIntPtr)
     return returnVal;
 }
 
+void BigInts1B::assign(BigIntBase* bigIntPtr)
+{
+    BigInts1B* src_Ptr = (BigInts1B*)bigIntPtr;
+    int sourceLength = src_Ptr->m_length;
+
+    if (m_length < sourceLength)
+    {
+        // not enough room in our current area. allocate more
+        delete[] m_value;
+        m_value = new int32_t[src_Ptr->m_length];
+    }
+
+    memcpy(m_value, src_Ptr->m_value, sourceLength);
+    m_length = sourceLength;
+    m_negative = src_Ptr->m_negative;
+}
+
 /*              4
  *            --------------
  * 8/2 ->   2 | 8

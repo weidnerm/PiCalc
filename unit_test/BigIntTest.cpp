@@ -803,6 +803,64 @@ TEST(TwoValueTestGroup, compareSameLenA_gt_B)
 
 
 
+TEST(TwoValueTestGroup, assign_sameLen)
+{
+    myBigIntBaseA->setString("3333333333");
+    myBigIntBaseB->setString("1234567890");
+
+    myBigIntBaseA->assign(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("1234567890",result);
+    STRCMP_EQUAL("1234567890",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, assign_sameLen_oppSign)
+{
+    myBigIntBaseA->setString("3333333333");
+    myBigIntBaseB->setString("-1234567890");
+
+    myBigIntBaseA->assign(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-1234567890",result);
+    STRCMP_EQUAL("-1234567890",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, assign_newLonger)
+{
+    myBigIntBaseA->setString("3333333333");
+    myBigIntBaseB->setString("-12345678901234567890");
+
+    myBigIntBaseA->assign(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-12345678901234567890",result);
+    STRCMP_EQUAL("-12345678901234567890",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, assign_origLonger)
+{
+    myBigIntBaseA->setString("-12345678901234567890");
+    myBigIntBaseB->setString("3333333333");
+
+    myBigIntBaseA->assign(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("3333333333",result);
+    STRCMP_EQUAL("3333333333",result2); // make sure that B didnt change
+}
+
+
+
+
+
+
+
 
 TEST(TwoValueTestGroup, divideLen1by1)
 {
@@ -818,9 +876,51 @@ TEST(TwoValueTestGroup, divideLen1by1)
     STRCMP_EQUAL("2",result2); // make sure that B didnt change
 }
 
+TEST(TwoValueTestGroup, divideLen1by1_posXneg)
+{
+    myBigIntBaseA->setString("8");
+    myBigIntBaseB->setString("-2");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-4",result);
+    STRCMP_EQUAL("-2",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen1by1_negXpos)
+{
+    myBigIntBaseA->setString("-8");
+    myBigIntBaseB->setString("2");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-4",result);
+    STRCMP_EQUAL("2",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen1by1_negXneg)
+{
+    myBigIntBaseA->setString("-8");
+    myBigIntBaseB->setString("-2");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("4",result);
+    STRCMP_EQUAL("-2",result2); // make sure that B didnt change
+}
+
 TEST(TwoValueTestGroup, divideLen1260257by37)
 {
-    myBigIntBaseA->setString("1260257");
+    myBigIntBaseA->setString("-1260257");
     myBigIntBaseB->setString("37");
 
     // A = A+B
@@ -828,11 +928,11 @@ TEST(TwoValueTestGroup, divideLen1260257by37)
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("34061",result);
+    STRCMP_EQUAL("-34061",result);
     STRCMP_EQUAL("37",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, divideLen1260293by37)
+TEST(TwoValueTestGroup, divideLen1260293by37)  //remainder 36
 {
     myBigIntBaseA->setString("1260293");
     myBigIntBaseB->setString("37");
@@ -849,15 +949,15 @@ TEST(TwoValueTestGroup, divideLen1260293by37)
 TEST(TwoValueTestGroup, divideLen1219326311126352690_by_1234567890)
 {
     myBigIntBaseA->setString("1219326311126352690");
-    myBigIntBaseB->setString("1234567890");
+    myBigIntBaseB->setString("-1234567890");
 
     // A = A+B
     myBigIntBaseA->divide(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("987654321",result);
-    STRCMP_EQUAL("1234567890",result2); // make sure that B didnt change
+    STRCMP_EQUAL("-987654321",result);
+    STRCMP_EQUAL("-1234567890",result2); // make sure that B didnt change
 }
 
 TEST(TwoValueTestGroup, divideLen1219326311126352690_by_987654321)
@@ -870,8 +970,8 @@ TEST(TwoValueTestGroup, divideLen1219326311126352690_by_987654321)
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("0",result);
-    STRCMP_EQUAL("1234567890",result2); // make sure that B didnt change
+    STRCMP_EQUAL("1234567890",result);
+    STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
 }
 
 // handle 0

@@ -285,11 +285,14 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
 {
     BigIntsBase10* dividend = this;
     BigIntsBase10* divisor = (BigIntsBase10*)bigIntPtr;
+    BigIntsBase10* posDivisor = new BigIntsBase10();
+    posDivisor->assign(divisor);
+    posDivisor->m_negative = false;  // force it to be positive.
 
     int8_t * resultArray = new int8_t[m_length];
 
     int index;
-    for(index=0;index<m_length;index++)
+    for (index = 0; index < m_length; index++)
     {
         resultArray[index] = 0;
     }
@@ -320,11 +323,11 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
         {
             dividendDigit++;
             printf("dividendDigit=%d;  ",dividendDigit);
-            productFrag.add(divisor);
+            productFrag.add(posDivisor);
         }
         while (( divdendFragment.compareMagnitude(&productFrag) > -1 ) && (dividendDigit <= 10 ));
 
-        productFrag.subtract(divisor);  // the previous loop went one too far.  back up.
+        productFrag.subtract(posDivisor);  // the previous loop went one too far.  back up.
         dividendDigit--;
 
         printBigInt("productFrag = %s\n", &productFrag);
@@ -347,8 +350,9 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
     printBigInt("Remainder = %s\n",&divdendFragment);
 
     delete [] m_value;
+    delete posDivisor;
     m_value = resultArray;
-//    m_length = resultLength;
+    m_negative = divisor->m_negative ^ dividend->m_negative;   // XOR divisor sign  and  dividend sign
     trimLeadingZeros();
 }
 
@@ -432,6 +436,23 @@ void BigIntsBase10::printBigInt(char * formatStr, BigIntsBase10* bigIntPtr)
     printf(formatStr, tempVal);
 
     delete[] tempVal;
+}
+
+void BigIntsBase10::assign(BigIntBase* bigIntPtr)
+{
+    BigIntsBase10* src_Ptr = (BigIntsBase10*)bigIntPtr;
+    int sourceLength = src_Ptr->m_length;
+
+    if (m_length < sourceLength)
+    {
+        // not enough room in our current area. allocate more
+        delete[] m_value;
+        m_value = new int8_t[src_Ptr->m_length];
+    }
+
+    memcpy(m_value, src_Ptr->m_value, sourceLength);
+    m_length = sourceLength;
+    m_negative = src_Ptr->m_negative;
 }
 
 void BigIntsBase10::insertLeastSigDigit(int8_t digit)
