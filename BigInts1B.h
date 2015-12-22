@@ -44,16 +44,18 @@ class BigInts1B: public BigIntBase
         BigInts1B();
         virtual ~BigInts1B();
         virtual void valueOf(int); // assign an int
-        virtual void add(BigIntBase* bigInt);
+        virtual void add(BigIntBase* bigIntPtr);
         virtual void subtract(BigIntBase* bigIntPtr);
-        virtual void multiply(BigIntBase* bigInt);
-        // divide
+        virtual void multiply(BigIntBase* bigIntPtr);
+        virtual void divide(BigIntBase* bigIntPtr);
         virtual void setString(char * valueString);  // assign from a string
         virtual char* getString(); // output to a string
+        virtual int compareMagnitude(BigIntBase* bigIntPtr);
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);
         virtual void diffSignAdd(BigIntBase* bigIntPtr);
         void swap(BigInts1B ** first, BigInts1B ** second);
+        void trimLeadingZeros();
     public:
         int32_t* m_value;
         uint32_t m_length;

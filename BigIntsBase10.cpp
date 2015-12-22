@@ -88,6 +88,13 @@ char* BigIntsBase10::getString()
         outIndex++;
     }
 
+    if ( (m_length > 1) && (m_value[m_length - 1] == 0) )   // if first value is 0, its improper
+    {
+        returnVal[0] = 'E';
+        returnVal[1] = 0;
+        return returnVal;
+    }
+
     for (index = m_length - 1; index >= 0; index--)
     {
         if ((m_value[index] != 0) || (foundFirstDigit == true))
@@ -158,6 +165,9 @@ void BigIntsBase10::setString(char* valueString)
 
 void BigIntsBase10::add(BigIntBase* bigIntPtr)
 {
+    printBigInt("%s+", this);
+    printBigInt("%s=", (BigIntsBase10*)bigIntPtr);
+
     if (m_negative == ((BigIntsBase10*)bigIntPtr)->m_negative)
     {
         sameSignAdd(bigIntPtr);
@@ -167,6 +177,7 @@ void BigIntsBase10::add(BigIntBase* bigIntPtr)
         // they are different signs need to subtract
         diffSignAdd(bigIntPtr);
     }
+    printBigInt("%s\n", this);
 }
 
 void BigIntsBase10::subtract(BigIntBase* bigInt)
@@ -188,13 +199,14 @@ void BigIntsBase10::sameSignAdd(BigIntBase* bigIntPtr)
         swap(&longPtr,&shortPtr);
     }
     int shortestLength = shortPtr->m_length;
+    int longestLength = longPtr->m_length;
 
     int8_t * resultArray = new int8_t[longPtr->m_length+1];
 
     // the signs match.  we can just add. (even if both negative)
     int index;
     int carry = 0;
-    for (index = 0; ((index < shortestLength) || (carry == 1)); index++)
+    for (index = 0; ((index < longestLength) || (carry == 1)); index++)
     {
         int temp = 0;
         if (index < shortestLength)
@@ -227,16 +239,9 @@ void BigIntsBase10::diffSignAdd(BigIntBase* bigIntPtr)
     BigIntsBase10* smallPtr = (BigIntsBase10*)bigIntPtr;
 
     // 55 - 5
-    if ((bigPtr->m_length) < (smallPtr->m_length))
+    if ( (smallPtr->compareMagnitude(bigPtr)) == 1 )  // If A>B then swap since A is desired to be small
     {
         swap(&bigPtr, &smallPtr);
-    }
-    else if ((bigPtr->m_length) == (smallPtr->m_length))  // 5 - 8
-    {
-        if (bigPtr->m_value[bigPtr->m_length - 1] < smallPtr->m_value[smallPtr->m_length - 1])
-        {
-            swap(&bigPtr, &smallPtr);
-        }
     }
     int shortestLength = smallPtr->m_length;
     int biggestLength  = bigPtr->m_length;
@@ -271,7 +276,80 @@ void BigIntsBase10::diffSignAdd(BigIntBase* bigIntPtr)
 
     // Set the final sign to the sign of the bigger of the values.
     m_negative = bigPtr->m_negative;
+
     m_length = bigPtr->m_length;
+    trimLeadingZeros();
+}
+
+void BigIntsBase10::divide(BigIntBase* bigIntPtr)
+{
+    BigIntsBase10* dividend = this;
+    BigIntsBase10* divisor = (BigIntsBase10*)bigIntPtr;
+
+    int8_t * resultArray = new int8_t[m_length];
+
+    int index;
+    for(index=0;index<m_length;index++)
+    {
+        resultArray[index] = 0;
+    }
+
+    int resultDigitIndex = dividend->m_length - divisor->m_length;
+    int resultLength;
+
+    BigIntsBase10 divdendFragment;
+
+    getSubArray(&divdendFragment, m_length-1, divisor->m_length);
+
+    printBigInt("divdendFragment = %s\n", &divdendFragment);
+    if ( divdendFragment.compareMagnitude(divisor) == -1 )
+    {
+        resultDigitIndex--;
+    }
+    getSubArray(&divdendFragment, m_length-1, m_length-resultDigitIndex);
+    printBigInt("divdendFragment = %s\n", &divdendFragment);
+
+    resultLength = resultDigitIndex+1;
+    while ( resultDigitIndex >= 0)
+    {
+        int dividendDigit = 0;
+        BigIntsBase10 productFrag;
+        productFrag.valueOf(0);
+        printBigInt("productFrag0 = %s\n", &productFrag);
+        do
+        {
+            dividendDigit++;
+            printf("dividendDigit=%d;  ",dividendDigit);
+            productFrag.add(divisor);
+        }
+        while (( divdendFragment.compareMagnitude(&productFrag) > -1 ) && (dividendDigit <= 10 ));
+
+        productFrag.subtract(divisor);  // the previous loop went one too far.  back up.
+        dividendDigit--;
+
+        printBigInt("productFrag = %s\n", &productFrag);
+        printf("resultArray[%d] = %d\n",resultDigitIndex,dividendDigit);
+
+
+        resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
+        resultDigitIndex--;
+
+        divdendFragment.subtract(&productFrag);
+        if (resultDigitIndex >= 0)
+        {
+            divdendFragment.insertLeastSigDigit(dividend->m_value[resultDigitIndex]);
+        }
+        printBigInt("concatResult = %s\n", &divdendFragment);
+
+
+    }
+
+    printBigInt("Remainder = %s\n",&divdendFragment);
+
+    delete [] m_value;
+    m_value = resultArray;
+//    m_length = resultLength;
+    trimLeadingZeros();
 }
 
 void BigIntsBase10::swap(BigIntsBase10** first, BigIntsBase10** second)
@@ -284,6 +362,87 @@ void BigIntsBase10::swap(BigIntsBase10** first, BigIntsBase10** second)
 
 void BigIntsBase10::multiply(BigIntBase* bigInt)
 {
+}
+
+// reuturns -1 if A<B;  0 if A==B;  1 if A>B
+int BigIntsBase10::compareMagnitude(BigIntBase* bigIntPtr)
+{
+    int returnVal = 0;
+
+    BigIntsBase10* A_Ptr = this;
+    BigIntsBase10* B_Ptr = (BigIntsBase10*)bigIntPtr;
+
+    if ((A_Ptr->m_length) < (B_Ptr->m_length))
+    {
+        returnVal = -1;
+    }
+    else if ((A_Ptr->m_length) > (B_Ptr->m_length))
+    {
+        returnVal = 1;
+    }
+    else
+    {
+        int index;
+        for (index = m_length - 1; index >= 0; index--)
+        {
+            if (A_Ptr->m_value[index] < B_Ptr->m_value[index])
+            {
+                returnVal = -1;
+                break;
+            }
+            else if (A_Ptr->m_value[index] > B_Ptr->m_value[index])
+            {
+                returnVal = 1;
+                break;
+            }
+        }
+    }
+
+    return returnVal;
+}
+
+void BigIntsBase10::trimLeadingZeros()
+{
+    while ((m_length != 1) && (m_value[m_length - 1] == 0))  // trim leading 0s if any
+    {
+        m_length--;
+    }
+}
+
+void BigIntsBase10::getSubArray(BigIntsBase10* destArray, int msbIndex, int numDigits)
+{
+    if ( numDigits > destArray->m_length)  // if it wont fit, allocate more space
+    {
+        delete [] destArray->m_value;
+        destArray->m_value = new int8_t[numDigits];
+    }
+    destArray->m_length = numDigits;
+
+    int index;
+    for(index=0; index<numDigits; index++)
+    {
+        destArray->m_value[index] = m_value[msbIndex-numDigits+index+1];
+    }
+}
+
+void BigIntsBase10::printBigInt(char * formatStr, BigIntsBase10* bigIntPtr)
+{
+    char * tempVal = bigIntPtr->getString();
+
+    printf(formatStr, tempVal);
+
+    delete[] tempVal;
+}
+
+void BigIntsBase10::insertLeastSigDigit(int8_t digit)
+{
+    int8_t * newArray = new int8_t[m_length + 1];
+    memcpy(newArray+1, m_value, m_length);
+    newArray[0] = digit;
+    m_length++;
+
+    delete[] m_value;
+    m_value = newArray;
 }
 /*
  * Same Sign Cases

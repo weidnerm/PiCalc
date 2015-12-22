@@ -427,6 +427,42 @@ TEST(TwoValueTestGroup, setStringAddLongDigitCarryShortMaxAddNeg)
     STRCMP_EQUAL("-199999999999999999998",result);
 }
 
+TEST(TwoValueTestGroup, add0and37)
+{
+    myBigIntBaseA->setString("0");
+    myBigIntBaseB->setString("37");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+
+    result  = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("37",result);
+    STRCMP_EQUAL("37",result2);// make sure that B didnt change
+}
+TEST(TwoValueTestGroup, add1and1111111111)
+{
+    myBigIntBaseA->setString("1");
+    myBigIntBaseB->setString("1111111111");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+
+    result  = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("1111111112",result);
+    STRCMP_EQUAL("1111111111",result2);// make sure that B didnt change
+}
+
+
+
+
+
+
+
+
 TEST(TwoValueTestGroup, setStringSubLongDigitCarryMaxNeg)
 {
     myBigIntBaseA->setString("99999999999999999999");
@@ -714,6 +750,131 @@ TEST(TwoValueTestGroup, addMixedBorrow4BigFirst)
     STRCMP_EQUAL("123450999999999999999999999999999999999999999999999999999999",result);
     STRCMP_EQUAL("-1",result2); // make sure that B didnt change
 }
+
+
+
+
+
+
+
+TEST(TwoValueTestGroup, compareAshorterThanB)
+{
+    myBigIntBaseA->setString("8");
+    myBigIntBaseB->setString("2222222222");
+
+    int result = myBigIntBaseA->compareMagnitude(myBigIntBaseB);
+
+    CHECK_EQUAL(-1,result);
+}
+
+TEST(TwoValueTestGroup, compareAlongerThanB)
+{
+    myBigIntBaseA->setString("2222222222");
+    myBigIntBaseB->setString("8");
+
+    int result = myBigIntBaseA->compareMagnitude(myBigIntBaseB);
+
+    CHECK_EQUAL(1,result);
+}
+
+TEST(TwoValueTestGroup, compareSameLenA_lt_B)
+{
+    myBigIntBaseA->setString("33333333332");
+    myBigIntBaseB->setString("-33333333333");
+
+    int result = myBigIntBaseA->compareMagnitude(myBigIntBaseB);
+
+    CHECK_EQUAL(-1,result);
+}
+
+TEST(TwoValueTestGroup, compareSameLenA_gt_B)
+{
+    myBigIntBaseA->setString("-33333333334");
+    myBigIntBaseB->setString("33333333333");
+
+    int result = myBigIntBaseA->compareMagnitude(myBigIntBaseB);
+
+    CHECK_EQUAL(1,result);
+}
+
+
+
+
+
+
+
+
+TEST(TwoValueTestGroup, divideLen1by1)
+{
+    myBigIntBaseA->setString("8");
+    myBigIntBaseB->setString("2");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("4",result);
+    STRCMP_EQUAL("2",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen1260257by37)
+{
+    myBigIntBaseA->setString("1260257");
+    myBigIntBaseB->setString("37");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("34061",result);
+    STRCMP_EQUAL("37",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen1260293by37)
+{
+    myBigIntBaseA->setString("1260293");
+    myBigIntBaseB->setString("37");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("34061",result);
+    STRCMP_EQUAL("37",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen1219326311126352690_by_1234567890)
+{
+    myBigIntBaseA->setString("1219326311126352690");
+    myBigIntBaseB->setString("1234567890");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("987654321",result);
+    STRCMP_EQUAL("1234567890",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen1219326311126352690_by_987654321)
+{
+    myBigIntBaseA->setString("1219326311126352690");
+    myBigIntBaseB->setString("987654321");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("0",result);
+    STRCMP_EQUAL("1234567890",result2); // make sure that B didnt change
+}
+
+// handle 0
 
 
 

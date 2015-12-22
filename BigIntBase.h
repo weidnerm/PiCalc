@@ -42,12 +42,12 @@ class BigIntBase
         BigIntBase();
 //        virtual void pow(int);   // base ^ int
         virtual void valueOf(int) = 0; // assign an int
-        virtual void add(BigIntBase* bigInt) = 0;
-        virtual void subtract(BigIntBase* bigInt) = 0;
-        virtual void multiply(BigIntBase* bigInt) = 0;
-        // multiply
-        // divide
+        virtual void add(BigIntBase* bigIntPtr) = 0;
+        virtual void subtract(BigIntBase* bigIntPtr) = 0;
+        virtual void multiply(BigIntBase* bigIntPtr) = 0;
+        virtual void divide(BigIntBase* bigIntPtr) = 0;
         virtual void setString(char * valueString) = 0;  // assign from a string
+        virtual int compareMagnitude(BigIntBase* bigIntPtr) = 0;
         virtual char* getString() = 0; // output to a string
         virtual ~BigIntBase();
 };

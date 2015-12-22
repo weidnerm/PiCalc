@@ -154,6 +154,13 @@ char* BigInts1B::getString()
         outIndex++;
     }
 
+    if ( (m_length > 1) && (m_value[m_length - 1] == 0) )   // if first value is 0, its improper
+    {
+        returnVal[0] = 'E';
+        returnVal[1] = 0;
+        return returnVal;
+    }
+
     for (storageIndex = m_length - 1; storageIndex >= 0; storageIndex--)
     {
         int32_t digitDivisor = 100000000;  // 1e8
@@ -195,13 +202,14 @@ void BigInts1B::sameSignAdd(BigIntBase* bigIntPtr)
         swap(&longPtr,&shortPtr);
     }
     int shortestLength = shortPtr->m_length;
+    int longestLength = longPtr->m_length;
 
     int32_t * resultArray = new int32_t[longPtr->m_length+1];
 
     // the signs match.  we can just add. (even if both negative)
     int index;
     int carry = 0;
-    for (index = 0; ((index < shortestLength) || (carry == 1)); index++)
+    for (index = 0; ((index < longestLength) || (carry == 1)); index++)
     {
         int temp = 0;
         if (index < shortestLength)
@@ -234,16 +242,9 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
     BigInts1B* smallPtr = (BigInts1B*)bigIntPtr;
 
     // 55 - 5
-    if ((bigPtr->m_length) < (smallPtr->m_length))
+    if ( (smallPtr->compareMagnitude(bigPtr)) == 1 )  // If A>B then swap since A is desired to be small
     {
         swap(&bigPtr, &smallPtr);
-    }
-    else if ((bigPtr->m_length) == (smallPtr->m_length))  // 5 - 8
-    {
-        if (bigPtr->m_value[bigPtr->m_length - 1] < smallPtr->m_value[smallPtr->m_length - 1])
-        {
-            swap(&bigPtr, &smallPtr);
-        }
     }
     int shortestLength = smallPtr->m_length;
     int biggestLength  = bigPtr->m_length;
@@ -278,7 +279,9 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
 
     // Set the final sign to the sign of the bigger of the values.
     m_negative = bigPtr->m_negative;
+
     m_length = bigPtr->m_length;
+    trimLeadingZeros();
 }
 
 void BigInts1B::multiply(BigIntBase* bigInt)
@@ -292,3 +295,99 @@ void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
     *first = *second;
     *second = tempPtr;
 }
+
+void BigInts1B::divide(BigIntBase* bigIntPtr)
+{
+    BigInts1B* dividend = this;
+    BigInts1B* divisor = (BigInts1B*)bigIntPtr;
+    int32_t * resultArray = new int32_t[m_length];
+
+    int index;
+    for(index=0;index<m_length;index++)
+    {
+        resultArray[index] = 0;
+    }
+
+
+
+
+
+    resultArray[0] = m_value[0] / divisor->m_value[0];
+
+    delete [] m_value;
+    m_value = resultArray;
+    trimLeadingZeros();
+
+}
+
+int BigInts1B::compareMagnitude(BigIntBase* bigIntPtr)
+{
+    int returnVal = 0;
+
+    BigInts1B* A_Ptr = this;
+    BigInts1B* B_Ptr = (BigInts1B*)bigIntPtr;
+
+    if ((A_Ptr->m_length) < (B_Ptr->m_length))
+    {
+        returnVal = -1;
+    }
+    else if ((A_Ptr->m_length) > (B_Ptr->m_length))
+    {
+        returnVal = 1;
+    }
+    else
+    {
+        int index;
+        for (index = m_length - 1; index >= 0; index--)
+        {
+            if (A_Ptr->m_value[index] < B_Ptr->m_value[index])
+            {
+                returnVal = -1;
+                break;
+            }
+            else if (A_Ptr->m_value[index] > B_Ptr->m_value[index])
+            {
+                returnVal = 1;
+                break;
+            }
+        }
+    }
+
+    return returnVal;
+}
+
+/*              4
+ *            --------------
+ * 8/2 ->   2 | 8
+ *              8
+ *             ---
+ *              0
+ *
+ *
+ *                  5
+ *             --------------
+ * 20/4 ->   4 | 2  0
+ *               2  0
+ *
+ *                      5
+ *                 --------------
+ * 200/40 ->   4 0 | 2  0  0
+ *                   2  0
+ *
+ *
+ * 1260257/37 = 34061
+ *
+ * 5676308/6532 = 869
+ *
+ */
+void BigInts1B::trimLeadingZeros()
+{
+    while ((m_length != 1) && (m_value[m_length - 1] == 0))  // trim leading 0s if any
+    {
+        m_length--;
+    }
+}
+
+
+
+
