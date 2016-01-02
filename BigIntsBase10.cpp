@@ -147,6 +147,10 @@ void BigIntsBase10::setString(char* valueString)
         inIndex++;
         length--;
     }
+    else
+    {
+        m_negative = false;
+    }
 
     delete [] m_value;
     m_length = length;
@@ -472,6 +476,11 @@ void BigIntsBase10::trimLeadingZeros()
     {
         m_length--;
     }
+
+    if ((m_length == 1) && (m_value[0] == 0))
+    {
+        m_negative = false;   // avoid a negative zero.
+    }
 }
 
 void BigIntsBase10::getSubArray(BigIntsBase10* destArray, int msbIndex, int numDigits)
@@ -564,6 +573,43 @@ void BigIntsBase10::pow(int exp)
     assign(&result);
 }
 
+bool BigIntsBase10::equals(int rightVal)
+{
+    bool returnVal = false;
+    uint64_t leftVal = 0;
+    uint64_t rightVal64;
+    int digitMultiplier = 1;
+    bool negative = false;
+
+    if (rightVal < 0)
+    {
+        rightVal = -rightVal;
+        negative = true;
+    }
+
+    rightVal64 = rightVal;
+
+    if (m_length <= 10)  // only deal with single digit billions at most
+    {
+        int index;
+        for (index = 0; index < m_length; index++)
+        {
+            leftVal += m_value[index] * digitMultiplier;
+            digitMultiplier *= 10;
+        }
+
+        if (rightVal64 == leftVal)
+        {
+            if (m_negative == negative)
+            {
+                returnVal = true;
+            }
+        }
+    }
+
+    return returnVal;
+}
+
 void BigIntsBase10::insertLeastSigDigit(int8_t digit)
 {
     int8_t * newArray = new int8_t[m_length + 1];
@@ -574,6 +620,37 @@ void BigIntsBase10::insertLeastSigDigit(int8_t digit)
     delete[] m_value;
     m_value = newArray;
     trimLeadingZeros();
+}
+
+bool BigIntsBase10::equals(BigIntBase* rightVal)
+{
+    BigIntsBase10* leftValPtr = this;
+    BigIntsBase10* rightValPtr = (BigIntsBase10*)rightVal;
+    bool returnVal = true;
+
+    if (leftValPtr->m_negative != rightValPtr->m_negative)
+    {
+        returnVal = false;  // signs dont match.  cant be equal.
+    }
+    else
+    {
+        if (leftValPtr->m_length != rightValPtr->m_length)
+        {
+            returnVal = false;   // lengths dont match. cant be equal.
+        }
+        else
+        {
+            int index;
+            for (index = 0; index < leftValPtr->m_length; index++)
+            {
+                if (leftValPtr->m_value[index] != rightValPtr->m_value[index])
+                {
+                    returnVal = false;   // one of the digits didnt match.  not equal.
+                }
+            }
+        }
+    }
+    return returnVal;
 }
 /*
  * Same Sign Cases

@@ -117,6 +117,10 @@ void BigInts1B::setString(char* valueString)
         inIndex++;
         length--;
     }
+    else
+    {
+        m_negative = false;
+    }
 
     // if there isnt currently enough space, allocate more.
     m_length = (length+8)/9;
@@ -474,6 +478,74 @@ void BigInts1B::pow(int exp)
     assign(&result);
 }
 
+bool BigInts1B::equals(BigIntBase* rightVal)
+{
+    BigInts1B* leftValPtr = this;
+    BigInts1B* rightValPtr = (BigInts1B*)rightVal;
+    bool returnVal = true;
+
+    if (leftValPtr->m_negative != rightValPtr->m_negative)
+    {
+        returnVal = false;  // signs dont match.  cant be equal.
+    }
+    else
+    {
+        if (leftValPtr->m_length != rightValPtr->m_length)
+        {
+            returnVal = false;   // lengths dont match. cant be equal.
+        }
+        else
+        {
+            int index;
+            for (index = 0; index < leftValPtr->m_length; index++)
+            {
+                if (leftValPtr->m_value[index] != rightValPtr->m_value[index])
+                {
+                    returnVal = false;   // one of the digits didnt match.  not equal.
+                }
+            }
+        }
+    }
+    return returnVal;
+}
+
+bool BigInts1B::equals(int rightVal)
+{
+    bool returnVal = false;
+    uint64_t leftVal = 0;
+    uint64_t rightVal64;
+    int digitMultiplier = 1;
+    bool negative = false;
+
+    if (rightVal < 0)
+    {
+        rightVal = -rightVal;
+        negative = true;
+    }
+
+    rightVal64 = rightVal;
+
+    if (m_length <= 2)  // only deal with single digit billions at most
+    {
+        int index;
+        for (index = 0; index < m_length; index++)
+        {
+            leftVal += m_value[index] * digitMultiplier;
+            digitMultiplier *= 1000000000;
+        }
+
+        if (rightVal64 == leftVal)
+        {
+            if (m_negative == negative)
+            {
+                returnVal = true;
+            }
+        }
+    }
+
+    return returnVal;
+}
+
 /*              4
  *            --------------
  * 8/2 ->   2 | 8
@@ -503,6 +575,11 @@ void BigInts1B::trimLeadingZeros()
     while ((m_length != 1) && (m_value[m_length - 1] == 0))  // trim leading 0s if any
     {
         m_length--;
+    }
+
+    if ((m_length == 1) && (m_value[0] == 0))
+    {
+        m_negative = false;   // avoid a negative zero.
     }
 }
 

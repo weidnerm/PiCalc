@@ -33,6 +33,7 @@
 #include "CppUTest/TestHarness.h"
 #include "stdio.h"
 #include "memory.h"
+#include "PiCalculator.h"
 
 //#define CLASS_UNDER_TEST BigInts1B
 #define CLASS_UNDER_TEST BigIntsBase10
@@ -234,6 +235,16 @@ TEST(FirstTestGroup, setStringNeg123)
     result = myBigIntBase->getString();
 
     STRCMP_EQUAL("-123",result);
+}
+
+TEST(FirstTestGroup, setSignChange)
+{
+    myBigIntBase->setString("-123");
+    myBigIntBase->setString("123");
+
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("123",result);
 }
 
 
@@ -1224,7 +1235,375 @@ TEST(TwoValueTestGroup, pow_10_toThe_100)
 
 
 
+TEST(TwoValueTestGroup, equals_int_0)
+{
+    myBigIntBaseA->setString("0");
 
+    // A = A+B
+    CHECK_EQUAL(true, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483647) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("0",result);
+}
+
+TEST(TwoValueTestGroup, equals_int_1)
+{
+    myBigIntBaseA->setString("1");
+
+    // A = A+B
+    CHECK_EQUAL(false, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(true, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483647) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("1",result);
+}
+
+TEST(TwoValueTestGroup, equals_int_minus_1)
+{
+    myBigIntBaseA->setString("-1");
+
+    // A = A+B
+    CHECK_EQUAL(false, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(true, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483647) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("-1",result);
+}
+
+TEST(TwoValueTestGroup, equals_int_256)
+{
+    myBigIntBaseA->setString("256");
+
+    // A = A+B
+    CHECK_EQUAL(false, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(true, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483647) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("256",result);
+}
+
+TEST(TwoValueTestGroup, equals_int_2147483647)
+{
+    myBigIntBaseA->setString("2147483647");
+
+    // A = A+B
+    CHECK_EQUAL(false, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(true, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483647) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("2147483647",result);
+}
+
+TEST(TwoValueTestGroup, equals_int_neg_2147483647)
+{
+    myBigIntBaseA->setString("-2147483647");
+
+    // A = A+B
+    CHECK_EQUAL(false, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(true, myBigIntBaseA->equals(-2147483647) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("-2147483647",result);
+}
+
+TEST(TwoValueTestGroup, equals_int_1000000000000)
+{
+    myBigIntBaseA->setString("1000000000000");
+
+    // A = A+B
+    CHECK_EQUAL(false, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483648) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("1000000000000",result);
+}
+
+TEST(TwoValueTestGroup, equals_int_1234567890)
+{
+    myBigIntBaseA->setString("1234567890");
+
+    // A = A+B
+    CHECK_EQUAL(false, myBigIntBaseA->equals(0) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-256) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-1000000000) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(2147483647) );
+    CHECK_EQUAL(false, myBigIntBaseA->equals(-2147483647) );
+    CHECK_EQUAL(true, myBigIntBaseA->equals(1234567890) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("1234567890",result);
+}
+
+
+
+
+
+
+TEST(TwoValueTestGroup, equals_BigInt_1234567890000000000)
+{
+    myBigIntBaseA->setString("1234567890000000000");
+
+    // A = A+B
+    myBigIntBaseB->setString("0");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-1");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("256");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-256");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1000000000");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-1000000000");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("2147483647");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-2147483647");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1234567890000000000");
+    CHECK_EQUAL(true, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("2234567890000000000");  // top digit
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1234567890000000001");  // bottom digit
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-1234567890000000000");  // opposite sign
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("1234567890000000000",result);
+    result2 = myBigIntBaseB->getString();
+    STRCMP_EQUAL("-1234567890000000000",result2);
+}
+
+TEST(TwoValueTestGroup, equals_BigInt_0)
+{
+    myBigIntBaseA->setString("0");
+
+    // A = A+B
+    myBigIntBaseB->setString("0");
+    CHECK_EQUAL(true, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-1");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("256");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-256");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1000000000");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-1000000000");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("2147483647");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-2147483647");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1234567890000000000");
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("2234567890000000000");  // top digit
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("1234567890000000001");  // bottom digit
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    myBigIntBaseB->setString("-1234567890000000000");  // opposite sign
+    CHECK_EQUAL(false, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("0",result);
+    result2 = myBigIntBaseB->getString();
+    STRCMP_EQUAL("-1234567890000000000",result2);
+}
+
+
+
+
+//
+//myBigIntBaseA->setString("3162277660168379331998893544");
+// myBigIntBaseB->setString("3162277660168379331998893544");
+//
+// // A = A+B
+// myBigIntBaseA->multiply(myBigIntBaseB);
+// result = myBigIntBaseA->getString();
+// result2 = myBigIntBaseB->getString();
+//
+// STRCMP_EQUAL("9999999999999999999999999997263247695355666440244879936",result);
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+TEST_GROUP(PiCalcTestGroup)
+{
+    BigIntBase * testValue;
+    BigIntBase * result;
+    BigIntBase * guess;
+
+    void setup()
+    {
+        testValue = new CLASS_UNDER_TEST;
+        result = new CLASS_UNDER_TEST;
+        guess = new CLASS_UNDER_TEST;
+    }
+
+    void teardown()
+    {
+        delete testValue;
+        delete result;
+        delete guess;
+    }
+
+    void checkAndFree(char* expectedValue, char* actualValue)
+    {
+        STRCMP_EQUAL(expectedValue, actualValue);
+        delete [] actualValue;
+    }
+};
+
+
+TEST(PiCalcTestGroup, testBigIntSqRootNewtonFloor)
+{
+    guess->valueOf(1); // seed value.
+
+    char * resultString;
+
+    testValue->valueOf(10005);
+    PiCalculator::bigIntSqRootNewtonFloor(result, testValue, guess);
+
+//    checkAndFree("100", result->getString());
+
+
+
+
+    testValue->valueOf(100050000);
+
+    //        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
+
+//    resultString = result->getString();
+//    STRCMP_EQUAL("10002", resultString);
+//    delete [] resultString;
+    //
+    //
+    //
+    //        result    = PiCalculatorMain.bigIntSqRootNewtonFloor( new BigInteger("100050000000000000000000000000000000000000000000000000000000000"),BigInteger.ONE);
+    //
+//    resultString = result->getString();
+//    STRCMP_EQUAL("10002499687578100594479218787635", resultString);
+//    delete [] resultString;
+
+}
+//
+//    public void testBigIntSqRootNewtonFloor() {
+//        BigInteger testValue;
+//        BigInteger result;
+//
+//
+//        testValue = BigInteger.valueOf(10005);
+//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
+//
+//        assertTrue( result.equals(BigInteger.valueOf(100)) );
+//
+//
+//
+//        testValue = BigInteger.valueOf(100050000);
+//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
+//
+//        assertTrue( result.equals(BigInteger.valueOf(10002)) );
+//
+//
+//
+//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor( new BigInteger("100050000000000000000000000000000000000000000000000000000000000"),BigInteger.ONE);
+//
+//        assertTrue( result.equals(new BigInteger("10002499687578100594479218787635")) );
+//    }
 
 
 

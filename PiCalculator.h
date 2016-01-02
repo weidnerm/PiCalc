@@ -6,7 +6,7 @@
  *
  ********************************************************************************
  *
- *  FILE NAME : BigIntBase.h
+ *  FILE NAME : PiCalculator.h
  *
  *-------------------------------- PURPOSE --------------------------------------
  *
@@ -25,10 +25,11 @@
  *
  *******************************************************************************/
 
-#ifndef BIGINTBASE_H_
-#define BIGINTBASE_H_
+#ifndef PICALCULATOR_H_
+#define PICALCULATOR_H_
 
 /*-------------------------- HEADER FILE INCLUDES -----------------------------*/
+#include "BigIntBase.h"
 
 /*------------------------------ CONSTANTS ------------------------------------*/
 
@@ -36,23 +37,14 @@
 
 /*---------------------------------- MACROS -----------------------------------*/
 
-class BigIntBase
+class PiCalculator
 {
     public:
-        BigIntBase();
-        virtual void valueOf(int) = 0; // assign an int
-        virtual void add(BigIntBase* bigIntPtr) = 0;
-        virtual void subtract(BigIntBase* bigIntPtr) = 0;
-        virtual void multiply(BigIntBase* bigIntPtr) = 0;
-        virtual void divide(BigIntBase* bigIntPtr) = 0;
-        virtual void setString(char * valueString) = 0;  // assign from a string
-        virtual int compareMagnitude(BigIntBase* bigIntPtr) = 0;
-        virtual char* getString() = 0; // output to a string
-        virtual void assign(BigIntBase* bigIntPtr) = 0;
-        virtual ~BigIntBase();
-        virtual void pow(int power) = 0;   // base ^ int
-        virtual bool equals(BigIntBase* rightVal) = 0;
-        virtual bool equals(int rightVal) = 0;
+        PiCalculator();
+        virtual ~PiCalculator();
+        static void bigIntSqRootNewtonFloor(BigIntBase * result, BigIntBase * input, BigIntBase * guess = 0);
+
+
 };
 
-#endif /* BIGINTBASE_H_ */
+#endif /* PICALCULATOR_H_ */
