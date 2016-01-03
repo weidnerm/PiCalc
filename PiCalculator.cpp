@@ -45,12 +45,13 @@ PiCalculator::PiCalculator(BigIntFactory* myBigIntFactory)
     m_one  = m_BigIntFactory->create();
     m_three= m_BigIntFactory->create();
     m_six  = m_BigIntFactory->create();
+    m_fiveFortyFiveMillion = m_BigIntFactory->create();
 
     m_zero ->valueOf(0);
     m_one  ->valueOf(1);
     m_three->valueOf(3);
     m_six  ->valueOf(6);
-
+    m_fiveFortyFiveMillion->valueOf(545140134L);
 }
 
 PiCalculator::~PiCalculator()
@@ -63,6 +64,7 @@ PiCalculator::~PiCalculator()
     delete m_one;
     delete m_three;
     delete m_six;
+    delete m_fiveFortyFiveMillion;
 
 }
 
@@ -178,6 +180,42 @@ void PiCalculator::get_three_k_factorial(BigIntBase* previous, int k_val)
 
 }
 
+//    public static BigInteger get_numerator_constant(BigInteger previous )
+//    {
+//        final BigInteger fiveFortyFiveMillion   = BigInteger.valueOf( 545140134L );
+//
+//        final BigInteger result = previous.add(fiveFortyFiveMillion);
+//
+//        return result;
+//    }
+void PiCalculator::get_numerator_constant(BigIntBase* previous)
+{
+    previous->add(m_fiveFortyFiveMillion);
+}
+
+//    public static BigInteger get_k_factorial_cubed( int k )
+//    {
+//        final BigInteger k_value                = BigInteger.valueOf(k);
+//        k_factorial                             = k_factorial.multiply(k_value);
+//        final BigInteger k_factorial_cubed      = k_factorial.multiply(k_factorial).multiply(k_factorial);
+//
+//        return k_factorial_cubed;
+//    }
+void PiCalculator::get_k_factorial_cubed(BigIntBase* k_factorial_cubed, BigIntBase* k_factorial, int k_val)
+{
+    BigIntBase * k               = m_BigIntFactory->create();
+
+    k->valueOf(k_val);
+
+    k_factorial->multiply(k);
+
+    k_factorial_cubed->assign(k_factorial);
+    k_factorial_cubed->multiply(k_factorial);
+    k_factorial_cubed->multiply(k_factorial);
+
+    delete k;
+}
+
 #ifdef DITCH_ME
 public class PiCalculatorMain {
 
@@ -286,25 +324,8 @@ public class PiCalculatorMain {
 
 
 
-    public static BigInteger get_numerator_constant(BigInteger previous )
-    {
-        final BigInteger fiveFortyFiveMillion   = BigInteger.valueOf( 545140134L );
-
-        final BigInteger result = previous.add(fiveFortyFiveMillion);
-
-        return result;
-    }
 
 
-
-    public static BigInteger get_k_factorial_cubed( int k )
-    {
-        final BigInteger k_value                = BigInteger.valueOf(k);
-        k_factorial                             = k_factorial.multiply(k_value);
-        final BigInteger k_factorial_cubed      = k_factorial.multiply(k_factorial).multiply(k_factorial);
-
-        return k_factorial_cubed;
-    }
 
     public static BigInteger get_neg_640320_to_the_3k(BigInteger previous)
     {

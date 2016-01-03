@@ -1625,7 +1625,7 @@ TEST_GROUP(PiCalculatorTestGroup)
 {
     BigIntFactory * myBigIntFactory;
     BigIntBase * myBigIntBaseA;
-//    BigIntBase * myBigIntBaseB;
+    BigIntBase * myBigIntBaseB;
     PiCalculator * myPiCalculator;
     char* result;
     char* result2;
@@ -1634,7 +1634,7 @@ TEST_GROUP(PiCalculatorTestGroup)
     {
         myBigIntFactory = new FACTORY_UNDER_TEST;
         myBigIntBaseA = myBigIntFactory->create();
-//        myBigIntBaseB = myBigIntFactory->create();
+        myBigIntBaseB = myBigIntFactory->create();
         myPiCalculator = new PiCalculator(myBigIntFactory);
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
@@ -1644,7 +1644,7 @@ TEST_GROUP(PiCalculatorTestGroup)
     {
         delete myBigIntFactory;
         delete myBigIntBaseA;
-//        delete myBigIntBaseB;
+        delete myBigIntBaseB;
         delete myPiCalculator;
         delete [] result;
         delete [] result2;
@@ -1685,7 +1685,6 @@ TEST(PiCalculatorTestGroup, testGet_six_k_factorial)
 
     myPiCalculator->get_six_k_factorial(myBigIntBaseA,3);
     checkAndCleanup("6402373705728000",myBigIntBaseA);
-
 }
 
 //    @Test
@@ -1714,7 +1713,6 @@ TEST(PiCalculatorTestGroup, testGet_three_k_factorial)
 
     myPiCalculator->get_three_k_factorial(myBigIntBaseA,3);
     checkAndCleanup("362880",myBigIntBaseA);
-
 }
 
 
@@ -1734,7 +1732,22 @@ TEST(PiCalculatorTestGroup, testGet_three_k_factorial)
 //        result = PiCalculatorMain.get_numerator_constant(result);
 //        assertTrue( result.equals(new BigInteger("1649011811")) );
 //    }
-//
+TEST(PiCalculatorTestGroup, testGet_numerator_constant)
+{
+    myBigIntBaseA->valueOf(13591409L);
+
+    myPiCalculator->get_numerator_constant(myBigIntBaseA);
+    checkAndCleanup("558731543",myBigIntBaseA);
+
+    myPiCalculator->get_numerator_constant(myBigIntBaseA);
+    checkAndCleanup("1103871677",myBigIntBaseA);
+
+    myPiCalculator->get_numerator_constant(myBigIntBaseA);
+    checkAndCleanup("1649011811",myBigIntBaseA);
+}
+
+
+
 //    @Test
 //    public void testGet_k_factorial_cubed()
 //    {
@@ -1749,7 +1762,25 @@ TEST(PiCalculatorTestGroup, testGet_three_k_factorial)
 //        result = PiCalculatorMain.get_k_factorial_cubed(3);
 //        assertTrue( result.equals(new BigInteger("216")) );
 //    }
-//
+
+TEST(PiCalculatorTestGroup, testGet_k_factorial_cubed)
+{
+//    myBigIntBaseA->valueOf(1);  // k_factorial_cubed
+    myBigIntBaseB->valueOf(1);  // k_factorial
+
+    myPiCalculator->get_k_factorial_cubed(myBigIntBaseA,myBigIntBaseB,1);
+    checkAndCleanup("1",myBigIntBaseA);
+
+    myPiCalculator->get_k_factorial_cubed(myBigIntBaseA,myBigIntBaseB,2);
+    checkAndCleanup("8",myBigIntBaseA);
+
+    myPiCalculator->get_k_factorial_cubed(myBigIntBaseA,myBigIntBaseB,3);
+    checkAndCleanup("216",myBigIntBaseA);
+}
+
+
+
+
 //    @Test
 //    public void testGet_neg_640320_to_the_3k()
 //    {
