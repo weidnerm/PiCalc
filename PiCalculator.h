@@ -45,11 +45,14 @@ class PiCalculator
         PiCalculator(BigIntFactory * myBigIntFactory);
         virtual ~PiCalculator();
         virtual void get_six_k_factorial(BigIntBase * previous, int k );
+        virtual void get_three_k_factorial(BigIntBase* previous, int k );
+
 
     protected:
         BigIntFactory * m_BigIntFactory;
         BigIntBase * m_zero;
         BigIntBase * m_one;
+        BigIntBase * m_three;
         BigIntBase * m_six;
 
 };

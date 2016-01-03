@@ -1702,7 +1702,24 @@ TEST(PiCalculatorTestGroup, testGet_six_k_factorial)
 //        result = PiCalculatorMain.get_three_k_factorial(result,3);
 //        assertTrue( result.equals(new BigInteger("362880")) );
 //    }
-//
+TEST(PiCalculatorTestGroup, testGet_three_k_factorial)
+{
+    myBigIntBaseA->valueOf(1);
+
+    myPiCalculator->get_three_k_factorial(myBigIntBaseA,1);
+    checkAndCleanup("6",myBigIntBaseA);
+
+    myPiCalculator->get_three_k_factorial(myBigIntBaseA,2);
+    checkAndCleanup("720",myBigIntBaseA);
+
+    myPiCalculator->get_three_k_factorial(myBigIntBaseA,3);
+    checkAndCleanup("362880",myBigIntBaseA);
+
+}
+
+
+
+
 //    @Test
 //    public void testGet_numerator_constant()
 //    {

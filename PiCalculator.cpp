@@ -43,11 +43,13 @@ PiCalculator::PiCalculator(BigIntFactory* myBigIntFactory)
     m_BigIntFactory = myBigIntFactory;
     m_zero = m_BigIntFactory->create();
     m_one  = m_BigIntFactory->create();
+    m_three= m_BigIntFactory->create();
     m_six  = m_BigIntFactory->create();
 
-    m_zero->valueOf(0);
-    m_one ->valueOf(1);
-    m_six ->valueOf(6);
+    m_zero ->valueOf(0);
+    m_one  ->valueOf(1);
+    m_three->valueOf(3);
+    m_six  ->valueOf(6);
 
 }
 
@@ -59,6 +61,7 @@ PiCalculator::~PiCalculator()
     /*---------------------------------- CODE ------------------------------------*/
     delete m_zero;
     delete m_one;
+    delete m_three;
     delete m_six;
 
 }
@@ -130,6 +133,49 @@ void PiCalculator::get_six_k_factorial(BigIntBase* previous, int k_val)
     delete six_k_minus_3 ;
     delete six_k_minus_4 ;
     delete six_k_minus_5 ;
+}
+
+//    public static BigInteger get_three_k_factorial(BigInteger previous, int k )
+//    {
+//        final BigInteger three                  = BigInteger.valueOf(3);
+//        final BigInteger three_k                = three.multiply(BigInteger.valueOf(k));
+//        final BigInteger three_k_minus_1        = three_k.subtract(BigInteger.ONE);
+//        final BigInteger three_k_minus_2        = three_k_minus_1.subtract(BigInteger.ONE);
+//
+//
+//        final BigInteger result = previous.multiply(three_k).
+//                multiply(three_k_minus_1).
+//                multiply(three_k_minus_2);
+//
+//        return result;
+//    }
+void PiCalculator::get_three_k_factorial(BigIntBase* previous, int k_val)
+{
+    BigIntBase * k               = m_BigIntFactory->create();
+    BigIntBase * three_k         = m_BigIntFactory->create();
+    BigIntBase * three_k_minus_1 = m_BigIntFactory->create();
+    BigIntBase * three_k_minus_2 = m_BigIntFactory->create();
+
+    k->valueOf(k_val);
+
+    three_k->assign(m_three);
+    three_k->multiply(k);
+
+    three_k_minus_1->assign(three_k);
+    three_k_minus_1->subtract(m_one);
+
+    three_k_minus_2->assign(three_k_minus_1);
+    three_k_minus_2->subtract(m_one);
+
+    previous->multiply(three_k        );
+    previous->multiply(three_k_minus_1);
+    previous->multiply(three_k_minus_2);
+
+    delete k              ;
+    delete three_k        ;
+    delete three_k_minus_1;
+    delete three_k_minus_2;
+
 }
 
 #ifdef DITCH_ME
@@ -206,51 +252,6 @@ public class PiCalculatorMain {
         System.out.println("Total execution time: " + (endOverallTime - startOverallTime)+" msec" );
     }
 
-//  public static BigInteger bigIntSqRootFloor(BigInteger x)
-//  {
-//      // square roots of 0 and 1 are trivial and
-//      // y == 0 will cause a divide-by-zero exception
-//      if (x.equals( BigInteger.ZERO) || x.equals( BigInteger.ONE) )
-//      {
-//          return x;
-//      } // end if
-//      BigInteger two = BigInteger.valueOf(2L);
-//      BigInteger y;
-//      int loopCount = 0;
-//      // starting with y = x / 2 avoids magnitude issues with x squared
-//      for (y = x.divide(two); y.compareTo(x.divide(y)) > 0; y = ((x.divide(y))
-//              .add(y)).divide(two))
-//          loopCount++;
-//      System.out.println("loopCount = "+loopCount);
-//      return y;
-//  } // end bigIntSqRootFloor
-
-
-    public static BigInteger bigIntSqRootNewtonFloor(BigInteger input, BigInteger guess)
-    {
-        if (input.equals( BigInteger.ZERO) || input.equals( BigInteger.ONE) )
-        {
-            return input;
-        } // end if
-
-        BigInteger prev;
-        BigInteger next = guess;  //starting value
-        int loopCount = 0;
-
-        do
-        {
-            prev = next.shiftRight(0);
-            next = prev.add( input.divide(prev) );
-            next = next.shiftRight(1);
-            loopCount++;
-
-        }
-        while ( prev.equals(next) == false );
-
-        System.out.println("loopCount = "+loopCount);
-        return next;
-    }
-
 
     public static void dumpString(String inputString)
     {
@@ -284,21 +285,6 @@ public class PiCalculatorMain {
     }
 
 
-
-    public static BigInteger get_three_k_factorial(BigInteger previous, int k )
-    {
-        final BigInteger three                  = BigInteger.valueOf(3);
-        final BigInteger three_k                = three.multiply(BigInteger.valueOf(k));
-        final BigInteger three_k_minus_1        = three_k.subtract(BigInteger.ONE);
-        final BigInteger three_k_minus_2        = three_k_minus_1.subtract(BigInteger.ONE);
-
-
-        final BigInteger result = previous.multiply(three_k).
-                multiply(three_k_minus_1).
-                multiply(three_k_minus_2);
-
-        return result;
-    }
 
     public static BigInteger get_numerator_constant(BigInteger previous )
     {
