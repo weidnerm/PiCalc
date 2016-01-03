@@ -238,6 +238,81 @@ void PiCalculator::get_neg_640320_to_the_3k(BigIntBase* previous)
     previous->multiply(m_neg_640320_cubed);
 }
 
+//    public static BigInteger get_426880_sqrt_10005(int numDigits)
+//    {
+//
+//        final BigInteger orig426880                   = BigInteger.valueOf(426880L);
+//
+//        final BigInteger orig10005                    = BigInteger.valueOf(10005L);
+//        final BigInteger mySquaredPowOfTenScaleFactor = ten.pow(2*numDigits);
+//        final BigInteger scaledOrig10005              = orig10005.multiply(mySquaredPowOfTenScaleFactor);
+//
+//        final BigInteger guessExponent                = ten.pow(numDigits-29);
+//        final BigInteger guessMantissa                = new BigInteger("10002499687578100594479218787636");
+//        final BigInteger guess                        = guessMantissa.multiply(guessExponent);
+//
+//        startSqrtTime                                 = System.currentTimeMillis();
+//        final BigInteger sqrt10005                    = bigIntSqRootNewtonFloor( scaledOrig10005, guess );
+//        endSqrtTime                                   = System.currentTimeMillis();
+//
+//        BigInteger testValue                          = sqrt10005.multiply(sqrt10005);
+//
+//
+////      System.out.println(sqrt10005.toString());
+////      System.out.println(testValue.toString());
+//
+//        return orig426880.multiply(sqrt10005);
+//    }
+void PiCalculator::get_426880_sqrt_10005(BigIntBase* result, int numDigits)
+{
+    BigIntBase * orig426880                   = m_BigIntFactory->create();
+    BigIntBase * orig10005                    = m_BigIntFactory->create();
+    BigIntBase * mySquaredPowOfTenScaleFactor = m_BigIntFactory->create();
+    BigIntBase * scaledOrig10005              = m_BigIntFactory->create();
+    BigIntBase * sqrt10005                    = m_BigIntFactory->create();
+
+    //        final BigInteger orig426880                   = BigInteger.valueOf(426880L);
+    //        final BigInteger orig10005                    = BigInteger.valueOf(10005L);
+    orig426880->valueOf(426880L);
+    orig10005->valueOf(10005L);
+
+    //        final BigInteger mySquaredPowOfTenScaleFactor = ten.pow(2*numDigits);
+    mySquaredPowOfTenScaleFactor->valueOf(10);
+    mySquaredPowOfTenScaleFactor->pow(2*numDigits);
+
+    //        final BigInteger scaledOrig10005              = orig10005.multiply(mySquaredPowOfTenScaleFactor);
+    scaledOrig10005->assign(orig10005);
+    scaledOrig10005->multiply(mySquaredPowOfTenScaleFactor);
+
+
+    //        final BigInteger guessExponent                = ten.pow(numDigits-29);
+    //        final BigInteger guessMantissa                = new BigInteger("10002499687578100594479218787636");
+    //        final BigInteger guess                        = guessMantissa.multiply(guessExponent);
+    //
+    //        startSqrtTime                                 = System.currentTimeMillis();
+    //        final BigInteger sqrt10005                    = bigIntSqRootNewtonFloor( scaledOrig10005, guess );
+    sqrt10005->assign(scaledOrig10005);
+    sqrt10005->sqrt();
+
+    //        endSqrtTime                                   = System.currentTimeMillis();
+    //
+    //        BigInteger testValue                          = sqrt10005.multiply(sqrt10005);
+    //
+    //
+    ////      System.out.println(sqrt10005.toString());
+    ////      System.out.println(testValue.toString());
+    //
+    //        return orig426880.multiply(sqrt10005);
+    result->assign(orig426880);
+    result->multiply(sqrt10005);
+
+    delete orig426880;
+    delete orig10005;
+    delete mySquaredPowOfTenScaleFactor;
+    delete scaledOrig10005;
+    delete sqrt10005;
+}
+
 #ifdef DITCH_ME
 public class PiCalculatorMain {
 
@@ -350,31 +425,6 @@ public class PiCalculatorMain {
 
 
 
-    public static BigInteger get_426880_sqrt_10005(int numDigits)
-    {
-
-        final BigInteger orig426880                   = BigInteger.valueOf(426880L);
-
-        final BigInteger orig10005                    = BigInteger.valueOf(10005L);
-        final BigInteger mySquaredPowOfTenScaleFactor = ten.pow(2*numDigits);
-        final BigInteger scaledOrig10005              = orig10005.multiply(mySquaredPowOfTenScaleFactor);
-
-        final BigInteger guessExponent                = ten.pow(numDigits-29);
-        final BigInteger guessMantissa                = new BigInteger("10002499687578100594479218787636");
-        final BigInteger guess                        = guessMantissa.multiply(guessExponent);
-
-        startSqrtTime                                 = System.currentTimeMillis();
-        final BigInteger sqrt10005                    = bigIntSqRootNewtonFloor( scaledOrig10005, guess );
-        endSqrtTime                                   = System.currentTimeMillis();
-
-        BigInteger testValue                          = sqrt10005.multiply(sqrt10005);
-
-
-//      System.out.println(sqrt10005.toString());
-//      System.out.println(testValue.toString());
-
-        return orig426880.multiply(sqrt10005);
-    }
 
 
 
