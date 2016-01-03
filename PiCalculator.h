@@ -48,6 +48,7 @@ class PiCalculator
         virtual void get_three_k_factorial(BigIntBase* previous, int k_val );
         virtual void get_numerator_constant(BigIntBase* previous);
         virtual void get_k_factorial_cubed(BigIntBase* k_factorial_cubed, BigIntBase* k_factorial, int k_val );
+        virtual void get_neg_640320_to_the_3k(BigIntBase* previous);
 
 
 
@@ -58,6 +59,8 @@ class PiCalculator
         BigIntBase * m_three;
         BigIntBase * m_six;
         BigIntBase * m_fiveFortyFiveMillion;
+        BigIntBase * m_neg_640320      ;
+        BigIntBase * m_neg_640320_cubed;
 
 
 };

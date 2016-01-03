@@ -40,18 +40,24 @@ PiCalculator::PiCalculator()
 
 PiCalculator::PiCalculator(BigIntFactory* myBigIntFactory)
 {
-    m_BigIntFactory = myBigIntFactory;
-    m_zero = m_BigIntFactory->create();
-    m_one  = m_BigIntFactory->create();
-    m_three= m_BigIntFactory->create();
-    m_six  = m_BigIntFactory->create();
+    m_BigIntFactory        = myBigIntFactory;
+    m_zero                 = m_BigIntFactory->create();
+    m_one                  = m_BigIntFactory->create();
+    m_three                = m_BigIntFactory->create();
+    m_six                  = m_BigIntFactory->create();
     m_fiveFortyFiveMillion = m_BigIntFactory->create();
+    m_neg_640320           = m_BigIntFactory->create();
+    m_neg_640320_cubed     = m_BigIntFactory->create();
 
     m_zero ->valueOf(0);
     m_one  ->valueOf(1);
     m_three->valueOf(3);
     m_six  ->valueOf(6);
     m_fiveFortyFiveMillion->valueOf(545140134L);
+    m_neg_640320      ->valueOf(-640320);
+    m_neg_640320_cubed->assign(m_neg_640320);
+    m_neg_640320_cubed->pow(3);
+
 }
 
 PiCalculator::~PiCalculator()
@@ -65,6 +71,8 @@ PiCalculator::~PiCalculator()
     delete m_three;
     delete m_six;
     delete m_fiveFortyFiveMillion;
+    delete m_neg_640320      ;
+    delete m_neg_640320_cubed;
 
 }
 
@@ -216,6 +224,20 @@ void PiCalculator::get_k_factorial_cubed(BigIntBase* k_factorial_cubed, BigIntBa
     delete k;
 }
 
+//    public static BigInteger get_neg_640320_to_the_3k(BigInteger previous)
+//    {
+//        final BigInteger neg_640320             = BigInteger.valueOf(-640320);
+//        final BigInteger neg_640320_cubed       = neg_640320.pow(3);
+//
+//        final BigInteger result = previous.multiply(neg_640320_cubed);
+//
+//        return result;
+//    }
+void PiCalculator::get_neg_640320_to_the_3k(BigIntBase* previous)
+{
+    previous->multiply(m_neg_640320_cubed);
+}
+
 #ifdef DITCH_ME
 public class PiCalculatorMain {
 
@@ -327,15 +349,6 @@ public class PiCalculatorMain {
 
 
 
-    public static BigInteger get_neg_640320_to_the_3k(BigInteger previous)
-    {
-        final BigInteger neg_640320             = BigInteger.valueOf(-640320);
-        final BigInteger neg_640320_cubed       = neg_640320.pow(3);
-
-        final BigInteger result = previous.multiply(neg_640320_cubed);
-
-        return result;
-    }
 
     public static BigInteger get_426880_sqrt_10005(int numDigits)
     {

@@ -1765,7 +1765,7 @@ TEST(PiCalculatorTestGroup, testGet_numerator_constant)
 
 TEST(PiCalculatorTestGroup, testGet_k_factorial_cubed)
 {
-//    myBigIntBaseA->valueOf(1);  // k_factorial_cubed
+    myBigIntBaseA->valueOf(1);  // k_factorial_cubed
     myBigIntBaseB->valueOf(1);  // k_factorial
 
     myPiCalculator->get_k_factorial_cubed(myBigIntBaseA,myBigIntBaseB,1);
@@ -1795,6 +1795,23 @@ TEST(PiCalculatorTestGroup, testGet_k_factorial_cubed)
 //        result = PiCalculatorMain.get_neg_640320_to_the_3k(result);
 //        assertTrue( result.equals(new BigInteger("-18095625621654356959022098935941777779064832000000000")) );
 //    }
+TEST(PiCalculatorTestGroup, testGet_neg_640320_to_the_3k)
+{
+    myBigIntBaseA->valueOf(1);
+
+    myPiCalculator->get_neg_640320_to_the_3k(myBigIntBaseA);
+    checkAndCleanup("-262537412640768000",myBigIntBaseA);
+
+    myPiCalculator->get_neg_640320_to_the_3k(myBigIntBaseA);
+    checkAndCleanup("68925893036108889235415629824000000",myBigIntBaseA);
+
+    myPiCalculator->get_neg_640320_to_the_3k(myBigIntBaseA);
+    checkAndCleanup("-18095625621654356959022098935941777779064832000000000",myBigIntBaseA);
+}
+
+
+
+
 //
 //    @Test
 //    public void testGet_426880_sqrt_10005()
