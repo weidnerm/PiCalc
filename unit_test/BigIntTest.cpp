@@ -1832,6 +1832,23 @@ TEST(PiCalculatorTestGroup, testGet_426880_sqrt_10005)
 
 
 
+TEST(PiCalculatorTestGroup, calc_Pi_digits_12)
+{
+    myPiCalculator->calc_Pi_digits(myBigIntBaseA, 12);
+    checkAndCleanup("3141592653589", myBigIntBaseA);
+}
+
+TEST(PiCalculatorTestGroup, calc_Pi_digits_100)
+{
+    myPiCalculator->calc_Pi_digits(myBigIntBaseA, 100);
+    checkAndCleanup("31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679", myBigIntBaseA);
+}
+
+TEST(PiCalculatorTestGroup, calc_Pi_digits_200)
+{
+    myPiCalculator->calc_Pi_digits(myBigIntBaseA, 200);
+    checkAndCleanup("314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196", myBigIntBaseA);
+}
 
 
 

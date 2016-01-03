@@ -27,6 +27,7 @@
 
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "PiCalculator.h"
+#include "stdio.h"
 
 PiCalculator::PiCalculator()
 :m_BigIntFactory(0)
@@ -311,6 +312,150 @@ void PiCalculator::get_426880_sqrt_10005(BigIntBase* result, int numDigits)
     delete mySquaredPowOfTenScaleFactor;
     delete scaledOrig10005;
     delete sqrt10005;
+}
+
+//    BigInteger powerOfTenScaleFactor        = ten.pow(numDigits);
+//    BigInteger squaredPowerOfTenScaleFactor = ten.pow(2*numDigits);
+//    BigInteger valof_426880_sqrt_10005      = get_426880_sqrt_10005(numDigits);
+//    BigInteger k_factorial                  = BigInteger.ONE;
+//    BigInteger three_k_factorial            = BigInteger.ONE;
+//    BigInteger six_k_factorial              = BigInteger.ONE;
+//    BigInteger k_factorial_cubed            = BigInteger.ONE;
+//    BigInteger numerator_constant           = BigInteger.valueOf(13591409L);
+//    BigInteger neg_640320_to_the_3k         = BigInteger.ONE;
+//    BigInteger series_k_sum                 = BigInteger.ZERO;
+//
+//        int k = 0;
+//
+//        while ( true )
+//        {
+//            if ( k>0 )
+//            {
+//                six_k_factorial        = get_six_k_factorial(six_k_factorial, k );
+//                three_k_factorial      = get_three_k_factorial(three_k_factorial, k );
+//                numerator_constant     = get_numerator_constant(numerator_constant);
+//                k_factorial_cubed      = get_k_factorial_cubed( k );
+//                neg_640320_to_the_3k   = get_neg_640320_to_the_3k(neg_640320_to_the_3k);
+//            }
+//
+//            BigInteger series_k_scaled_numerator  = six_k_factorial.multiply(numerator_constant).multiply(powerOfTenScaleFactor);
+//            BigInteger series_k_denominator       = three_k_factorial.multiply(k_factorial_cubed).multiply(neg_640320_to_the_3k);
+//
+//            BigInteger series_k_fraction          = series_k_scaled_numerator.divide(series_k_denominator);
+//
+//            series_k_sum                          = series_k_sum.add(series_k_fraction);
+//
+//            int series_k_fraction_num_digits      = series_k_fraction.toString().length();
+//            System.out.println("k="+k+"  series_k_fraction_num_digits="+series_k_fraction_num_digits );
+//
+//            if ( series_k_fraction.equals(BigInteger.ZERO) )
+//            {
+//                break;
+//            }
+//            k++;
+//        }
+//
+//        BigInteger scaled_Pi = valof_426880_sqrt_10005.multiply(powerOfTenScaleFactor).divide(series_k_sum);
+//
+//        endOverallTime                          = System.currentTimeMillis();
+//        System.out.println("Complete.");
+//
+//        String scaled_Pi_string                 = scaled_Pi.toString();
+//
+//        String scaled_Pi_fraction_string        = scaled_Pi_string.substring(1);
+//        dumpString(scaled_Pi_fraction_string);
+//
+//        System.out.println("Total execution time: " + (endOverallTime - startOverallTime)+" msec" );
+//    }
+void PiCalculator::calc_Pi_digits(BigIntBase* result, int numDigits)
+{
+    BigIntBase * powerOfTenScaleFactor        = m_BigIntFactory->create(); //= ten.pow(numDigits);
+    BigIntBase * squaredPowerOfTenScaleFactor = m_BigIntFactory->create(); //= ten.pow(2*numDigits);
+    BigIntBase * valof_426880_sqrt_10005      = m_BigIntFactory->create(); //= get_426880_sqrt_10005(numDigits);
+    BigIntBase * k_factorial                  = m_BigIntFactory->create(); //= BigInteger.ONE;
+    BigIntBase * three_k_factorial            = m_BigIntFactory->create(); //= BigInteger.ONE;
+    BigIntBase * six_k_factorial              = m_BigIntFactory->create(); //= BigInteger.ONE;
+    BigIntBase * k_factorial_cubed            = m_BigIntFactory->create(); //= BigInteger.ONE;
+    BigIntBase * numerator_constant           = m_BigIntFactory->create(); //= BigInteger.valueOf(13591409L);
+    BigIntBase * neg_640320_to_the_3k         = m_BigIntFactory->create(); //= BigInteger.ONE;
+    BigIntBase * series_k_sum                 = m_BigIntFactory->create(); //= BigInteger.ZERO;
+    BigIntBase * scaled_Pi                    = m_BigIntFactory->create();
+
+    powerOfTenScaleFactor        ->valueOf(10);    //= ten.pow(numDigits);
+    powerOfTenScaleFactor        ->pow(numDigits); //= ten.pow(numDigits);
+    squaredPowerOfTenScaleFactor ->valueOf(10);      //= ten.pow(2*numDigits);
+    squaredPowerOfTenScaleFactor ->pow(2*numDigits); //= ten.pow(2*numDigits);
+    get_426880_sqrt_10005(valof_426880_sqrt_10005, numDigits);   //= get_426880_sqrt_10005(numDigits);
+    k_factorial                  ->valueOf(1); //= BigInteger.ONE;
+    three_k_factorial            ->valueOf(1); //= BigInteger.ONE;
+    six_k_factorial              ->valueOf(1); //= BigInteger.ONE;
+    k_factorial_cubed            ->valueOf(1); //= BigInteger.ONE;
+    numerator_constant           ->valueOf(13591409L); //= BigInteger.valueOf(13591409L);
+    neg_640320_to_the_3k         ->valueOf(1); //= BigInteger.ONE;
+    series_k_sum                 ->valueOf(0); //= BigInteger.ZERO;
+
+    int k = 0;
+    bool more_work = true;
+
+    while (more_work)
+    {
+        if (k > 0)
+        {
+            get_six_k_factorial(six_k_factorial, k);      // six_k_factorial        = get_six_k_factorial(six_k_factorial, k );
+            get_three_k_factorial(three_k_factorial, k);  // three_k_factorial      = get_three_k_factorial(three_k_factorial, k );
+            get_numerator_constant(numerator_constant);    // numerator_constant     = get_numerator_constant(numerator_constant);
+            get_k_factorial_cubed(k_factorial_cubed, k_factorial, k);  // k_factorial_cubed      = get_k_factorial_cubed( k );
+            get_neg_640320_to_the_3k(neg_640320_to_the_3k); // neg_640320_to_the_3k   = get_neg_640320_to_the_3k(neg_640320_to_the_3k);
+        }
+
+        BigIntBase * series_k_scaled_numerator = m_BigIntFactory->create();
+        BigIntBase * series_k_denominator = m_BigIntFactory->create();
+        BigIntBase * series_k_fraction = m_BigIntFactory->create();
+
+        series_k_scaled_numerator->assign(six_k_factorial); //series_k_scaled_numerator  = six_k_factorial.multiply(numerator_constant).multiply(powerOfTenScaleFactor);
+        series_k_scaled_numerator->multiply(numerator_constant); //series_k_scaled_numerator  = six_k_factorial.multiply(numerator_constant).multiply(powerOfTenScaleFactor);
+        series_k_scaled_numerator->multiply(powerOfTenScaleFactor); //series_k_scaled_numerator  = six_k_factorial.multiply(numerator_constant).multiply(powerOfTenScaleFactor);
+
+        series_k_denominator->assign(three_k_factorial); //series_k_denominator = three_k_factorial.multiply(k_factorial_cubed).multiply(neg_640320_to_the_3k);
+        series_k_denominator->multiply(k_factorial_cubed); //series_k_denominator = three_k_factorial.multiply(k_factorial_cubed).multiply(neg_640320_to_the_3k);
+        series_k_denominator->multiply(neg_640320_to_the_3k); //series_k_denominator = three_k_factorial.multiply(k_factorial_cubed).multiply(neg_640320_to_the_3k);
+
+        series_k_fraction->assign(series_k_scaled_numerator); //series_k_fraction = series_k_scaled_numerator.divide(series_k_denominator);
+        series_k_fraction->divide(series_k_denominator); //series_k_fraction = series_k_scaled_numerator.divide(series_k_denominator);
+
+        series_k_sum->add(series_k_fraction); // series_k_sum  = series_k_sum.add(series_k_fraction);
+
+    //            int series_k_fraction_num_digits      = series_k_fraction.toString().length();
+    //            System.out.println("k="+k+"  series_k_fraction_num_digits="+series_k_fraction_num_digits );
+
+        if (series_k_fraction->equals(m_zero))    // if ( series_k_fraction.equals(BigInteger.ZERO) )
+        {
+            more_work = false;
+        }
+        k++;
+printf("k=%d\n",k);
+        delete series_k_scaled_numerator;
+        delete series_k_denominator;
+        delete series_k_fraction;
+    }
+
+    scaled_Pi->assign(valof_426880_sqrt_10005); // BigInteger scaled_Pi = valof_426880_sqrt_10005.multiply(powerOfTenScaleFactor).divide(series_k_sum);
+    scaled_Pi->multiply(powerOfTenScaleFactor); // BigInteger scaled_Pi = valof_426880_sqrt_10005.multiply(powerOfTenScaleFactor).divide(series_k_sum);
+    scaled_Pi->divide(series_k_sum);            // BigInteger scaled_Pi = valof_426880_sqrt_10005.multiply(powerOfTenScaleFactor).divide(series_k_sum);
+
+    result->assign(scaled_Pi);
+
+    delete powerOfTenScaleFactor;
+    delete squaredPowerOfTenScaleFactor;
+    delete valof_426880_sqrt_10005;
+    delete k_factorial;
+    delete three_k_factorial;
+    delete six_k_factorial;
+    delete k_factorial_cubed;
+    delete numerator_constant;
+    delete neg_640320_to_the_3k;
+    delete series_k_sum;
+    delete scaled_Pi;
 }
 
 #ifdef DITCH_ME

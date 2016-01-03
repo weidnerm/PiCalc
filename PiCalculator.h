@@ -50,6 +50,7 @@ class PiCalculator
         virtual void get_k_factorial_cubed(BigIntBase* k_factorial_cubed, BigIntBase* k_factorial, int k_val );
         virtual void get_neg_640320_to_the_3k(BigIntBase* previous);
         virtual void get_426880_sqrt_10005(BigIntBase* result, int numDigits );
+        virtual void calc_Pi_digits(BigIntBase* result, int numDigits );
 
 
 
