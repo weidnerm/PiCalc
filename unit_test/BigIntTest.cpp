@@ -34,27 +34,34 @@
 #include "stdio.h"
 #include "memory.h"
 #include "PiCalculator.h"
+#include "BigIntFactory.h"
+#include "BigIntFactory10.h"
+#include "BigIntFactory1B.cpp"
 
-//#define CLASS_UNDER_TEST BigInts1B
-#define CLASS_UNDER_TEST BigIntsBase10
+
+#define FACTORY_UNDER_TEST BigIntFactory10
+//#define FACTORY_UNDER_TEST BigIntFactory1B
 
 #define DIVISION_TESTS
 
 TEST_GROUP(FirstTestGroup)
 {
+    BigIntFactory * myBigIntFactory;
     BigIntBase * myBigIntBase;
     BigIntBase * myGuess;
     char* result;
 
     void setup()
     {
-        myBigIntBase = new CLASS_UNDER_TEST;
-        myGuess = new CLASS_UNDER_TEST;
+        myBigIntFactory = new FACTORY_UNDER_TEST;
+        myBigIntBase = myBigIntFactory->create();
+        myGuess = myBigIntFactory->create();
         result = 0;  // null it out in case its not used, we can safely delete 0
     }
 
     void teardown()
     {
+        delete myBigIntFactory;
         delete myBigIntBase;
         delete myGuess;
         delete [] result;
@@ -337,6 +344,7 @@ TEST(FirstTestGroup, sqrt_10005_100digs)
 
 TEST_GROUP(TwoValueTestGroup)
 {
+    BigIntFactory * myBigIntFactory;
     BigIntBase * myBigIntBaseA;
     BigIntBase * myBigIntBaseB;
     char* result;
@@ -344,14 +352,16 @@ TEST_GROUP(TwoValueTestGroup)
 
     void setup()
     {
-        myBigIntBaseA = new CLASS_UNDER_TEST;
-        myBigIntBaseB = new CLASS_UNDER_TEST;
+        myBigIntFactory = new FACTORY_UNDER_TEST;
+        myBigIntBaseA = myBigIntFactory->create();
+        myBigIntBaseB = myBigIntFactory->create();
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
     }
 
     void teardown()
     {
+        delete myBigIntFactory;
         delete myBigIntBaseA;
         delete myBigIntBaseB;
         delete [] result;
@@ -1602,33 +1612,46 @@ TEST(TwoValueTestGroup, equals_BigInt_0)
     STRCMP_EQUAL("-1234567890000000000",result2);
 }
 
+TEST(TwoValueTestGroup, testGet_six_k_factorial)
+{
+    myBigIntBaseA->valueOf(1);
 
 
-//    @Test
-//    public void testBigIntSqRootNewtonFloor() {
-//        BigInteger testValue;
-//        BigInteger result;
-//
-//
-//        testValue = BigInteger.valueOf(10005);
-//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
-//
-//        assertTrue( result.equals(BigInteger.valueOf(100)) );
-//
-//
-//
-//        testValue = BigInteger.valueOf(100050000);
-//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
-//
-//        assertTrue( result.equals(BigInteger.valueOf(10002)) );
-//
-//
-//
-//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor( new BigInteger("100050000000000000000000000000000000000000000000000000000000000"),BigInteger.ONE);
-//
-//        assertTrue( result.equals(new BigInteger("10002499687578100594479218787635")) );
-//    }
-//
+}
+
+
+
+TEST_GROUP(PiCalculatorTestGroup)
+{
+    BigIntFactory * myBigIntFactory;
+    BigIntBase * myBigIntBaseA;
+    BigIntBase * myBigIntBaseB;
+    PiCalculator * myPiCalculator;
+    char* result;
+    char* result2;
+
+    void setup()
+    {
+        myBigIntFactory = new FACTORY_UNDER_TEST;
+        myBigIntBaseA = myBigIntFactory->create();
+        myBigIntBaseB = myBigIntFactory->create();
+        myPiCalculator = new PiCalculator(myBigIntFactory);
+        result = 0;  // null it out in case its not used, we can safely delete 0
+        result2 = 0;  // null it out in case its not used, we can safely delete 0
+    }
+
+    void teardown()
+    {
+        delete myBigIntFactory;
+        delete myBigIntBaseA;
+        delete myBigIntBaseB;
+        delete [] result;
+        delete [] result2;
+    }
+};
+
+
+
 //    @Test
 //    public void testGet_six_k_factorial()
 //    {

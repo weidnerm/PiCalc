@@ -1,12 +1,12 @@
 /*******************************************************************************
  *
- *             COPYRIGHT 2015 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
+ *             COPYRIGHT 2016 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
  *                    MOTOROLA SOLUTIONS CONFIDENTIAL RESTRICTED
  *                            TEMPLATE VERSION R01.03
  *
  ********************************************************************************
  *
- *  FILE NAME : PiCalculator.h
+ *  FILE NAME : BigIntFactory.h
  *
  *-------------------------------- PURPOSE --------------------------------------
  *
@@ -25,12 +25,11 @@
  *
  *******************************************************************************/
 
-#ifndef PICALCULATOR_H_
-#define PICALCULATOR_H_
+#ifndef BIGINTFACTORY_H_
+#define BIGINTFACTORY_H_
 
 /*-------------------------- HEADER FILE INCLUDES -----------------------------*/
 #include "BigIntBase.h"
-#include "BigIntFactory.h"
 
 /*------------------------------ CONSTANTS ------------------------------------*/
 
@@ -38,16 +37,12 @@
 
 /*---------------------------------- MACROS -----------------------------------*/
 
-class PiCalculator
+class BigIntFactory
 {
     public:
-        PiCalculator();
-        PiCalculator(BigIntFactory * myBigIntFactory);
-        virtual ~PiCalculator();
-
-    protected:
-        BigIntFactory * m_BigIntFactory;
-
+        BigIntFactory();
+        virtual ~BigIntFactory();
+        virtual BigIntBase * create() = 0;
 };
 
-#endif /* PICALCULATOR_H_ */
+#endif /* BIGINTFACTORY_H_ */

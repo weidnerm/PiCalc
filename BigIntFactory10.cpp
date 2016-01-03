@@ -1,12 +1,12 @@
 /*******************************************************************************
  *
- *             COPYRIGHT 2015 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
+ *             COPYRIGHT 2016 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
  *                    MOTOROLA SOLUTIONS CONFIDENTIAL RESTRICTED
  *                            TEMPLATE VERSION R01.03
  *
  ********************************************************************************
  *
- *  FILE NAME : PiCalculator.h
+ *  FILE NAME : BigIntFactory10.cpp
  *
  *-------------------------------- PURPOSE --------------------------------------
  *
@@ -25,29 +25,29 @@
  *
  *******************************************************************************/
 
-#ifndef PICALCULATOR_H_
-#define PICALCULATOR_H_
+/*--------------------------- HEADER FILE INCLUDES ----------------------------*/
+#include "BigIntFactory10.h"
+#include "BigIntsBase10.h"
 
-/*-------------------------- HEADER FILE INCLUDES -----------------------------*/
-#include "BigIntBase.h"
-#include "BigIntFactory.h"
-
-/*------------------------------ CONSTANTS ------------------------------------*/
-
-/*---------------------------- ENUMERATED TYPES -------------------------------*/
-
-/*---------------------------------- MACROS -----------------------------------*/
-
-class PiCalculator
+BigIntFactory10::BigIntFactory10()
 {
-    public:
-        PiCalculator();
-        PiCalculator(BigIntFactory * myBigIntFactory);
-        virtual ~PiCalculator();
+    // TODO Auto-generated constructor stub
+    /*----------------------------- LOCAL VARIABLES ------------------------------*/
 
-    protected:
-        BigIntFactory * m_BigIntFactory;
+    /*---------------------------------- CODE ------------------------------------*/
 
-};
+}
 
-#endif /* PICALCULATOR_H_ */
+BigIntFactory10::~BigIntFactory10()
+{
+    // TODO Auto-generated method stub
+    /*----------------------------- LOCAL VARIABLES ------------------------------*/
+
+    /*---------------------------------- CODE ------------------------------------*/
+
+}
+
+BigIntBase* BigIntFactory10::create()
+{
+    return new BigIntsBase10;
+}
