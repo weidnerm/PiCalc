@@ -49,25 +49,50 @@ PiCalculator::~PiCalculator()
 void PiCalculator::bigIntSqRootNewtonFloor(BigIntBase* result, BigIntBase* input, BigIntBase* guess)
 {
 
-//    if (input.equals( BigInteger.ZERO) || input.equals( BigInteger.ONE) )
-//    {
-//        return input;
-//    } // end if
-//
-//    BigInteger prev;
-//    BigInteger next = guess;  //starting value
-//    int loopCount = 0;
-//
-//    do
-//    {
-//        prev = next.shiftRight(0);
-//        next = prev.add( input.divide(prev) );
-//        next = next.shiftRight(1);
-//        loopCount++;
-//
-//    }
-//    while ( prev.equals(next) == false );
-//
-//    System.out.println("loopCount = "+loopCount);
-//    return next;
+    if (input->equals(0) || input->equals(1))
+    {
+        result->assign(input); // return input;
+    } // end if
+
+//    BigIntBase prev;   //    BigInteger prev;
+    //    BigInteger next = guess;  //starting value
+    //    int loopCount = 0;
+    //
+    //    do
+    //    {
+    //        prev = next.shiftRight(0);
+    //        next = prev.add( input.divide(prev) );
+    //        next = next.shiftRight(1);
+    //        loopCount++;
+    //
+    //    }
+    //    while ( prev.equals(next) == false );
+    //
+    //    System.out.println("loopCount = "+loopCount);
+    //    return next;
+
+
+
+
+    //    if (input.equals( BigInteger.ZERO) || input.equals( BigInteger.ONE) )
+    //    {
+    //        return input;
+    //    } // end if
+    //
+    //    BigInteger prev;
+    //    BigInteger next = guess;  //starting value
+    //    int loopCount = 0;
+    //
+    //    do
+    //    {
+    //        prev = next.shiftRight(0);
+    //        next = prev.add( input.divide(prev) );
+    //        next = next.shiftRight(1);
+    //        loopCount++;
+    //
+    //    }
+    //    while ( prev.equals(next) == false );
+    //
+    //    System.out.println("loopCount = "+loopCount);
+    //    return next;
 }

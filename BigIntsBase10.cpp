@@ -295,6 +295,12 @@ void BigIntsBase10::diffSignAdd(BigIntBase* bigIntPtr)
     trimLeadingZeros();
 }
 
+
+/*
+ * for long division algorithm.
+ * https://en.wikipedia.org/wiki/Long_division
+ *
+ */
 void BigIntsBase10::divide(BigIntBase* bigIntPtr)
 {
     int index;
@@ -608,6 +614,78 @@ bool BigIntsBase10::equals(int rightVal)
     }
 
     return returnVal;
+}
+
+//    if (input.equals( BigInteger.ZERO) || input.equals( BigInteger.ONE) )
+//    {
+//        return input;
+//    } // end if
+//
+//    BigInteger prev;
+//    BigInteger next = guess;  //starting value
+//    int loopCount = 0;
+//
+//    do
+//    {
+//        prev = next.shiftRight(0);
+//        next = prev.add( input.divide(prev) );
+//        next = next.shiftRight(1);
+//        loopCount++;
+//
+//    }
+//    while ( prev.equals(next) == false );
+//
+//    System.out.println("loopCount = "+loopCount);
+//    return next;
+void BigIntsBase10::sqrt(BigIntBase* guess)
+{
+    if (equals(0) || equals(1))
+    {
+        return; // return input;
+    }
+
+    BigIntsBase10 * myGuess = new BigIntsBase10;
+    BigIntsBase10 * prev = new BigIntsBase10;
+    BigIntsBase10 * next = new BigIntsBase10;
+    BigIntsBase10 * two = new BigIntsBase10;
+    two->valueOf(2);
+
+    if (guess != 0)
+    {
+        myGuess->assign(guess);
+    }
+    else
+    {
+        myGuess->valueOf(10);   // if no guess was provided, use 1
+        myGuess->pow(m_length/2);
+    }
+
+    next->assign(myGuess);  //starting value
+    int loopCount = 0;
+
+    do
+    {
+        //        prev = next.shiftRight(0);
+        prev->assign(next);     //printBigInt("\nprev->assign(next);  = %s\n",prev);
+
+        //        next = prev.add( input.divide(prev) );
+        next->assign(this);     //printBigInt("next->assign(this);  = %s\n",next);
+        next->divide(prev);     //printBigInt("next->divide(prev);  = %s\n",next);
+        next->add(prev);        //printBigInt("next->add(prev);     = %s\n",next);
+
+        //        next = next.shiftRight(1);
+        next->divide(two);      //printBigInt("next->divide(two);     = %s\n",next);
+        loopCount++;
+    }
+    while (prev->equals(next) == false);
+//    printf("loopCount = %d\n",loopCount);
+
+    assign(next);
+
+    delete myGuess;
+    delete prev;
+    delete next;
+    delete two;
 }
 
 void BigIntsBase10::insertLeastSigDigit(int8_t digit)

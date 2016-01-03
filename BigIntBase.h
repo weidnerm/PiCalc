@@ -53,6 +53,7 @@ class BigIntBase
         virtual void pow(int power) = 0;   // base ^ int
         virtual bool equals(BigIntBase* rightVal) = 0;
         virtual bool equals(int rightVal) = 0;
+        virtual void sqrt(BigIntBase* guess = 0) = 0;
 };
 
 #endif /* BIGINTBASE_H_ */

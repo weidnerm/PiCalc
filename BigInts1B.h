@@ -55,6 +55,7 @@ class BigInts1B: public BigIntBase
         virtual void pow(int power);   // base ^ int
         virtual bool equals(BigIntBase* rightVal);
         virtual bool equals(int rightVal);
+        virtual void sqrt(BigIntBase* guess = 0);
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);
         virtual void diffSignAdd(BigIntBase* bigIntPtr);

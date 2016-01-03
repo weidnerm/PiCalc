@@ -43,17 +43,20 @@
 TEST_GROUP(FirstTestGroup)
 {
     BigIntBase * myBigIntBase;
+    BigIntBase * myGuess;
     char* result;
 
     void setup()
     {
         myBigIntBase = new CLASS_UNDER_TEST;
+        myGuess = new CLASS_UNDER_TEST;
         result = 0;  // null it out in case its not used, we can safely delete 0
     }
 
     void teardown()
     {
         delete myBigIntBase;
+        delete myGuess;
         delete [] result;
     }
 };
@@ -246,6 +249,89 @@ TEST(FirstTestGroup, setSignChange)
 
     STRCMP_EQUAL("123",result);
 }
+
+
+TEST(FirstTestGroup, sqrt_0)
+{
+    myBigIntBase->setString("0");
+
+    myBigIntBase->sqrt();
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("0",result);
+}
+
+TEST(FirstTestGroup, sqrt_1)
+{
+    myBigIntBase->setString("1");
+
+    myBigIntBase->sqrt();
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("1",result);
+}
+
+TEST(FirstTestGroup, sqrt_2)
+{
+    myBigIntBase->setString("2");
+
+    myBigIntBase->sqrt();
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("1",result);
+}
+
+TEST(FirstTestGroup, sqrt_400)
+{
+    myBigIntBase->setString("403");
+
+    myBigIntBase->sqrt();
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("20",result);
+}
+
+TEST(FirstTestGroup, sqrt_10005_100digs)
+{
+    myBigIntBase->setString("1000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+//    myGuess->setString("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+
+    myBigIntBase->sqrt();
+    result = myBigIntBase->getString();
+
+    STRCMP_EQUAL("1000249968757810059447921878763577780015950243686963146571355115696509678538643042923111879484999732977",result);
+}
+
+//
+//    public void testBigIntSqRootNewtonFloor() {
+//        BigInteger testValue;
+//        BigInteger result;
+//
+//
+//        testValue = BigInteger.valueOf(10005);
+//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
+//
+//        assertTrue( result.equals(BigInteger.valueOf(100)) );
+//
+//
+//
+//        testValue = BigInteger.valueOf(100050000);
+//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
+//
+//        assertTrue( result.equals(BigInteger.valueOf(10002)) );
+//
+//
+//
+//        result    = PiCalculatorMain.bigIntSqRootNewtonFloor( new BigInteger("100050000000000000000000000000000000000000000000000000000000000"),BigInteger.ONE);
+//
+//        assertTrue( result.equals(new BigInteger("10002499687578100594479218787635")) );
+//    }
+
+
+
+
+
+
 
 
 
@@ -1061,7 +1147,7 @@ IGNORE_TEST(TwoValueTestGroup, speedTestDivide)
 {
     myBigIntBaseB->setString("987654321");
     int index;
-    for(index=0;index<100000;index++)
+    for (index = 0; index < 100000; index++)
     {
         myBigIntBaseA->setString("1219326311126352690");
 
@@ -1089,11 +1175,11 @@ IGNORE_TEST(TwoValueTestGroup, speedTestDivide)
 
 
 
-TEST(TwoValueTestGroup, speedTestMultiply)
+IGNORE_TEST(TwoValueTestGroup, speedTestMultiply)
 {
     myBigIntBaseB->setString("987654321");
     int index;
-    for(index=0;index<1;index++)
+    for (index = 0; index < 100000; index++)
     {
         myBigIntBaseA->setString("1234567890");
 
@@ -1103,8 +1189,8 @@ TEST(TwoValueTestGroup, speedTestMultiply)
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("1219326311126352690",result);
-    STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
+    STRCMP_EQUAL("1219326311126352690", result);
+    STRCMP_EQUAL("987654321", result2); // make sure that B didnt change
 }
 
 TEST(TwoValueTestGroup, multiply1234x2_noCarry)
@@ -1112,7 +1198,7 @@ TEST(TwoValueTestGroup, multiply1234x2_noCarry)
     myBigIntBaseA->setString("1234");
     myBigIntBaseB->setString("2");
 
-    // A = A+B
+    // A = A*B
     myBigIntBaseA->multiply(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
@@ -1126,7 +1212,7 @@ TEST(TwoValueTestGroup, multiply2345x2)
     myBigIntBaseA->setString("-12345");
     myBigIntBaseB->setString("2");
 
-    // A = A+B
+    // A = A*B
     myBigIntBaseA->multiply(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
@@ -1140,7 +1226,7 @@ TEST(TwoValueTestGroup, multiply9999x9)
     myBigIntBaseA->setString("9999");
     myBigIntBaseB->setString("-9");
 
-    // A = A+B
+    // A = A*B
     myBigIntBaseA->multiply(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
@@ -1154,7 +1240,7 @@ TEST(TwoValueTestGroup, multiply6x9)
     myBigIntBaseA->setString("-6");
     myBigIntBaseB->setString("-9");
 
-    // A = A+B
+    // A = A*B
     myBigIntBaseA->multiply(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
@@ -1168,7 +1254,7 @@ TEST(TwoValueTestGroup, multiply9999x99)
     myBigIntBaseA->setString("9999");
     myBigIntBaseB->setString("99");
 
-    // A = A+B
+    // A = A*B
     myBigIntBaseA->multiply(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
@@ -1182,7 +1268,7 @@ TEST(TwoValueTestGroup, multiply9x888888)
     myBigIntBaseA->setString("9");
     myBigIntBaseB->setString("888888");
 
-    // A = A+B
+    // A = A*B
     myBigIntBaseA->multiply(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
@@ -1196,7 +1282,7 @@ TEST(TwoValueTestGroup, multiply3162277660168379331998893544_sqrd)
     myBigIntBaseA->setString("3162277660168379331998893544");
     myBigIntBaseB->setString("3162277660168379331998893544");
 
-    // A = A+B
+    // A = A*B
     myBigIntBaseA->multiply(myBigIntBaseB);
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
@@ -1205,11 +1291,33 @@ TEST(TwoValueTestGroup, multiply3162277660168379331998893544_sqrd)
     STRCMP_EQUAL("3162277660168379331998893544",result2); // make sure that B didnt change
 }
 
+TEST(TwoValueTestGroup, selfMultiply3162277660168379331998893544_sqrd)
+{
+    myBigIntBaseA->setString("3162277660168379331998893544");
+
+    // A = A*A
+    myBigIntBaseA->multiply(myBigIntBaseA);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("9999999999999999999999999997263247695355666440244879936",result);
+}
 
 
 
 
 
+
+
+TEST(TwoValueTestGroup, pow_10_toThe_0)
+{
+    myBigIntBaseA->setString("10");
+
+    // A = A+B
+    myBigIntBaseA->pow(0);
+    result = myBigIntBaseA->getString();
+
+    STRCMP_EQUAL("1",result);
+}
 
 TEST(TwoValueTestGroup, pow_10_toThe_3)
 {
@@ -1496,91 +1604,7 @@ TEST(TwoValueTestGroup, equals_BigInt_0)
 
 
 
-
-//
-//myBigIntBaseA->setString("3162277660168379331998893544");
-// myBigIntBaseB->setString("3162277660168379331998893544");
-//
-// // A = A+B
-// myBigIntBaseA->multiply(myBigIntBaseB);
-// result = myBigIntBaseA->getString();
-// result2 = myBigIntBaseB->getString();
-//
-// STRCMP_EQUAL("9999999999999999999999999997263247695355666440244879936",result);
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-TEST_GROUP(PiCalcTestGroup)
-{
-    BigIntBase * testValue;
-    BigIntBase * result;
-    BigIntBase * guess;
-
-    void setup()
-    {
-        testValue = new CLASS_UNDER_TEST;
-        result = new CLASS_UNDER_TEST;
-        guess = new CLASS_UNDER_TEST;
-    }
-
-    void teardown()
-    {
-        delete testValue;
-        delete result;
-        delete guess;
-    }
-
-    void checkAndFree(char* expectedValue, char* actualValue)
-    {
-        STRCMP_EQUAL(expectedValue, actualValue);
-        delete [] actualValue;
-    }
-};
-
-
-TEST(PiCalcTestGroup, testBigIntSqRootNewtonFloor)
-{
-    guess->valueOf(1); // seed value.
-
-    char * resultString;
-
-    testValue->valueOf(10005);
-    PiCalculator::bigIntSqRootNewtonFloor(result, testValue, guess);
-
-//    checkAndFree("100", result->getString());
-
-
-
-
-    testValue->valueOf(100050000);
-
-    //        result    = PiCalculatorMain.bigIntSqRootNewtonFloor(testValue,BigInteger.ONE);
-
-//    resultString = result->getString();
-//    STRCMP_EQUAL("10002", resultString);
-//    delete [] resultString;
-    //
-    //
-    //
-    //        result    = PiCalculatorMain.bigIntSqRootNewtonFloor( new BigInteger("100050000000000000000000000000000000000000000000000000000000000"),BigInteger.ONE);
-    //
-//    resultString = result->getString();
-//    STRCMP_EQUAL("10002499687578100594479218787635", resultString);
-//    delete [] resultString;
-
-}
-//
+//    @Test
 //    public void testBigIntSqRootNewtonFloor() {
 //        BigInteger testValue;
 //        BigInteger result;
@@ -1604,6 +1628,99 @@ TEST(PiCalcTestGroup, testBigIntSqRootNewtonFloor)
 //
 //        assertTrue( result.equals(new BigInteger("10002499687578100594479218787635")) );
 //    }
+//
+//    @Test
+//    public void testGet_six_k_factorial()
+//    {
+//        BigInteger result = BigInteger.ONE;
+//
+//        result = PiCalculatorMain.get_six_k_factorial(result,1);
+//        assertTrue( result.equals(new BigInteger("720")) );
+//
+//        result = PiCalculatorMain.get_six_k_factorial(result,2);
+//        assertTrue( result.equals(new BigInteger("479001600")) );
+//
+//        result = PiCalculatorMain.get_six_k_factorial(result,3);
+//        assertTrue( result.equals(new BigInteger("6402373705728000")) );
+//    }
+//
+//    @Test
+//    public void testGet_three_k_factorial()
+//    {
+//        BigInteger result = BigInteger.ONE;
+//
+//        result = PiCalculatorMain.get_three_k_factorial(result,1);
+//        assertTrue( result.equals(new BigInteger("6")) );
+//
+//        result = PiCalculatorMain.get_three_k_factorial(result,2);
+//        assertTrue( result.equals(new BigInteger("720")) );
+//
+//        result = PiCalculatorMain.get_three_k_factorial(result,3);
+//        assertTrue( result.equals(new BigInteger("362880")) );
+//    }
+//
+//    @Test
+//    public void testGet_numerator_constant()
+//    {
+//        BigInteger result = BigInteger.valueOf(13591409L);;
+//
+//        result = PiCalculatorMain.get_numerator_constant(result);
+//        assertTrue( result.equals(new BigInteger("558731543")) );
+//
+//        result = PiCalculatorMain.get_numerator_constant(result);
+//        assertTrue( result.equals(new BigInteger("1103871677")) );
+//
+//        result = PiCalculatorMain.get_numerator_constant(result);
+//        assertTrue( result.equals(new BigInteger("1649011811")) );
+//    }
+//
+//    @Test
+//    public void testGet_k_factorial_cubed()
+//    {
+//        BigInteger result = BigInteger.ONE;
+//
+//        result = PiCalculatorMain.get_k_factorial_cubed(1);
+//        assertTrue( result.equals(new BigInteger("1")) );
+//
+//        result = PiCalculatorMain.get_k_factorial_cubed(2);
+//        assertTrue( result.equals(new BigInteger("8")) );
+//
+//        result = PiCalculatorMain.get_k_factorial_cubed(3);
+//        assertTrue( result.equals(new BigInteger("216")) );
+//    }
+//
+//    @Test
+//    public void testGet_neg_640320_to_the_3k()
+//    {
+//        BigInteger result = BigInteger.ONE;
+//
+//        result = PiCalculatorMain.get_neg_640320_to_the_3k(result);
+//        assertTrue( result.equals(new BigInteger("-262537412640768000")) );
+//
+//        result = PiCalculatorMain.get_neg_640320_to_the_3k(result);
+//        assertTrue( result.equals(new BigInteger("68925893036108889235415629824000000")) );
+//
+//        result = PiCalculatorMain.get_neg_640320_to_the_3k(result);
+//        assertTrue( result.equals(new BigInteger("-18095625621654356959022098935941777779064832000000000")) );
+//    }
+//
+//    @Test
+//    public void testGet_426880_sqrt_10005()
+//    {
+//        BigInteger result       = PiCalculatorMain.get_426880_sqrt_10005(100);
+//        assertTrue( result.equals(new BigInteger("426986706663333958177128891606596082733208840025090828008380071788526051574575942163017999114556686013221760")) );
+//    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

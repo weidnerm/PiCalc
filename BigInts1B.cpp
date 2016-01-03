@@ -546,6 +546,10 @@ bool BigInts1B::equals(int rightVal)
     return returnVal;
 }
 
+void BigInts1B::sqrt(BigIntBase* guess)
+{
+}
+
 /*              4
  *            --------------
  * 8/2 ->   2 | 8
