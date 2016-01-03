@@ -1625,7 +1625,7 @@ TEST_GROUP(PiCalculatorTestGroup)
 {
     BigIntFactory * myBigIntFactory;
     BigIntBase * myBigIntBaseA;
-    BigIntBase * myBigIntBaseB;
+//    BigIntBase * myBigIntBaseB;
     PiCalculator * myPiCalculator;
     char* result;
     char* result2;
@@ -1634,7 +1634,7 @@ TEST_GROUP(PiCalculatorTestGroup)
     {
         myBigIntFactory = new FACTORY_UNDER_TEST;
         myBigIntBaseA = myBigIntFactory->create();
-        myBigIntBaseB = myBigIntFactory->create();
+//        myBigIntBaseB = myBigIntFactory->create();
         myPiCalculator = new PiCalculator(myBigIntFactory);
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
@@ -1644,13 +1644,20 @@ TEST_GROUP(PiCalculatorTestGroup)
     {
         delete myBigIntFactory;
         delete myBigIntBaseA;
-        delete myBigIntBaseB;
+//        delete myBigIntBaseB;
+        delete myPiCalculator;
         delete [] result;
         delete [] result2;
     }
+
 };
 
-
+#define checkAndCleanup(expected, actual) \
+        {\
+            char * tempVal = (actual)->getString(); \
+            STRCMP_EQUAL((expected), tempVal); \
+            delete[] tempVal; \
+        }
 
 //    @Test
 //    public void testGet_six_k_factorial()
@@ -1666,7 +1673,21 @@ TEST_GROUP(PiCalculatorTestGroup)
 //        result = PiCalculatorMain.get_six_k_factorial(result,3);
 //        assertTrue( result.equals(new BigInteger("6402373705728000")) );
 //    }
-//
+TEST(PiCalculatorTestGroup, testGet_six_k_factorial)
+{
+    myBigIntBaseA->valueOf(1);
+
+    myPiCalculator->get_six_k_factorial(myBigIntBaseA,1);
+    checkAndCleanup("720",myBigIntBaseA);
+
+    myPiCalculator->get_six_k_factorial(myBigIntBaseA,2);
+    checkAndCleanup("479001600",myBigIntBaseA);
+
+    myPiCalculator->get_six_k_factorial(myBigIntBaseA,3);
+    checkAndCleanup("6402373705728000",myBigIntBaseA);
+
+}
+
 //    @Test
 //    public void testGet_three_k_factorial()
 //    {

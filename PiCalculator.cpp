@@ -41,6 +41,14 @@ PiCalculator::PiCalculator()
 PiCalculator::PiCalculator(BigIntFactory* myBigIntFactory)
 {
     m_BigIntFactory = myBigIntFactory;
+    m_zero = m_BigIntFactory->create();
+    m_one  = m_BigIntFactory->create();
+    m_six  = m_BigIntFactory->create();
+
+    m_zero->valueOf(0);
+    m_one ->valueOf(1);
+    m_six ->valueOf(6);
+
 }
 
 PiCalculator::~PiCalculator()
@@ -49,10 +57,80 @@ PiCalculator::~PiCalculator()
     /*----------------------------- LOCAL VARIABLES ------------------------------*/
 
     /*---------------------------------- CODE ------------------------------------*/
+    delete m_zero;
+    delete m_one;
+    delete m_six;
 
-    delete m_BigIntFactory;
 }
 
+/**
+ *     public static BigInteger get_six_k_factorial(BigInteger previous, int k )
+    {
+        final BigInteger six                  = BigInteger.valueOf(6);
+        final BigInteger six_k                = six.multiply(BigInteger.valueOf(k));
+        final BigInteger six_k_minus_1        = six_k.subtract(BigInteger.ONE);
+        final BigInteger six_k_minus_2        = six_k_minus_1.subtract(BigInteger.ONE);
+        final BigInteger six_k_minus_3        = six_k_minus_2.subtract(BigInteger.ONE);
+        final BigInteger six_k_minus_4        = six_k_minus_3.subtract(BigInteger.ONE);
+        final BigInteger six_k_minus_5        = six_k_minus_4.subtract(BigInteger.ONE);
+
+
+        final BigInteger result = previous.multiply(six_k).
+                multiply(six_k_minus_1).
+                multiply(six_k_minus_2).
+                multiply(six_k_minus_3).
+                multiply(six_k_minus_4).
+                multiply(six_k_minus_5);
+
+        return result;
+    }
+ *
+ */
+void PiCalculator::get_six_k_factorial(BigIntBase* previous, int k_val)
+{
+    BigIntBase *  k             = m_BigIntFactory->create();
+    BigIntBase *  six_k         = m_BigIntFactory->create();
+    BigIntBase *  six_k_minus_1 = m_BigIntFactory->create();
+    BigIntBase *  six_k_minus_2 = m_BigIntFactory->create();
+    BigIntBase *  six_k_minus_3 = m_BigIntFactory->create();
+    BigIntBase *  six_k_minus_4 = m_BigIntFactory->create();
+    BigIntBase *  six_k_minus_5 = m_BigIntFactory->create();
+
+    k->valueOf(k_val);
+
+    six_k->assign(m_six);
+    six_k->multiply(k);
+
+    six_k_minus_1->assign(six_k);
+    six_k_minus_1->subtract(m_one);
+
+    six_k_minus_2->assign(six_k_minus_1);
+    six_k_minus_2->subtract(m_one);
+
+    six_k_minus_3->assign(six_k_minus_2);
+    six_k_minus_3->subtract(m_one);
+
+    six_k_minus_4->assign(six_k_minus_3);
+    six_k_minus_4->subtract(m_one);
+
+    six_k_minus_5->assign(six_k_minus_4);
+    six_k_minus_5->subtract(m_one);
+
+    previous->multiply(six_k        );
+    previous->multiply(six_k_minus_1);
+    previous->multiply(six_k_minus_2);
+    previous->multiply(six_k_minus_3);
+    previous->multiply(six_k_minus_4);
+    previous->multiply(six_k_minus_5);
+
+    delete k             ;
+    delete six_k         ;
+    delete six_k_minus_1 ;
+    delete six_k_minus_2 ;
+    delete six_k_minus_3 ;
+    delete six_k_minus_4 ;
+    delete six_k_minus_5 ;
+}
 
 #ifdef DITCH_ME
 public class PiCalculatorMain {
@@ -206,26 +284,6 @@ public class PiCalculatorMain {
     }
 
 
-    public static BigInteger get_six_k_factorial(BigInteger previous, int k )
-    {
-        final BigInteger six                  = BigInteger.valueOf(6);
-        final BigInteger six_k                = six.multiply(BigInteger.valueOf(k));
-        final BigInteger six_k_minus_1        = six_k.subtract(BigInteger.ONE);
-        final BigInteger six_k_minus_2        = six_k_minus_1.subtract(BigInteger.ONE);
-        final BigInteger six_k_minus_3        = six_k_minus_2.subtract(BigInteger.ONE);
-        final BigInteger six_k_minus_4        = six_k_minus_3.subtract(BigInteger.ONE);
-        final BigInteger six_k_minus_5        = six_k_minus_4.subtract(BigInteger.ONE);
-
-
-        final BigInteger result = previous.multiply(six_k).
-                multiply(six_k_minus_1).
-                multiply(six_k_minus_2).
-                multiply(six_k_minus_3).
-                multiply(six_k_minus_4).
-                multiply(six_k_minus_5);
-
-        return result;
-    }
 
     public static BigInteger get_three_k_factorial(BigInteger previous, int k )
     {
