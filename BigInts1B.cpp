@@ -355,11 +355,11 @@ void BigInts1B::swap(BigInts1B** first, BigInts1B** second)
 
 void BigInts1B::divide(BigIntBase* bigIntPtr)
 {
+    int index;
     BigInts1B* dividend = this;
     BigInts1B* divisor = (BigInts1B*)bigIntPtr;
     int32_t * resultArray = new int32_t[m_length];
 
-    int index;
     for(index=0;index<m_length;index++)
     {
         resultArray[index] = 0;
@@ -369,10 +369,82 @@ void BigInts1B::divide(BigIntBase* bigIntPtr)
 
 
 
-    resultArray[0] = m_value[0] / divisor->m_value[0];
+    int resultDigitIndex = dividend->m_length - divisor->m_length;
+    int resultLength;
+
+    BigInts1B divdendFragment;
+
+    // get a starting point for our division.  assume same num of digits as divisor.  might need one more though.
+    getSubArray(&divdendFragment, m_length-1, divisor->m_length);
+    if ( divdendFragment.compareMagnitude(divisor) == -1 )  // if divisor doesnt fit in fragment, tack on an extra digit.
+    {
+        resultDigitIndex--;
+    }
+    getSubArray(&divdendFragment, m_length-1, m_length-resultDigitIndex);
+//    printBigInt("divdendFragment = %s\n", &divdendFragment);
+
+    resultLength = resultDigitIndex+1;
+    while ( resultDigitIndex >= 0)
+    {
+        int dividendDigit = 0;
+        BigInts1B productFrag;
+        BigInts1B scaledDivisor;
+        BigInts1B scaleFactor;
+
+        productFrag.valueOf(0);
+//        printBigInt("productFrag0 = %s\n", &productFrag);
+        for (int subDigitMultiplier = BASE / 10; subDigitMultiplier > 0; subDigitMultiplier /= 10)
+        {
+            scaleFactor.valueOf(subDigitMultiplier);
+            scaledDivisor.assign(divisor);
+            scaledDivisor.multiply(&scaleFactor);
+            scaledDivisor.m_negative = false;
+            int loopLimiter = 0;
+            do
+            {
+                dividendDigit += subDigitMultiplier;
+//                printf("subDigitMultipli =%09d;  \n", subDigitMultiplier);
+//                printf("dividendDigit    =%09d;  \n", dividendDigit);
+                productFrag.add(&scaledDivisor);
+                loopLimiter++;
+
+//                printBigInt("divdendFragment = %s\n", &divdendFragment);
+//                printBigInt("productFrag     = %s\n", &productFrag);
+//                printf("\n");
+
+            }
+            while ((divdendFragment.compareMagnitude(&productFrag) > -1) && (loopLimiter < 10));
+
+            productFrag.subtract(&scaledDivisor);  // the previous loop went one too far.  back up.
+            dividendDigit -= subDigitMultiplier;
+
+        }
+
+
+
+//        printBigInt("productFrag = %s\n", &productFrag);
+//        printf("resultArray[%d] = %d\n",resultDigitIndex,dividendDigit);
+
+        resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
+        resultDigitIndex--;
+
+        divdendFragment.subtract(&productFrag);
+        if (resultDigitIndex >= 0)
+        {
+            divdendFragment.insertLeastSigDigit(dividend->m_value[resultDigitIndex]);
+        }
+//        printBigInt("concatResult = %s\n", &divdendFragment);
+
+
+    }
+
+
+
+//    resultArray[0] = m_value[0] / divisor->m_value[0];
 
     delete [] m_value;
     m_value = resultArray;
+    m_negative = divisor->m_negative ^ dividend->m_negative;   // XOR divisor sign  and  dividend sign
     trimLeadingZeros();
 
 }
@@ -587,6 +659,43 @@ void BigInts1B::trimLeadingZeros()
     }
 }
 
+void BigInts1B::getSubArray(BigInts1B* destArray, int msbIndex, int numDigits)
+{
+    if ( numDigits > destArray->m_length)  // if it wont fit, allocate more space
+    {
+        delete [] destArray->m_value;
+        destArray->m_value = new int32_t[numDigits];
+    }
+    destArray->m_length = numDigits;
 
+    int index;
+    for(index=0; index<numDigits; index++)
+    {
+        destArray->m_value[index] = m_value[msbIndex-numDigits+index+1];
+    }
+}
 
+void BigInts1B::printBigInt(char* formatStr, BigInts1B* bigIntPtr)
+{
+    char * tempVal = bigIntPtr->getString();
 
+    printf(formatStr, tempVal);
+
+    delete[] tempVal;
+}
+
+void BigInts1B::insertLeastSigDigit(int32_t digit)
+{
+    int32_t * newArray = new int32_t[m_length + 1];
+    int index;
+    for(index=0;index<m_length; index++)
+    {
+        newArray[index+1] = m_value[index];
+    }
+    newArray[0] = digit;
+    m_length++;
+
+    delete[] m_value;
+    m_value = newArray;
+    trimLeadingZeros();
+}

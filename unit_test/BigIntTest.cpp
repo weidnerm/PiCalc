@@ -38,9 +38,8 @@
 #include "BigIntFactory10.h"
 #include "BigIntFactory1B.cpp"
 
-
-#define FACTORY_UNDER_TEST BigIntFactory10
-//#define FACTORY_UNDER_TEST BigIntFactory1B
+//#define FACTORY_UNDER_TEST BigIntFactory10
+#define FACTORY_UNDER_TEST BigIntFactory1B
 
 #define DIVISION_TESTS
 
@@ -278,7 +277,7 @@ TEST(FirstTestGroup, sqrt_1)
     STRCMP_EQUAL("1",result);
 }
 
-TEST(FirstTestGroup, sqrt_2)
+IGNORE_TEST(FirstTestGroup, sqrt_2)
 {
     myBigIntBase->setString("2");
 
@@ -288,7 +287,7 @@ TEST(FirstTestGroup, sqrt_2)
     STRCMP_EQUAL("1",result);
 }
 
-TEST(FirstTestGroup, sqrt_400)
+IGNORE_TEST(FirstTestGroup, sqrt_400)
 {
     myBigIntBase->setString("403");
 
@@ -298,7 +297,7 @@ TEST(FirstTestGroup, sqrt_400)
     STRCMP_EQUAL("20",result);
 }
 
-TEST(FirstTestGroup, sqrt_10005_100digs)
+IGNORE_TEST(FirstTestGroup, sqrt_10005_100digs)
 {
     myBigIntBase->setString("1000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
 //    myGuess->setString("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
@@ -999,7 +998,7 @@ TEST(TwoValueTestGroup, divideLen1by1)
     STRCMP_EQUAL("2",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, divideLen1by1_posXneg)
+TEST(TwoValueTestGroup, divideLen6by3_posXneg)
 {
     myBigIntBaseA->setString("111228");
     myBigIntBaseB->setString("-199");
@@ -1013,7 +1012,35 @@ TEST(TwoValueTestGroup, divideLen1by1_posXneg)
     STRCMP_EQUAL("-199",result2); // make sure that B didnt change
 }
 
-TEST(TwoValueTestGroup, divideLen1by1_negXpos)
+TEST(TwoValueTestGroup, divideLen2by2_posXneg)
+{
+    myBigIntBaseA->setString("234567890");
+    myBigIntBaseB->setString("-2");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-117283945",result);//117283945
+    STRCMP_EQUAL("-2",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen19x10_negXpos)
+{
+    myBigIntBaseA->setString("-2000000003000000000");
+    myBigIntBaseB->setString("1000000000");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-2000000003",result);
+    STRCMP_EQUAL("1000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divideLen12by6_negXpos)
 {
     myBigIntBaseA->setString("-111228975896");
     myBigIntBaseB->setString("129787");
@@ -1153,13 +1180,41 @@ TEST(TwoValueTestGroup, divide10_by_200)
     STRCMP_EQUAL("-200",result2); // make sure that B didnt change
 }
 
+TEST(TwoValueTestGroup, divide1000000000_by_2000000000000000000)
+{
+    myBigIntBaseA->setString("-1000000000");
+    myBigIntBaseB->setString("-2000000000000000000");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("0",result);
+    STRCMP_EQUAL("-2000000000000000000",result2); // make sure that B didnt change
+}
+
+TEST(TwoValueTestGroup, divide_9s_Sqared_by_999999999999999999999999999999999999)
+{
+    myBigIntBaseA->setString("999999999999999999999999999999999998000000000000000000000000000000000001");
+    myBigIntBaseB->setString("-999999999999999999999999999999999999");
+
+    // A = A+B
+    myBigIntBaseA->divide(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-999999999999999999999999999999999999",result);
+    STRCMP_EQUAL("-999999999999999999999999999999999999",result2); // make sure that B didnt change
+}
+
 IGNORE_TEST(TwoValueTestGroup, speedTestDivide)
 {
-    myBigIntBaseB->setString("987654321");
+    myBigIntBaseB->setString("-999999999999999999999999999999999999");
     int index;
     for (index = 0; index < 100000; index++)
     {
-        myBigIntBaseA->setString("1219326311126352690");
+        myBigIntBaseA->setString("999999999999999999999999999999999998000000000000000000000000000000000001");
 
         // A = A+B
         myBigIntBaseA->divide(myBigIntBaseB);
@@ -1167,8 +1222,8 @@ IGNORE_TEST(TwoValueTestGroup, speedTestDivide)
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("1234567890",result);
-    STRCMP_EQUAL("987654321",result2); // make sure that B didnt change
+    STRCMP_EQUAL("-999999999999999999999999999999999999",result);
+    STRCMP_EQUAL("-999999999999999999999999999999999999",result2); // make sure that B didnt change
 }
 
 #endif
@@ -1187,11 +1242,11 @@ IGNORE_TEST(TwoValueTestGroup, speedTestDivide)
 
 IGNORE_TEST(TwoValueTestGroup, speedTestMultiply)
 {
-    myBigIntBaseB->setString("987654321");
+    myBigIntBaseB->setString("-999999999999999999999999999999999999");
     int index;
     for (index = 0; index < 100000; index++)
     {
-        myBigIntBaseA->setString("1234567890");
+        myBigIntBaseA->setString("-999999999999999999999999999999999999");
 
         // A = A+B
         myBigIntBaseA->multiply(myBigIntBaseB);
@@ -1199,8 +1254,8 @@ IGNORE_TEST(TwoValueTestGroup, speedTestMultiply)
     result = myBigIntBaseA->getString();
     result2 = myBigIntBaseB->getString();
 
-    STRCMP_EQUAL("1219326311126352690", result);
-    STRCMP_EQUAL("987654321", result2); // make sure that B didnt change
+    STRCMP_EQUAL("999999999999999999999999999999999998000000000000000000000000000000000001", result);
+    STRCMP_EQUAL("-999999999999999999999999999999999999", result2); // make sure that B didnt change
 }
 
 TEST(TwoValueTestGroup, multiply1234x2_noCarry)
@@ -1612,14 +1667,6 @@ TEST(TwoValueTestGroup, equals_BigInt_0)
     STRCMP_EQUAL("-1234567890000000000",result2);
 }
 
-TEST(TwoValueTestGroup, testGet_six_k_factorial)
-{
-    myBigIntBaseA->valueOf(1);
-
-
-}
-
-
 
 TEST_GROUP(PiCalculatorTestGroup)
 {
@@ -1820,7 +1867,7 @@ TEST(PiCalculatorTestGroup, testGet_neg_640320_to_the_3k)
 //        assertTrue( result.equals(new BigInteger("426986706663333958177128891606596082733208840025090828008380071788526051574575942163017999114556686013221760")) );
 //    }
 
-TEST(PiCalculatorTestGroup, testGet_426880_sqrt_10005)
+IGNORE_TEST(PiCalculatorTestGroup, testGet_426880_sqrt_10005)
 {
     myBigIntBaseA->valueOf(1);
 
@@ -1832,27 +1879,23 @@ TEST(PiCalculatorTestGroup, testGet_426880_sqrt_10005)
 
 
 
-TEST(PiCalculatorTestGroup, calc_Pi_digits_12)
+IGNORE_TEST(PiCalculatorTestGroup, calc_Pi_digits_12)
 {
     myPiCalculator->calc_Pi_digits(myBigIntBaseA, 12);
     checkAndCleanup("3141592653589", myBigIntBaseA);
 }
 
-TEST(PiCalculatorTestGroup, calc_Pi_digits_100)
+IGNORE_TEST(PiCalculatorTestGroup, calc_Pi_digits_100)
 {
     myPiCalculator->calc_Pi_digits(myBigIntBaseA, 100);
     checkAndCleanup("31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679", myBigIntBaseA);
 }
 
-TEST(PiCalculatorTestGroup, calc_Pi_digits_200)
+IGNORE_TEST(PiCalculatorTestGroup, calc_Pi_digits_200)
 {
     myPiCalculator->calc_Pi_digits(myBigIntBaseA, 200);
     checkAndCleanup("314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196", myBigIntBaseA);
 }
-
-
-
-
 
 
 
