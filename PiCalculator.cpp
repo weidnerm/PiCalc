@@ -425,6 +425,9 @@ void PiCalculator::calc_Pi_digits(BigIntBase* result, int numDigits)
 
         series_k_sum->add(series_k_fraction); // series_k_sum  = series_k_sum.add(series_k_fraction);
 
+//        char * textPtr = series_k_fraction->getString();
+//        printf("k=%d;  series_k_fraction=%s\n", k, textPtr);
+//        delete [] textPtr;
     //            int series_k_fraction_num_digits      = series_k_fraction.toString().length();
     //            System.out.println("k="+k+"  series_k_fraction_num_digits="+series_k_fraction_num_digits );
 
@@ -433,7 +436,7 @@ void PiCalculator::calc_Pi_digits(BigIntBase* result, int numDigits)
             more_work = false;
         }
         k++;
-printf("k=%d\n",k);
+//printf("k=%d\n",k);
         delete series_k_scaled_numerator;
         delete series_k_denominator;
         delete series_k_fraction;

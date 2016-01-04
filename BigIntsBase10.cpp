@@ -706,28 +706,34 @@ bool BigIntsBase10::equals(BigIntBase* rightVal)
     BigIntsBase10* rightValPtr = (BigIntsBase10*)rightVal;
     bool returnVal = true;
 
-    if (leftValPtr->m_negative != rightValPtr->m_negative)
+    if (leftValPtr->m_length != rightValPtr->m_length)
     {
-        returnVal = false;  // signs dont match.  cant be equal.
+        returnVal = false;   // lengths dont match. cant be equal.
     }
     else
     {
-        if (leftValPtr->m_length != rightValPtr->m_length)
+        int index;
+        for (index = 0; index < leftValPtr->m_length; index++)
         {
-            returnVal = false;   // lengths dont match. cant be equal.
-        }
-        else
-        {
-            int index;
-            for (index = 0; index < leftValPtr->m_length; index++)
+            if (leftValPtr->m_value[index] != rightValPtr->m_value[index])
             {
-                if (leftValPtr->m_value[index] != rightValPtr->m_value[index])
-                {
-                    returnVal = false;   // one of the digits didnt match.  not equal.
-                }
+                returnVal = false;   // one of the digits didnt match.  not equal.
+                break;
             }
         }
     }
+
+    if (returnVal == true)
+    {
+        if ((m_length != 1) || (m_value[0] != 0)) // the two are non-zero and numerically equal in absolute value. make sure signs match
+        {
+            if (leftValPtr->m_negative != rightValPtr->m_negative)
+            {
+                returnVal = false;  // signs dont match.  cant be equal.
+            }
+        }
+    }
+
     return returnVal;
 }
 /*

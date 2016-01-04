@@ -36,7 +36,7 @@
 #include "PiCalculator.h"
 #include "BigIntFactory.h"
 #include "BigIntFactory10.h"
-#include "BigIntFactory1B.cpp"
+#include "BigIntFactory1B.h"
 
 //#define FACTORY_UNDER_TEST BigIntFactory10
 #define FACTORY_UNDER_TEST BigIntFactory1B
@@ -1427,6 +1427,18 @@ TEST(TwoValueTestGroup, equals_int_0)
     STRCMP_EQUAL("0",result);
 }
 
+TEST(TwoValueTestGroup, equals_setsetString0_vs_valueOf0)
+{
+    myBigIntBaseA->setString("0");
+    myBigIntBaseB->valueOf(0);
+
+    // A = A+B
+    CHECK_EQUAL(true, myBigIntBaseA->equals(myBigIntBaseB) );
+
+    result = myBigIntBaseA->getString();
+    STRCMP_EQUAL("0",result);
+}
+
 TEST(TwoValueTestGroup, equals_int_1)
 {
     myBigIntBaseA->setString("1");
@@ -1668,6 +1680,21 @@ TEST(TwoValueTestGroup, equals_BigInt_0)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 TEST_GROUP(PiCalculatorTestGroup)
 {
     BigIntFactory * myBigIntFactory;
@@ -1867,7 +1894,7 @@ TEST(PiCalculatorTestGroup, testGet_neg_640320_to_the_3k)
 //        assertTrue( result.equals(new BigInteger("426986706663333958177128891606596082733208840025090828008380071788526051574575942163017999114556686013221760")) );
 //    }
 
-IGNORE_TEST(PiCalculatorTestGroup, testGet_426880_sqrt_10005)
+TEST(PiCalculatorTestGroup, testGet_426880_sqrt_10005)
 {
     myBigIntBaseA->valueOf(1);
 
@@ -1879,19 +1906,19 @@ IGNORE_TEST(PiCalculatorTestGroup, testGet_426880_sqrt_10005)
 
 
 
-IGNORE_TEST(PiCalculatorTestGroup, calc_Pi_digits_12)
+TEST(PiCalculatorTestGroup, calc_Pi_digits_12)
 {
     myPiCalculator->calc_Pi_digits(myBigIntBaseA, 12);
     checkAndCleanup("3141592653589", myBigIntBaseA);
 }
 
-IGNORE_TEST(PiCalculatorTestGroup, calc_Pi_digits_100)
+TEST(PiCalculatorTestGroup, calc_Pi_digits_100)
 {
     myPiCalculator->calc_Pi_digits(myBigIntBaseA, 100);
     checkAndCleanup("31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679", myBigIntBaseA);
 }
 
-IGNORE_TEST(PiCalculatorTestGroup, calc_Pi_digits_200)
+TEST(PiCalculatorTestGroup, calc_Pi_digits_200)
 {
     myPiCalculator->calc_Pi_digits(myBigIntBaseA, 200);
     checkAndCleanup("314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196", myBigIntBaseA);

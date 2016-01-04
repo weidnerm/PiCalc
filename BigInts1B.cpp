@@ -63,12 +63,14 @@ void BigInts1B::valueOf(int inputValue)
 
     int index = 0;
 
-    while (inputValue != 0)
+    do
     {
         m_value[index] = inputValue % BASE;
         inputValue = inputValue / BASE;
         index++;
     }
+    while (inputValue != 0);
+
     m_length = index;
 }
 
@@ -556,28 +558,45 @@ bool BigInts1B::equals(BigIntBase* rightVal)
     BigInts1B* rightValPtr = (BigInts1B*)rightVal;
     bool returnVal = true;
 
-    if (leftValPtr->m_negative != rightValPtr->m_negative)
+    if (leftValPtr->m_length != rightValPtr->m_length)
     {
-        returnVal = false;  // signs dont match.  cant be equal.
+        returnVal = false;   // lengths dont match. cant be equal.
+//        printf("length mismatch %d != %d\n",leftValPtr->m_length ,rightValPtr->m_length );
     }
     else
     {
-        if (leftValPtr->m_length != rightValPtr->m_length)
+        int index;
+        for (index = 0; index < leftValPtr->m_length; index++)
         {
-            returnVal = false;   // lengths dont match. cant be equal.
-        }
-        else
-        {
-            int index;
-            for (index = 0; index < leftValPtr->m_length; index++)
+            if (leftValPtr->m_value[index] != rightValPtr->m_value[index])
             {
-                if (leftValPtr->m_value[index] != rightValPtr->m_value[index])
-                {
-                    returnVal = false;   // one of the digits didnt match.  not equal.
-                }
+                returnVal = false;   // one of the digits didnt match.  not equal.
+//                printf("digit mismatch [%d] %d != %d\n",index, leftValPtr->m_value[index] ,rightValPtr->m_value[index] );
+                break;
             }
         }
     }
+
+    if (returnVal == true)
+    {
+        if ((m_length != 1) || (m_value[0] != 0)) // the two are non-zero and numerically equal in absolute value. make sure signs match
+        {
+            if (leftValPtr->m_negative != rightValPtr->m_negative)
+            {
+                returnVal = false;  // signs dont match.  cant be equal.
+            }
+        }
+    }
+
+//    char * textPtr = leftValPtr->getString();
+//    printf("leftValPtr=%s   ", textPtr);
+//    delete [] textPtr;
+//    textPtr = rightValPtr->getString();
+//    printf("rightValPtr=%s   ", textPtr);
+//    delete [] textPtr;
+//    printf("returnVal=%s   ", returnVal ? "true": "false");
+
+
     return returnVal;
 }
 
@@ -657,6 +676,10 @@ void BigInts1B::sqrt(BigIntBase* guess)
         //        next = next.shiftRight(1);
         next->divide(two);      //printBigInt("next->divide(two);     = %s\n",next);
         loopCount++;
+        if (loopCount == 10000)
+        {
+            printf("Uh Oh. loopCount=%d. something seems wrong.\n", loopCount);
+        }
     }
     while (prev->equals(next) == false);
 //    printf("loopCount = %d\n",loopCount);
