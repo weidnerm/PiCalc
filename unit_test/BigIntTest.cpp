@@ -38,8 +38,28 @@
 #include "BigIntFactory10.h"
 #include "BigIntFactory1B.h"
 
+extern int suiteNum;
+
 //#define FACTORY_UNDER_TEST BigIntFactory10
-#define FACTORY_UNDER_TEST BigIntFactory1B
+//#define FACTORY_UNDER_TEST BigIntFactory1B
+
+BigIntFactory * getFactory()
+{
+    BigIntFactory * returnVal;
+
+    switch(suiteNum)
+    {
+        case 0:
+            returnVal = new BigIntFactory1B;
+            break;
+        case 1:
+        default:
+            returnVal = new BigIntFactory10;
+            break;
+
+    }
+    return returnVal;
+}
 
 #define DIVISION_TESTS
 
@@ -52,7 +72,7 @@ TEST_GROUP(FirstTestGroup)
 
     void setup()
     {
-        myBigIntFactory = new FACTORY_UNDER_TEST;
+        myBigIntFactory = getFactory();
         myBigIntBase = myBigIntFactory->create();
         myGuess = myBigIntFactory->create();
         result = 0;  // null it out in case its not used, we can safely delete 0
@@ -351,7 +371,7 @@ TEST_GROUP(TwoValueTestGroup)
 
     void setup()
     {
-        myBigIntFactory = new FACTORY_UNDER_TEST;
+        myBigIntFactory = getFactory();
         myBigIntBaseA = myBigIntFactory->create();
         myBigIntBaseB = myBigIntFactory->create();
         result = 0;  // null it out in case its not used, we can safely delete 0
@@ -1706,7 +1726,7 @@ TEST_GROUP(PiCalculatorTestGroup)
 
     void setup()
     {
-        myBigIntFactory = new FACTORY_UNDER_TEST;
+        myBigIntFactory = getFactory();
         myBigIntBaseA = myBigIntFactory->create();
         myBigIntBaseB = myBigIntFactory->create();
         myPiCalculator = new PiCalculator(myBigIntFactory);

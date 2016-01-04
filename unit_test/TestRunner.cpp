@@ -30,7 +30,11 @@
 
 #include "CppUTest/CommandLineTestRunner.h"
 
+int suiteNum = 0;
 int main(int ac, char** av)
 {
+    suiteNum = 0;
+    CommandLineTestRunner::RunAllTests(ac, av);
+    suiteNum = 1;
     return CommandLineTestRunner::RunAllTests(ac, av);
 }
