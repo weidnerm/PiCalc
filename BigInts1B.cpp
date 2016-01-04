@@ -620,6 +620,53 @@ bool BigInts1B::equals(int rightVal)
 
 void BigInts1B::sqrt(BigIntBase* guess)
 {
+    if (equals(0) || equals(1))
+    {
+        return; // return input;
+    }
+
+    BigInts1B * myGuess = new BigInts1B;
+    BigInts1B * prev = new BigInts1B;
+    BigInts1B * next = new BigInts1B;
+    BigInts1B * two = new BigInts1B;
+    two->valueOf(2);
+
+    if (guess != 0)
+    {
+        myGuess->assign(guess);
+    }
+    else
+    {
+        myGuess->valueOf(10);   // if no guess was provided, use 1
+        myGuess->pow(m_length/2);
+    }
+
+    next->assign(myGuess);  //starting value
+    int loopCount = 0;
+
+    do
+    {
+        //        prev = next.shiftRight(0);
+        prev->assign(next);     //printBigInt("\nprev->assign(next);  = %s\n",prev);
+
+        //        next = prev.add( input.divide(prev) );
+        next->assign(this);     //printBigInt("next->assign(this);  = %s\n",next);
+        next->divide(prev);     //printBigInt("next->divide(prev);  = %s\n",next);
+        next->add(prev);        //printBigInt("next->add(prev);     = %s\n",next);
+
+        //        next = next.shiftRight(1);
+        next->divide(two);      //printBigInt("next->divide(two);     = %s\n",next);
+        loopCount++;
+    }
+    while (prev->equals(next) == false);
+//    printf("loopCount = %d\n",loopCount);
+
+    assign(next);
+
+    delete myGuess;
+    delete prev;
+    delete next;
+    delete two;
 }
 
 /*              4
