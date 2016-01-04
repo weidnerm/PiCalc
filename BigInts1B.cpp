@@ -657,7 +657,7 @@ void BigInts1B::sqrt(BigIntBase* guess)
     else
     {
         myGuess->valueOf(10);   // if no guess was provided, use 1
-        myGuess->pow(m_length/2);
+        myGuess->pow((m_length*9)/2);
     }
 
     next->assign(myGuess);  //starting value
