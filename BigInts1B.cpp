@@ -362,17 +362,38 @@ void BigInts1B::divide(BigIntBase* bigIntPtr)
     BigInts1B* divisor = (BigInts1B*)bigIntPtr;
     int32_t * resultArray = new int32_t[m_length];
 
+
+    // pre-compute various divisor products for 0-9 (and one for 10 since search loop goes one past)
+    BigInts1B productFrag[9][11];
+    productFrag[0][0].valueOf(0);
+    productFrag[1][0].valueOf(0);
+    productFrag[2][0].valueOf(0);
+    productFrag[3][0].valueOf(0);
+    productFrag[4][0].valueOf(0);
+    productFrag[5][0].valueOf(0);
+    productFrag[6][0].valueOf(0);
+    productFrag[7][0].valueOf(0);
+    productFrag[8][0].valueOf(0);
+    for (int digValIndex = 1; digValIndex < 11; digValIndex++)
+    {
+        productFrag[0][digValIndex].assign(&productFrag[0][digValIndex - 1]);
+        productFrag[0][digValIndex].sameSignAdd(divisor); //sameSignAdd ignores sign bits so we can handle a negative divisor
+    }
+    for (int digPosIndex = 1; digPosIndex < 9; digPosIndex++)
+    {
+        for (int digValIndex = 1; digValIndex < 11; digValIndex++)
+        {
+            productFrag[digPosIndex][digValIndex].assign(&productFrag[digPosIndex][digValIndex-1]);
+            productFrag[digPosIndex][digValIndex].sameSignAdd(&productFrag[digPosIndex-1][10]); //sameSignAdd ignores sign bits so we can handle a negative divisor
+        }
+    }
+
     for(index=0;index<m_length;index++)
     {
         resultArray[index] = 0;
     }
 
-
-
-
-
-    int resultDigitIndex = dividend->m_length - divisor->m_length;
-    int resultLength;
+    int resultDigitIndex = dividend->m_length - divisor->m_length;   // position of digit in overall result value
 
     BigInts1B divdendFragment;
 
@@ -383,72 +404,42 @@ void BigInts1B::divide(BigIntBase* bigIntPtr)
         resultDigitIndex--;
     }
     getSubArray(&divdendFragment, m_length-1, m_length-resultDigitIndex);
-//    printBigInt("divdendFragment = %s\n", &divdendFragment);
 
-    resultLength = resultDigitIndex+1;
-    while ( resultDigitIndex >= 0)
+    // compute the overall digit 000000000-999999999 by building each subdigit.
+    while (resultDigitIndex >= 0)
     {
-        int dividendDigit = 0;
-        BigInts1B productFrag;
-        BigInts1B scaledDivisor;
-        BigInts1B scaleFactor;
+        int dividendDigit = 0;   // full 1B digit i.e. 000000000-999999999 in value
+        int digitPos;            // 8-0 representing digitPosition within dividendDigit.  8 is leftmost; 0 is rightmost
+        int subDigitMultiplier;  // values of 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1
 
-        productFrag.valueOf(0);
-//        printBigInt("productFrag0 = %s\n", &productFrag);
-        for (int subDigitMultiplier = BASE / 10; subDigitMultiplier > 0; subDigitMultiplier /= 10)
+        for (subDigitMultiplier = BASE / 10, digitPos = 8; subDigitMultiplier > 0; subDigitMultiplier /= 10, digitPos--)
         {
-            scaleFactor.valueOf(subDigitMultiplier);
-            scaledDivisor.assign(divisor);
-            scaledDivisor.multiply(&scaleFactor);
-            scaledDivisor.m_negative = false;
-            int loopLimiter = 0;
+            int singleDividendDigit = 0;   // value 0-9 of current sub-digit.
             do
             {
                 dividendDigit += subDigitMultiplier;
-//                printf("subDigitMultipli =%09d;  \n", subDigitMultiplier);
-//                printf("dividendDigit    =%09d;  \n", dividendDigit);
-                productFrag.add(&scaledDivisor);
-                loopLimiter++;
-
-//                printBigInt("divdendFragment = %s\n", &divdendFragment);
-//                printBigInt("productFrag     = %s\n", &productFrag);
-//                printf("\n");
-
+                singleDividendDigit++;
             }
-            while ((divdendFragment.compareMagnitude(&productFrag) > -1) && (loopLimiter < 10));
+            while ((divdendFragment.compareMagnitude(&productFrag[digitPos][singleDividendDigit]) > -1) && (singleDividendDigit < 10));
 
-            productFrag.subtract(&scaledDivisor);  // the previous loop went one too far.  back up.
+            divdendFragment.subtract(&productFrag[digitPos][singleDividendDigit - 1]); // the previous loop went one too far.  back up.
             dividendDigit -= subDigitMultiplier;
-
         }
-
-
-
-//        printBigInt("productFrag = %s\n", &productFrag);
-//        printf("resultArray[%d] = %d\n",resultDigitIndex,dividendDigit);
 
         resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
         resultDigitIndex--;
 
-        divdendFragment.subtract(&productFrag);
         if (resultDigitIndex >= 0)
         {
             divdendFragment.insertLeastSigDigit(dividend->m_value[resultDigitIndex]);
         }
 //        printBigInt("concatResult = %s\n", &divdendFragment);
-
-
     }
-
-
-
-//    resultArray[0] = m_value[0] / divisor->m_value[0];
 
     delete [] m_value;
     m_value = resultArray;
     m_negative = divisor->m_negative ^ dividend->m_negative;   // XOR divisor sign  and  dividend sign
     trimLeadingZeros();
-
 }
 
 int BigInts1B::compareMagnitude(BigIntBase* bigIntPtr)

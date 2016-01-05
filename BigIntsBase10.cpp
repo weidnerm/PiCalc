@@ -314,13 +314,8 @@ void BigIntsBase10::divide(BigIntBase* bigIntPtr)
     for (index = 1; index < 11; index++)
     {
         productFrag[index].assign(&productFrag[index-1]);
-        productFrag[index].add(divisor);
+        productFrag[index].sameSignAdd(divisor);   // use same sign add in case its negative.  sameSignAdd ignores sign bit.
     }
-    for (index = 1; index < 11; index++)
-    {
-        productFrag[index].m_negative = false; // make sure all of these are positive since we do math using them.
-    }
-
 
     for (index = 0; index < m_length; index++)
     {
