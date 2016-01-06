@@ -1,12 +1,12 @@
 /*******************************************************************************
  *
- *             COPYRIGHT 2015 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
+ *             COPYRIGHT 2016 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
  *                    MOTOROLA SOLUTIONS CONFIDENTIAL RESTRICTED
  *                            TEMPLATE VERSION R01.03
  *
  ********************************************************************************
  *
- *  FILE NAME : TestRunner.cpp
+ *  FILE NAME : BigIntFactory31Bit.cpp
  *
  *-------------------------------- PURPOSE --------------------------------------
  *
@@ -26,26 +26,28 @@
  *******************************************************************************/
 
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
-#include "TestRunner.h"
+#include "BigIntFactory31Bit.h"
+#include "BigInts31Bit.h"
 
-#include "CppUTest/CommandLineTestRunner.h"
-
-int suiteNum = 0;
-int main(int ac, char** av)
+BigIntFactory31Bit::BigIntFactory31Bit()
 {
-    int returnVal;
+    // TODO Auto-generated constructor stub
+    /*----------------------------- LOCAL VARIABLES ------------------------------*/
 
-    suiteNum = 0;  // base 1e9 tests
-    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
+    /*---------------------------------- CODE ------------------------------------*/
 
-    suiteNum = 1;  // base 10 tests
-    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
+}
 
-//    suiteNum = 2;  // base 2^31 tests
-//    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
-//
-//    suiteNum = 3;  // base 2^32 tests
-//    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
+BigIntFactory31Bit::~BigIntFactory31Bit()
+{
+    // TODO Auto-generated method stub
+    /*----------------------------- LOCAL VARIABLES ------------------------------*/
 
-    return returnVal;
+    /*---------------------------------- CODE ------------------------------------*/
+
+}
+
+BigIntBase* BigIntFactory31Bit::create()
+{
+    return new BigInts31Bit;
 }

@@ -132,3 +132,63 @@ void BigInts32Bit::add(BigIntBase* bigInt)
 void BigInts32Bit::subtract(BigIntBase* bigInt)
 {
 }
+
+void BigInts32Bit::multiply(BigIntBase* bigIntPtr)
+{
+}
+
+void BigInts32Bit::divide(BigIntBase* bigIntPtr)
+{
+}
+
+int BigInts32Bit::compareMagnitude(BigIntBase* bigIntPtr)
+{
+}
+
+void BigInts32Bit::assign(BigIntBase* bigIntPtr)
+{
+}
+
+void BigInts32Bit::pow(int power)
+{
+}
+
+bool BigInts32Bit::equals(BigIntBase* rightVal)
+{
+}
+
+bool BigInts32Bit::equals(int rightVal)
+{
+}
+
+void BigInts32Bit::sqrt(BigIntBase* guess)
+{
+}
+
+void BigInts32Bit::sameSignAdd(BigIntBase* bigIntPtr)
+{
+}
+
+void BigInts32Bit::diffSignAdd(BigIntBase* bigIntPtr)
+{
+}
+
+void BigInts32Bit::swap(BigInts32Bit** first, BigInts32Bit** second)
+{
+}
+
+void BigInts32Bit::trimLeadingZeros()
+{
+}
+
+void BigInts32Bit::getSubArray(BigInts32Bit* destArray, int msbIndex, int numDigits)
+{
+}
+
+void BigInts32Bit::printBigInt(char* formatStr, BigInts32Bit* bigIntPtr)
+{
+}
+
+void BigInts32Bit::insertLeastSigDigit(int32_t digit)
+{
+}

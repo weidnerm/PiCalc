@@ -1,12 +1,12 @@
 /*******************************************************************************
  *
- *             COPYRIGHT 2015 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
+ *             COPYRIGHT 2016 MOTOROLA SOLUTIONS INC. ALL RIGHTS RESERVED.
  *                    MOTOROLA SOLUTIONS CONFIDENTIAL RESTRICTED
  *                            TEMPLATE VERSION R01.03
  *
  ********************************************************************************
  *
- *  FILE NAME : TestRunner.cpp
+ *  FILE NAME : BigIntFactory32Bit.h
  *
  *-------------------------------- PURPOSE --------------------------------------
  *
@@ -25,27 +25,24 @@
  *
  *******************************************************************************/
 
-/*--------------------------- HEADER FILE INCLUDES ----------------------------*/
-#include "TestRunner.h"
+#ifndef BIGINTFACTORY32BIT_H_
+#define BIGINTFACTORY32BIT_H_
 
-#include "CppUTest/CommandLineTestRunner.h"
+/*-------------------------- HEADER FILE INCLUDES -----------------------------*/
+#include <BigIntFactory.h>
 
-int suiteNum = 0;
-int main(int ac, char** av)
+/*------------------------------ CONSTANTS ------------------------------------*/
+
+/*---------------------------- ENUMERATED TYPES -------------------------------*/
+
+/*---------------------------------- MACROS -----------------------------------*/
+
+class BigIntFactory32Bit: public BigIntFactory
 {
-    int returnVal;
+    public:
+        BigIntFactory32Bit();
+        virtual ~BigIntFactory32Bit();
+        virtual BigIntBase * create();
+};
 
-    suiteNum = 0;  // base 1e9 tests
-    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
-
-    suiteNum = 1;  // base 10 tests
-    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
-
-//    suiteNum = 2;  // base 2^31 tests
-//    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
-//
-//    suiteNum = 3;  // base 2^32 tests
-//    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
-
-    return returnVal;
-}
+#endif /* BIGINTFACTORY32BIT_H_ */
