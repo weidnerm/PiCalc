@@ -27,7 +27,7 @@
 
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "TestRunner.h"
-
+#include "stdio.h"
 #include "CppUTest/CommandLineTestRunner.h"
 
 int suiteNum = 0;
@@ -35,16 +35,20 @@ int main(int ac, char** av)
 {
     int returnVal;
 
+    printf("Running base 1e9 tests\n");
     suiteNum = 0;  // base 1e9 tests
     returnVal = CommandLineTestRunner::RunAllTests(ac, av);
 
-    suiteNum = 1;  // base 10 tests
+    printf("Running base 10 tests\n");
+    suiteNum = 1;  //
     returnVal = CommandLineTestRunner::RunAllTests(ac, av);
 
-//    suiteNum = 2;  // base 2^31 tests
+//    printf("Running base 2^31 tests\n");
+//    suiteNum = 2;
 //    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
 //
-//    suiteNum = 3;  // base 2^32 tests
+//    printf("Running base 2^32 tests\n");
+//    suiteNum = 3;
 //    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
 
     return returnVal;

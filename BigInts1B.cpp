@@ -362,30 +362,14 @@ void BigInts1B::divide(BigIntBase* bigIntPtr)
     BigInts1B* divisor = (BigInts1B*)bigIntPtr;
     int32_t * resultArray = new int32_t[m_length];
 
-
     // pre-compute various divisor products for 0-9 (and one for 10 since search loop goes one past)
-    BigInts1B productFrag[9][11];
-    productFrag[0][0].valueOf(0);
-    productFrag[1][0].valueOf(0);
-    productFrag[2][0].valueOf(0);
-    productFrag[3][0].valueOf(0);
-    productFrag[4][0].valueOf(0);
-    productFrag[5][0].valueOf(0);
-    productFrag[6][0].valueOf(0);
-    productFrag[7][0].valueOf(0);
-    productFrag[8][0].valueOf(0);
-    for (int digValIndex = 1; digValIndex < 11; digValIndex++)
+    BigInts1B productFrag[30];  // only 30 bits of value in base 1e9
+    productFrag[0].assign(divisor);
+    productFrag[0].m_negative = false; // guarantee its positive.
+    for (int digValIndex = 1; digValIndex < 30; digValIndex++)
     {
-        productFrag[0][digValIndex].assign(&productFrag[0][digValIndex - 1]);
-        productFrag[0][digValIndex].sameSignAdd(divisor); //sameSignAdd ignores sign bits so we can handle a negative divisor
-    }
-    for (int digPosIndex = 1; digPosIndex < 9; digPosIndex++)
-    {
-        for (int digValIndex = 1; digValIndex < 11; digValIndex++)
-        {
-            productFrag[digPosIndex][digValIndex].assign(&productFrag[digPosIndex][digValIndex-1]);
-            productFrag[digPosIndex][digValIndex].sameSignAdd(&productFrag[digPosIndex-1][10]); //sameSignAdd ignores sign bits so we can handle a negative divisor
-        }
+        productFrag[digValIndex].assign(&productFrag[digValIndex - 1]);
+        productFrag[digValIndex].sameSignAdd(&productFrag[digValIndex - 1]); //sameSignAdd ignores sign bits so we can handle a negative divisor
     }
 
     for(index=0;index<m_length;index++)
@@ -409,21 +393,15 @@ void BigInts1B::divide(BigIntBase* bigIntPtr)
     while (resultDigitIndex >= 0)
     {
         int dividendDigit = 0;   // full 1B digit i.e. 000000000-999999999 in value
-        int digitPos;            // 8-0 representing digitPosition within dividendDigit.  8 is leftmost; 0 is rightmost
         int subDigitMultiplier;  // values of 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1
 
-        for (subDigitMultiplier = BASE / 10, digitPos = 8; subDigitMultiplier > 0; subDigitMultiplier /= 10, digitPos--)
+        for (subDigitMultiplier = 29 ; subDigitMultiplier >= 0; subDigitMultiplier--)
         {
-            int singleDividendDigit = 0;   // value 0-9 of current sub-digit.
-            do
+            if (divdendFragment.compareMagnitude(&productFrag[subDigitMultiplier]) > -1)
             {
-                dividendDigit += subDigitMultiplier;
-                singleDividendDigit++;
+                dividendDigit += (1<<subDigitMultiplier);
+                divdendFragment.subtract(&productFrag[subDigitMultiplier]); // the previous loop went one too far.  back up.
             }
-            while ((divdendFragment.compareMagnitude(&productFrag[digitPos][singleDividendDigit]) > -1) && (singleDividendDigit < 10));
-
-            divdendFragment.subtract(&productFrag[digitPos][singleDividendDigit - 1]); // the previous loop went one too far.  back up.
-            dividendDigit -= subDigitMultiplier;
         }
 
         resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
