@@ -175,6 +175,10 @@ void BigInts32Bit::diffSignAdd(BigIntBase* bigIntPtr)
 
 void BigInts32Bit::swap(BigInts32Bit** first, BigInts32Bit** second)
 {
+    BigInts32Bit * tempPtr;
+    tempPtr = *first;
+    *first = *second;
+    *second = tempPtr;
 }
 
 void BigInts32Bit::trimLeadingZeros()

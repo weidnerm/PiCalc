@@ -56,13 +56,13 @@ class BigInts32Bit: public BigIntBase
         virtual bool equals(BigIntBase* rightVal);
         virtual bool equals(int rightVal);
         virtual void sqrt(BigIntBase* guess = 0);
+        void printBigInt(char * formatStr, BigInts32Bit *bigIntPtr);
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);
         virtual void diffSignAdd(BigIntBase* bigIntPtr);
         void swap(BigInts32Bit ** first, BigInts32Bit ** second);
         void trimLeadingZeros();
         void getSubArray(BigInts32Bit * destArray, int msbIndex, int numDigits);
-        void printBigInt(char * formatStr, BigInts32Bit *bigIntPtr);
         void insertLeastSigDigit(int32_t digit);
 
     public:

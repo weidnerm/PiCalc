@@ -217,7 +217,7 @@ void BigInts1B::sameSignAdd(BigIntBase* bigIntPtr)
     int carry = 0;
     for (index = 0; ((index < longestLength) || (carry == 1)); index++)
     {
-        int temp = 0;
+        unsigned int temp = 0;
         if (index < shortestLength)
         {
             temp = shortPtr->m_value[index];
@@ -247,7 +247,7 @@ void BigInts1B::diffSignAdd(BigIntBase* bigIntPtr)
     BigInts1B* bigPtr = this;
     BigInts1B* smallPtr = (BigInts1B*)bigIntPtr;
 
-    // 55 - 5
+    // we want bigger minus smaller. i.e. 55 - 5
     if ( (smallPtr->compareMagnitude(bigPtr)) == 1 )  // If A>B then swap since A is desired to be small
     {
         swap(&bigPtr, &smallPtr);

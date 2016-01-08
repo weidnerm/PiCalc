@@ -43,10 +43,10 @@ int main(int ac, char** av)
     suiteNum = 1;  //
     returnVal = CommandLineTestRunner::RunAllTests(ac, av);
 
-//    printf("Running base 2^31 tests\n");
-//    suiteNum = 2;
-//    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
-//
+    printf("Running base 2^31 tests\n");
+    suiteNum = 2;
+    returnVal = CommandLineTestRunner::RunAllTests(ac, av);
+
 //    printf("Running base 2^32 tests\n");
 //    suiteNum = 3;
 //    returnVal = CommandLineTestRunner::RunAllTests(ac, av);

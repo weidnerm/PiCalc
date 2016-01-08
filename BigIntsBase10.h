@@ -56,6 +56,7 @@ class BigIntsBase10: public BigIntBase
         virtual bool equals(BigIntBase* rightVal);
         virtual bool equals(int rightVal);
         virtual void sqrt(BigIntBase* guess = 0);
+        void printBigInt(char * formatStr, BigIntsBase10 *bigIntPtr);
 
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);
@@ -63,7 +64,6 @@ class BigIntsBase10: public BigIntBase
         void swap(BigIntsBase10 ** first, BigIntsBase10 ** second);
         void trimLeadingZeros();
         void getSubArray(BigIntsBase10 * destArray, int msbIndex, int numDigits);
-        void printBigInt(char * formatStr, BigIntsBase10 *bigIntPtr);
         void insertLeastSigDigit(int8_t digit);
     public:
         int8_t* m_value;

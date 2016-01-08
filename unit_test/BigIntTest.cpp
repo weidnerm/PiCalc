@@ -50,12 +50,12 @@ extern int suiteNum;
 #define COMPARE_MAGNITUDE_TESTS
 #define ASSIGN_TESTS
 #define MULTIPLY_TESTS
-#define DIVISION_TESTS
+//#define DIVISION_TESTS
 #define POW_TESTS
-#define SQRT_TESTS
-#define EQUALS_TESTS
-#define PICALC_INTERNALS_TESTS
-#define PICALC_TESTS
+//#define SQRT_TESTS
+//#define EQUALS_TESTS
+//#define PICALC_INTERNALS_TESTS
+//#define PICALC_TESTS
 //#define DIVIDE_SPEED_TESTS
 //#define MULTIPLY_SPEED_TESTS
 
@@ -585,6 +585,39 @@ TEST(TwoValueTestGroup, add1and1111111111)
     STRCMP_EQUAL("1111111112",result);
     STRCMP_EQUAL("1111111111",result2);// make sure that B didnt change
 }
+
+TEST(TwoValueTestGroup, addMixed_neg0x7fffffffffffffff_minus1)
+{
+    myBigIntBaseA->setString("-9223372036854775807");
+    myBigIntBaseB->setString("-1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-9223372036854775808",result);
+    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+
+}
+
+TEST(TwoValueTestGroup, addMixed_neg0xffffffffffffffff_minus1)
+{
+    myBigIntBaseA->setString("-18446744073709551615");
+    myBigIntBaseB->setString("-1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("-18446744073709551616",result);
+    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+
+//    unsigned long long temp = 0xffffffffffffffffl;
+//    printf("temp=%llu\n",temp);
+}
+
 #endif // SAME_SIGN_ADD_TESTS
 
 #ifdef SUBTRACT_TESTS
@@ -631,6 +664,7 @@ TEST(TwoValueTestGroup, setStringSubLongDigitCarryMaxPos)
     STRCMP_EQUAL("99999999999999999999",result2); // make sure that B didnt change
 }
 #endif // SUBTRACT_TESTS
+
 
 #ifdef DIFF_SIGN_ADD_TESTS
 TEST(TwoValueTestGroup, addMixedSmallSingleDigPBpNS)
@@ -891,7 +925,28 @@ TEST(TwoValueTestGroup, addMixedBorrow4BigFirst)
 
     STRCMP_EQUAL("123450999999999999999999999999999999999999999999999999999999",result);
     STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+
+//    long long temp = 0x7fffffffffffffffl;
+//    printf("temp=%lld\n",temp);
 }
+
+TEST(TwoValueTestGroup, addMixed0x7fffffffffffffff_minus1)
+{
+    myBigIntBaseA->setString("9223372036854775807");
+    myBigIntBaseB->setString("-1");
+
+    // A = A+B
+    myBigIntBaseA->add(myBigIntBaseB);
+    result = myBigIntBaseA->getString();
+    result2 = myBigIntBaseB->getString();
+
+    STRCMP_EQUAL("9223372036854775806",result);
+    STRCMP_EQUAL("-1",result2); // make sure that B didnt change
+
+//    long long temp = 0x7fffffffffffffffl;
+//    printf("temp=%lld\n",temp);
+}
+
 #endif // DIFF_SIGN_ADD_TESTS
 
 
