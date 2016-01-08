@@ -27,6 +27,7 @@
 
 /*--------------------------- HEADER FILE INCLUDES ----------------------------*/
 #include "BigIntBase.h"
+#include "stdio.h"
 
 BigIntBase::BigIntBase()
 {
@@ -47,3 +48,11 @@ BigIntBase::~BigIntBase()
 
 }
 
+void BigIntBase::printBigInt(char* formatStr, BigIntBase* bigIntPtr)
+{
+    char * tempVal = bigIntPtr->getString();
+
+    printf(formatStr, tempVal);
+
+    delete[] tempVal;
+}

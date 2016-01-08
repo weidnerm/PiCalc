@@ -56,7 +56,7 @@ class BigInts32Bit: public BigIntBase
         virtual bool equals(BigIntBase* rightVal);
         virtual bool equals(int rightVal);
         virtual void sqrt(BigIntBase* guess = 0);
-        void printBigInt(char * formatStr, BigInts32Bit *bigIntPtr);
+//        void printBigInt(char * formatStr, BigInts32Bit *bigIntPtr);
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);
         virtual void diffSignAdd(BigIntBase* bigIntPtr);

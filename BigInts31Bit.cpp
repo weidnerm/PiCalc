@@ -395,12 +395,87 @@ void BigInts31Bit::pow(int exp)
 
 bool BigInts31Bit::equals(BigIntBase* rightVal)
 {
-    printf("Uh. oh. equals Not implemented.\n");
+    BigInts31Bit* leftValPtr = this;
+    BigInts31Bit* rightValPtr = (BigInts31Bit*)rightVal;
+    bool returnVal = true;
+
+    if (leftValPtr->m_length != rightValPtr->m_length)
+    {
+        returnVal = false;   // lengths dont match. cant be equal.
+//        printf("length mismatch %d != %d\n",leftValPtr->m_length ,rightValPtr->m_length );
+    }
+    else
+    {
+        int index;
+        for (index = 0; index < leftValPtr->m_length; index++)
+        {
+            if (leftValPtr->m_value[index] != rightValPtr->m_value[index])
+            {
+                returnVal = false;   // one of the digits didnt match.  not equal.
+//                printf("digit mismatch [%d] %d != %d\n",index, leftValPtr->m_value[index] ,rightValPtr->m_value[index] );
+                break;
+            }
+        }
+    }
+
+    if (returnVal == true)
+    {
+        if ((m_length != 1) || (m_value[0] != 0)) // the two are non-zero and numerically equal in absolute value. make sure signs match
+        {
+            if (leftValPtr->m_negative != rightValPtr->m_negative)
+            {
+                returnVal = false;  // signs dont match.  cant be equal.
+            }
+        }
+    }
+
+//    char * textPtr = leftValPtr->getString();
+//    printf("leftValPtr=%s   ", textPtr);
+//    delete [] textPtr;
+//    textPtr = rightValPtr->getString();
+//    printf("rightValPtr=%s   ", textPtr);
+//    delete [] textPtr;
+//    printf("returnVal=%s   ", returnVal ? "true": "false");
+
+
+    return returnVal;
 }
 
 bool BigInts31Bit::equals(int rightVal)
 {
-    printf("Uh. oh. equals Not implemented.\n");
+    bool returnVal = false;
+    uint64_t leftVal = 0;
+    uint64_t rightVal64;
+    int digitMultiplier = 1;
+    bool negative = false;
+
+    if (rightVal < 0)
+    {
+        rightVal = -rightVal;
+        negative = true;
+    }
+
+    rightVal64 = rightVal;
+
+    if (m_length <= 2)  // only deal with single digit billions at most
+    {
+        int index;
+        for (index = 0; index < m_length; index++)
+        {
+            leftVal += m_value[index] * digitMultiplier;
+            digitMultiplier *= 1000000000;
+        }
+
+        if (rightVal64 == leftVal)
+        {
+            if (m_negative == negative)
+            {
+                returnVal = true;
+            }
+        }
+    }
+
+    return returnVal;
 }
 
 void BigInts31Bit::sqrt(BigIntBase* guess)
@@ -586,14 +661,14 @@ void BigInts31Bit::getSubArray(BigInts31Bit* destArray, int msbIndex, int numDig
     }
 }
 
-void BigInts31Bit::printBigInt(char* formatStr, BigInts31Bit* bigIntPtr)
-{
-    char * tempVal = bigIntPtr->getString();
-
-    printf(formatStr, tempVal);
-
-    delete[] tempVal;
-}
+//void BigInts31Bit::printBigInt(char* formatStr, BigInts31Bit* bigIntPtr)
+//{
+//    char * tempVal = bigIntPtr->getString();
+//
+//    printf(formatStr, tempVal);
+//
+//    delete[] tempVal;
+//}
 
 void BigInts31Bit::insertLeastSigDigit(int32_t digit)
 {

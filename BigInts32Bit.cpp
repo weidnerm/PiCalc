@@ -189,9 +189,9 @@ void BigInts32Bit::getSubArray(BigInts32Bit* destArray, int msbIndex, int numDig
 {
 }
 
-void BigInts32Bit::printBigInt(char* formatStr, BigInts32Bit* bigIntPtr)
-{
-}
+//void BigInts32Bit::printBigInt(char* formatStr, BigInts32Bit* bigIntPtr)
+//{
+//}
 
 void BigInts32Bit::insertLeastSigDigit(int32_t digit)
 {

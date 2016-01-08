@@ -714,14 +714,14 @@ void BigInts1B::getSubArray(BigInts1B* destArray, int msbIndex, int numDigits)
     }
 }
 
-void BigInts1B::printBigInt(char* formatStr, BigInts1B* bigIntPtr)
-{
-    char * tempVal = bigIntPtr->getString();
-
-    printf(formatStr, tempVal);
-
-    delete[] tempVal;
-}
+//void BigInts1B::printBigInt(char* formatStr, BigInts1B* bigIntPtr)
+//{
+//    char * tempVal = bigIntPtr->getString();
+//
+//    printf(formatStr, tempVal);
+//
+//    delete[] tempVal;
+//}
 
 void BigInts1B::insertLeastSigDigit(int32_t digit)
 {

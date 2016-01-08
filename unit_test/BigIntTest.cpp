@@ -52,10 +52,10 @@ extern int suiteNum;
 #define MULTIPLY_TESTS
 #define DIVISION_TESTS
 #define POW_TESTS
-//#define SQRT_TESTS
-//#define EQUALS_TESTS
-//#define PICALC_INTERNALS_TESTS
-//#define PICALC_TESTS
+#define SQRT_TESTS
+#define EQUALS_TESTS
+#define PICALC_INTERNALS_TESTS
+#define PICALC_TESTS
 //#define DIVIDE_SPEED_TESTS
 //#define MULTIPLY_SPEED_TESTS
 

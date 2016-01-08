@@ -500,14 +500,14 @@ void BigIntsBase10::getSubArray(BigIntsBase10* destArray, int msbIndex, int numD
     }
 }
 
-void BigIntsBase10::printBigInt(char * formatStr, BigIntsBase10* bigIntPtr)
-{
-    char * tempVal = bigIntPtr->getString();
-
-    printf(formatStr, tempVal);
-
-    delete[] tempVal;
-}
+//void BigIntsBase10::printBigInt(char * formatStr, BigIntsBase10* bigIntPtr)
+//{
+//    char * tempVal = bigIntPtr->getString();
+//
+//    printf(formatStr, tempVal);
+//
+//    delete[] tempVal;
+//}
 
 void BigIntsBase10::assign(BigIntBase* bigIntPtr)
 {

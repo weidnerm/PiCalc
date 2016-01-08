@@ -56,7 +56,7 @@ class BigIntsBase10: public BigIntBase
         virtual bool equals(BigIntBase* rightVal);
         virtual bool equals(int rightVal);
         virtual void sqrt(BigIntBase* guess = 0);
-        void printBigInt(char * formatStr, BigIntsBase10 *bigIntPtr);
+//        void printBigInt(char * formatStr, BigIntsBase10 *bigIntPtr);
 
     protected:
         virtual void sameSignAdd(BigIntBase* bigIntPtr);

@@ -54,6 +54,7 @@ class BigIntBase
         virtual bool equals(BigIntBase* rightVal) = 0;
         virtual bool equals(int rightVal) = 0;
         virtual void sqrt(BigIntBase* guess = 0) = 0;
+        void printBigInt(char * formatStr, BigIntBase *bigIntPtr);
 };
 
 #endif /* BIGINTBASE_H_ */
