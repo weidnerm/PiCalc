@@ -150,7 +150,67 @@ void BigInts31Bit::multiply(BigIntBase* bigIntPtr)
 
 void BigInts31Bit::divide(BigIntBase* bigIntPtr)
 {
-    printf("Uh. oh. divide Not implemented.\n");
+    int index;
+    BigInts31Bit* dividend = this;
+    BigInts31Bit* divisor = (BigInts31Bit*)bigIntPtr;
+    int32_t * resultArray = new int32_t[m_length];
+
+    // pre-compute various divisor products for 0-9 (and one for 10 since search loop goes one past)
+    BigInts31Bit productFrag[32];  // only 30 bits of value in base 1e9
+    productFrag[0].assign(divisor);
+    productFrag[0].m_negative = false; // guarantee its positive.
+    for (int digValIndex = 1; digValIndex < 32; digValIndex++)
+    {
+        productFrag[digValIndex].assign(&productFrag[digValIndex - 1]);
+        productFrag[digValIndex].sameSignAdd(&productFrag[digValIndex - 1]); //sameSignAdd ignores sign bits so we can handle a negative divisor
+    }
+
+    for(index=0;index<m_length;index++)
+    {
+        resultArray[index] = 0;
+    }
+
+    int resultDigitIndex = dividend->m_length - divisor->m_length;   // position of digit in overall result value
+
+    BigInts31Bit divdendFragment;
+
+    // get a starting point for our division.  assume same num of digits as divisor.  might need one more though.
+    getSubArray(&divdendFragment, m_length-1, divisor->m_length);
+    if ( divdendFragment.compareMagnitude(divisor) == -1 )  // if divisor doesnt fit in fragment, tack on an extra digit.
+    {
+        resultDigitIndex--;
+    }
+    getSubArray(&divdendFragment, m_length-1, m_length-resultDigitIndex);
+
+    // compute the overall digit 000000000-999999999 by building each subdigit.
+    while (resultDigitIndex >= 0)
+    {
+        int dividendDigit = 0;   // full 1B digit i.e. 000000000-999999999 in value
+        int subDigitMultiplier;  // values of 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1
+
+        for (subDigitMultiplier = 31 ; subDigitMultiplier >= 0; subDigitMultiplier--)
+        {
+            if (divdendFragment.compareMagnitude(&productFrag[subDigitMultiplier]) > -1)
+            {
+                dividendDigit += (1<<subDigitMultiplier);
+                divdendFragment.subtract(&productFrag[subDigitMultiplier]); // the previous loop went one too far.  back up.
+            }
+        }
+
+        resultArray[resultDigitIndex] = dividendDigit;  // store the final digit.
+        resultDigitIndex--;
+
+        if (resultDigitIndex >= 0)
+        {
+            divdendFragment.insertLeastSigDigit(dividend->m_value[resultDigitIndex]);
+        }
+//        printBigInt("concatResult = %s\n", &divdendFragment);
+    }
+
+    delete [] m_value;
+    m_value = resultArray;
+    m_negative = divisor->m_negative ^ dividend->m_negative;   // XOR divisor sign  and  dividend sign
+    trimLeadingZeros();
 }
 
 void BigInts31Bit::setString(char* valueString)
@@ -512,7 +572,18 @@ void BigInts31Bit::trimLeadingZeros()
 
 void BigInts31Bit::getSubArray(BigInts31Bit* destArray, int msbIndex, int numDigits)
 {
-    printf("Uh. oh. getSubArray Not implemented.\n");
+    if ( numDigits > destArray->m_length)  // if it wont fit, allocate more space
+    {
+        delete [] destArray->m_value;
+        destArray->m_value = new int32_t[numDigits];
+    }
+    destArray->m_length = numDigits;
+
+    int index;
+    for(index=0; index<numDigits; index++)
+    {
+        destArray->m_value[index] = m_value[msbIndex-numDigits+index+1];
+    }
 }
 
 void BigInts31Bit::printBigInt(char* formatStr, BigInts31Bit* bigIntPtr)
@@ -526,5 +597,16 @@ void BigInts31Bit::printBigInt(char* formatStr, BigInts31Bit* bigIntPtr)
 
 void BigInts31Bit::insertLeastSigDigit(int32_t digit)
 {
-    printf("Uh. oh. insertLeastSigDigit Not implemented.\n");
+    int32_t * newArray = new int32_t[m_length + 1];
+    int index;
+    for(index=0;index<m_length; index++)
+    {
+        newArray[index+1] = m_value[index];
+    }
+    newArray[0] = digit;
+    m_length++;
+
+    delete[] m_value;
+    m_value = newArray;
+    trimLeadingZeros();
 }

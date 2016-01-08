@@ -50,7 +50,7 @@ extern int suiteNum;
 #define COMPARE_MAGNITUDE_TESTS
 #define ASSIGN_TESTS
 #define MULTIPLY_TESTS
-//#define DIVISION_TESTS
+#define DIVISION_TESTS
 #define POW_TESTS
 //#define SQRT_TESTS
 //#define EQUALS_TESTS
