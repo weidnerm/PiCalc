@@ -368,6 +368,7 @@ TEST_GROUP(TwoValueTestGroup)
     BigIntFactory * myBigIntFactory;
     BigIntBase * myBigIntBaseA;
     BigIntBase * myBigIntBaseB;
+    BigIntBase * myBigIntBaseC;
     char* result;
     char* result2;
 
@@ -376,6 +377,7 @@ TEST_GROUP(TwoValueTestGroup)
         myBigIntFactory = getFactory();
         myBigIntBaseA = myBigIntFactory->create();
         myBigIntBaseB = myBigIntFactory->create();
+        myBigIntBaseC = myBigIntFactory->create();
         result = 0;  // null it out in case its not used, we can safely delete 0
         result2 = 0;  // null it out in case its not used, we can safely delete 0
     }
@@ -385,6 +387,7 @@ TEST_GROUP(TwoValueTestGroup)
         delete myBigIntFactory;
         delete myBigIntBaseA;
         delete myBigIntBaseB;
+        delete myBigIntBaseC;
         delete [] result;
         delete [] result2;
     }
@@ -1300,10 +1303,11 @@ TEST(TwoValueTestGroup, divide_9s_Sqared_by_999999999999999999999999999999999999
 TEST(TwoValueTestGroup, speedTestDivide)
 {
     myBigIntBaseB->setString("-999999999999999999999999999999999999999999999999999999999999999999999999");
+    myBigIntBaseC->setString("999999999999999999999999999999999999999999999999999999999999999999999998000000000000000000000000000000000000000000000000000000000000000000000001");
     int index;
     for (index = 0; index < 100000; index++)
     {
-        myBigIntBaseA->setString("999999999999999999999999999999999999999999999999999999999999999999999998000000000000000000000000000000000000000000000000000000000000000000000001");
+        myBigIntBaseA->assign(myBigIntBaseC);
 
         // A = A+B
         myBigIntBaseA->divide(myBigIntBaseB);
@@ -1330,10 +1334,11 @@ TEST(TwoValueTestGroup, speedTestDivide)
 TEST(TwoValueTestGroup, speedTestMultiply)
 {
     myBigIntBaseB->setString("-999999999999999999999999999999999999");
+    myBigIntBaseC->setString("-999999999999999999999999999999999999");
     int index;
     for (index = 0; index < 500000; index++)
     {
-        myBigIntBaseA->setString("-999999999999999999999999999999999999");
+        myBigIntBaseA->assign(myBigIntBaseC);
 
         // A = A+B
         myBigIntBaseA->multiply(myBigIntBaseB);
