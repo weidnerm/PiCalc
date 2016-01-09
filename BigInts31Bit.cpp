@@ -497,8 +497,19 @@ void BigInts31Bit::sqrt(BigIntBase* guess)
     }
     else
     {
-        myGuess->valueOf(10);   // if no guess was provided, use 1
-        myGuess->pow((m_length*9)/2);
+        int first1Pos;
+        for(first1Pos=30; first1Pos>=0; first1Pos--)
+        {
+            if ( (unsigned int)m_value[m_length-1] > (1u<<first1Pos) )
+            {
+                break;
+            }
+        }
+//        printf("m_value[m_length-1]=%08x;  first1Pos=%d; m_length=%d; totalBits=%d;  halfTotalBits=%d\n",
+//                m_value[m_length-1],
+//                first1Pos, m_length, (m_length-1)*31+first1Pos , ((m_length-1)*31+first1Pos)/2 );
+        myGuess->valueOf(2);   // if no guess was provided, use 1
+        myGuess->pow(((m_length-1)*31+first1Pos)/2);
     }
 
     next->assign(myGuess);  //starting value

@@ -625,8 +625,17 @@ void BigInts1B::sqrt(BigIntBase* guess)
     }
     else
     {
+        int first1Pos;
+        for(first1Pos=30; first1Pos>=0; first1Pos--)
+        {
+            if ( (unsigned int)m_value[m_length-1] > (1u<<first1Pos) )
+            {
+                break;
+            }
+        }
         myGuess->valueOf(10);   // if no guess was provided, use 1
-        myGuess->pow((m_length*9)/2);
+        myGuess->pow(((m_length-1)*9+(first1Pos*2)/7)/2);
+//        myGuess->pow((m_length*9)/2);
     }
 
     next->assign(myGuess);  //starting value
