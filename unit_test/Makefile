@@ -19,13 +19,13 @@ CPP_PLATFORM = Gcc
 
 CPPUTEST_WARNINGFLAGS = -Wno-error=sign-conversion -Wno-write-strings
 
-SRC_DIRS = /home/vagrant/workspace/BigInts \
+SRC_DIRS = /home/emw010/workspaces/PiCalc \
 
-TEST_SRC_DIRS = /home/vagrant/workspace/BigInts/unit_test \
+TEST_SRC_DIRS = /home/emw010/workspaces/PiCalc/unit_test \
 
 INCLUDE_DIRS =\
-  /home/vagrant/workspace/BigInts \
-  /home/vagrant/workspace/BigInts/unit_test \
+  /home/emw010/workspaces/PiCalc \
+  /home/emw010/workspaces/PiCalc/unit_test \
   $(CPPUTEST_HOME)/include\
 
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
